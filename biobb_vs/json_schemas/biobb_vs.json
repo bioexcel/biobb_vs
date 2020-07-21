@@ -1,0 +1,41 @@
+{
+    "_id": "biobb_vs",
+    "desc": "Biobb_vs is the Biobb module collection to perform virtual screening studies.",
+    "github": "https://github.com/bioexcel/biobb_vs",
+    "readthedocs": "https://biobb-vs.readthedocs.io/en/latest/",
+    "conda": "https://anaconda.org/bioconda/biobb_vs",
+    "docker": "https://quay.io/repository/biocontainers/biobb_vs",
+    "singularity": "",
+    "version": "3.0.0",
+    "tools" : [
+        {
+            "block" : "VinaPrepareLigand", 
+            "tool" : "MGLTools prepare_ligand4", 
+            "desc" : "Prepares input ligand for an Autodock Vina Virtual Screening.",
+            "exec" : "vina_prepare_ligand",
+            "docs": ""
+        },
+        {
+            "block" : "VinaPrepareReceptor", 
+            "tool" : "MGLTools prepare_receptor4", 
+            "desc" : "Prepares input receptor structure for an Autodock Vina Virtual Screening.",
+            "exec" : "vina_prepare_receptor",
+            "docs": ""
+        }
+    ],
+    "dep_pypi" : [
+        "install_requires=['biobb_common==3.0.0', 'autodock-vina ==1.1.2', 'mgltools ==1.5.7']", 
+        "python_requires='==3.7.*'"
+    ], 
+    "dep_conda" : [
+        "python ==3.7.*", 
+        "biobb_common ==3.0.0", 
+        "mgltools ==1.5.7"
+    ],
+    "keywords" : [
+        "virtual screening",
+        "autodock",
+        "vina",
+        "mgltools"
+    ]
+}

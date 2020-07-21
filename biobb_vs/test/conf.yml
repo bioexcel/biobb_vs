@@ -1,0 +1,19 @@
+working_dir_path: /tmp/biobb/unitests
+
+# VINA
+
+vina_prepare_ligand:
+  paths:
+    input_ligand_path: file:test_data_dir/vina/prepare_ligand.pdb
+    output_ligand_path: prepare_ligand.pdbqt
+    ref_output_ligand_path: file:test_reference_dir/vina/ref_prepare_ligand.pdbqt
+  properties:
+    mgltools_path: '/anaconda3/pkgs/mgltools-1.5.7-0'
+
+vina_prepare_receptor:
+  paths:
+    input_receptor_path: file:test_data_dir/vina/prepare_receptor.pdb
+    output_receptor_path: prepare_receptor.pdbqt
+    ref_output_receptor_path: file:test_reference_dir/vina/ref_prepare_receptor.pdbqt
+  properties:
+    mgltools_path: '/anaconda3/pkgs/mgltools-1.5.7-0'

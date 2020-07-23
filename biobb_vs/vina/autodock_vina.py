@@ -3,7 +3,6 @@
 """Module containing the AutoDockVina class and the command line interface."""
 import argparse
 import os
-import shutil
 from biobb_common.configuration import  settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
@@ -92,6 +91,7 @@ class AutoDockVina():
         # calculating box position and size
         x0, y0, z0, sidex, sidey, sidez = self.calculate_box(self.io_dict["in"]["input_box_path"])
 
+        # create cmd
         cmd = [self.vina_path,
                '--ligand', self.io_dict["in"]["input_ligand_pdbqt_path"],
                '--receptor', self.io_dict["in"]["input_receptor_pdbqt_path"],

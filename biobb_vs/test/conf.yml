@@ -17,3 +17,13 @@ vina_prepare_receptor:
     ref_output_receptor_path: file:test_reference_dir/vina/ref_prepare_receptor.pdbqt
   properties:
     mgltools_path: '/anaconda3/pkgs/mgltools-1.5.7-0'
+
+autodock_vina:
+  paths:
+    input_ligand_pdbqt_path: file:test_data_dir/vina/vina_ligand.pdbqt
+    input_receptor_pdbqt_path: file:test_data_dir/vina/vina_receptor.pdbqt
+    input_box_path: file:test_data_dir/vina/vina_box.pdb
+    output_pdbqt_path: output_pdbqt_path.pdbqt
+    ref_output_pdbqt_path: file:test_reference_dir/vina/ref_output_vina.pdbqt
+    output_log_path: output_log_path.log
+    ref_output_log_path: file:test_reference_dir/vina/ref_output_vina.log

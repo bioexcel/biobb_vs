@@ -1,2 +1,2 @@
 name = "biobb_vs"
-__all__ = ["vina"]
+__all__ = ["vina", "utils"]

@@ -1,9 +1,8 @@
 from pathlib import Path, PurePath
 import re
-import warnings
 import Bio.PDB
-#import Bio.pairwise2
-#import Bio.SubsMat.MatrixInfo
+import Bio.pairwise2
+import Bio.SubsMat.MatrixInfo
 from Bio.Data.SCOPData import protein_letters_3to1 as prot_one_letter
 from Bio import BiopythonWarning
 from biobb_common.tools import file_utils as fu
@@ -46,6 +45,15 @@ def is_valid_file(ext, argument):
 
 # UTILS FUNCTIONS
 
+def get_residue_by_id(structure, res_num):
+
+    for residue in structure.get_residues():
+        if residue.get_id()[1] == res_num:
+            return residue
+
+    return None
+
+
 def get_pdb_sequence(structure):
     """
     Retrieves the AA sequence from a PDB structure.
@@ -57,6 +65,56 @@ def get_pdb_sequence(structure):
         if Bio.PDB.Polypeptide.is_aa(r):
             seq.append(aa(r))
     return seq
+
+def align_sequences(seqA, seqB, matrix_name, gap_open, gap_extend):
+        """
+        Performs a global pairwise alignment between two sequences using the Needleman-Wunsch algorithm as implemented in Biopython.
+        Returns the alignment and the residue mapping between both original sequences.
+        """
+
+        #seq list to seq string
+        sequence_A = ''.join([i[1] for i in seqA])
+        sequence_B = ''.join([i[1] for i in seqB])
+
+        # get matrix from matrix_name
+        matrix = getattr(Bio.SubsMat.MatrixInfo, matrix_name)
+
+        # Do pairwaise alignment
+        alns = Bio.pairwise2.align.globalds(sequence_A, sequence_B, matrix, gap_open, gap_extend, penalize_end_gaps=(False, False) )
+
+        best_aln = alns[0]
+        aligned_A, aligned_B, score, begin, end = best_aln
+
+        # Equivalent residue numbering. Relative to reference
+        mapping = {}
+        aa_i_A, aa_i_B = 0, 0
+        for aln_i, (aa_aln_A, aa_aln_B) in enumerate(zip(aligned_A, aligned_B)):
+            if aa_aln_A == '-':
+                if aa_aln_B != '-':
+                    aa_i_B += 1
+            elif aa_aln_B == '-':
+                if aa_aln_A != '-':
+                    aa_i_A += 1
+            else:
+                assert seqA[aa_i_A][1] == aa_aln_A
+                assert seqB[aa_i_B][1] == aa_aln_B
+                mapping[seqA[aa_i_A][0]] = seqB[aa_i_B][0]
+                aa_i_A += 1
+                aa_i_B += 1
+
+        return ((aligned_A, aligned_B), mapping)
+
+def calculate_alignment_identity(alignedA, alignedB):
+        """
+        Returns the percentage of identical characters between two sequences
+        """
+        matches = [alignedA[i] == alignedB[i] for i in range(len(alignedA))]
+        seq_id = (100 * sum(matches)) / len(alignedA)
+
+        gapless_sl = sum([1 for i in range(len(alignedA)) if (alignedA[i] != '-' and alignedB[i] != '-')])
+        gap_id = (100 * sum(matches)) / gapless_sl
+        return (seq_id, gap_id)
+
 
 def get_ligand_residues(PDBchain,ignore_wats=True,ignore_small_molec=True, ignore_ions=True, ignore_modres=True):
     """

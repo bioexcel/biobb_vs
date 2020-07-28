@@ -1,10 +1,11 @@
 from pathlib import Path, PurePath
 import re
+import shutil
+import numpy as np
 import Bio.PDB
 import Bio.pairwise2
 import Bio.SubsMat.MatrixInfo
 from Bio.Data.SCOPData import protein_letters_3to1 as prot_one_letter
-from Bio import BiopythonWarning
 from biobb_common.tools import file_utils as fu
 
 # CHECK PARAMETERS
@@ -38,6 +39,7 @@ def is_valid_file(ext, argument):
 	formats = {
 		'input_pdb_path': ['pdb'],
 		'input_clusters_zip': ['zip'],
+        'resid_pdb_path': ['pdb'],
 		'output_pdb_path': ['pdb']
 	}
 	return ext in formats[argument]
@@ -66,7 +68,14 @@ def get_pdb_sequence(structure):
             seq.append(aa(r))
     return seq
 
-def align_sequences(seqA, seqB, matrix_name, gap_open, gap_extend):
+def get_sequence_nucs(structure):
+
+    seq = []
+    for nuc in structure:
+        seq.append(nuc)
+    return seq
+
+def align_sequences(seqA, seqB, matrix_name = 'blosum62', gap_open = -10.0, gap_extend = -0.5):
         """
         Performs a global pairwise alignment between two sequences using the Needleman-Wunsch algorithm as implemented in Biopython.
         Returns the alignment and the residue mapping between both original sequences.
@@ -161,6 +170,34 @@ def get_ligand_residues(PDBchain,ignore_wats=True,ignore_small_molec=True, ignor
 
     return ligands
 
+def get_box_coordinates(box_center, box_size, pdb_format=True):
+    coords = [
+        [box_center[0]-box_size[0],box_center[1]-box_size[1],box_center[2]-box_size[2]],
+        [box_center[0]-box_size[0],box_center[1]-box_size[1],box_center[2]+box_size[2]],
+        [box_center[0]-box_size[0],box_center[1]+box_size[1],box_center[2]-box_size[2]],
+        [box_center[0]-box_size[0],box_center[1]+box_size[1],box_center[2]+box_size[2]],
+        [box_center[0]+box_size[0],box_center[1]-box_size[1],box_center[2]-box_size[2]],
+        [box_center[0]+box_size[0],box_center[1]-box_size[1],box_center[2]+box_size[2]],
+        [box_center[0]+box_size[0],box_center[1]+box_size[1],box_center[2]-box_size[2]],
+        [box_center[0]+box_size[0],box_center[1]+box_size[1],box_center[2]+box_size[2]]
+    ]
+
+    if pdb_format:
+        coords_txt = ""
+        at_num = 10000
+        at_nam = "ZN"
+        re_nam = "ZN"
+        chain  = "Z"
+        res_num= 9999
+        occ    = 1
+        bfact  = 50
+        elem   = "ZN"
+        for coord in coords:
+            coords_txt += "HETATM%5d %-4s %3s %s%4d    %8.3f%8.3f%8.3f%6.2f%6.2f          %2s\n" % (at_num,at_nam,re_nam,chain,res_num,coord[0],coord[1],coord[2],occ,bfact,elem)
+            at_num +=1
+        return coords_txt
+    else:
+        return coords
 
 def __ions():
     return {

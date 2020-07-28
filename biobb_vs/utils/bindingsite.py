@@ -17,7 +17,7 @@ class BindingSite():
         output_pdb_path (str): Path to the PDB containig the residues belonging to the binding site. File type: output. `Sample file <>`_. Accepted formats: pdb.
         properties (dic):
             * **ligand** (*str*) - (None) Ligand to be found in the protein structure. If no ligand provided, no action will be executed.
-            * **radius** (*float*) - (5.0) Cut-off distance(Amstrongs) around ligand atoms to consider a protein atom as a binding site atom.
+            * **radius** (*float*) - (5.0) Cut-off distance(Angstroms) around ligand atoms to consider a protein atom as a binding site atom.
             * **max_num_ligands** (*int*) - (15) Total number of superimposed ligands to be extracted from the identity cluster. For populated clusters, the restriction avoids to superimpose redundant structures. If 0, all ligands extracted will be considered.
             * **matrix_name** (*str*) - ('blosum62') Substitution matrices for use in alignments. Values: 'benner6', 'benner22', 'benner74', 'blosum100', 'blosum30', 'blosum35', 'blosum40', 'blosum45', 'blosum50', 'blosum55', 'blosum60', 'blosum62', 'blosum65', 'blosum70', 'blosum75', 'blosum80', 'blosum85', 'blosum90', 'blosum95', 'feng', 'fitch', 'genetic', 'gonnet', 'grant', 'ident', 'johnson', 'levin', 'mclach', 'miyata', 'nwsgappep', 'pam120', 'pam180', 'pam250', 'pam30', 'pam300', 'pam60', 'pam90', 'rao', 'risler', 'structure'.
             * **gap_open** (*float*) - (-10.0) Gap open penalty.
@@ -83,6 +83,7 @@ class BindingSite():
 
 
         # Parse structure
+        fu.log('Loading input PDB structure %s' % (self.io_dict["in"]["input_pdb_path"]), out_log, self.global_log)
         structure_name = PurePath(self.io_dict["in"]["input_pdb_path"]).name
         parser      = Bio.PDB.PDBParser(QUIET = True)
         structPDB   = parser.get_structure(structure_name, self.io_dict["in"]["input_pdb_path"])
@@ -279,8 +280,6 @@ class BindingSite():
             fu.log('----------------------------------------', out_log)
             fu.log('Removed temporary folder: %s' % unique_dir, out_log)
 
-
-        #return returncode
         return 0
 
 def main():

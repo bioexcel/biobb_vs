@@ -18,7 +18,8 @@ setuptools.setup(
         "Bioexcel": "https://bioexcel.eu/"
     },
     packages=setuptools.find_packages(exclude=['docs', 'test']),
-    install_requires=['biobb_common==3.0.0', 'autodock-vina ==1.1.2', 'mgltools ==1.5.7', 'biopython==1.76'],
+    #install_requires=['biobb_common==3.0.0', 'autodock-vina ==1.1.2', 'mgltools ==1.5.7', 'biopython==1.76'],
+    install_requires=['biobb_common==3.0.0', 'autodock-vina ==1.1.2', 'biopython==1.76'],
     python_requires='==3.7.*',
     classifiers=(
         "Development Status :: 3 - Alpha",

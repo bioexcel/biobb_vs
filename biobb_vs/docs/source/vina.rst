@@ -20,3 +20,11 @@ vina.vina_prepare_receptor module
     :members:
     :undoc-members:
     :show-inheritance:
+
+vina.autodock_vina module
+------------------------------------
+
+.. automodule:: vina.autodock_vina
+    :members:
+    :undoc-members:
+    :show-inheritance:

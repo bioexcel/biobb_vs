@@ -5,3 +5,4 @@ biobb_vs
    :maxdepth: 4
 
    vina
+   utils

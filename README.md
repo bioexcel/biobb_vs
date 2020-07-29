@@ -14,9 +14,7 @@ bioinformatics tools.
 The latest documentation of this package can be found in our readthedocs site:
 [latest API documentation](http://biobb_vs.readthedocs.io/en/latest/).
 
-> **Important:** This package installs automatically [MGLTools](http://mgltools.scripps.edu/) from [anaconda](https://anaconda.org/bioconda/mgltools). After the installation users must edit the **/path/to/anaconda/mgltools/bin/pythonsh** (MGLTools are usually in the pkgs/ folder of the anaconda folder) file and set the **MGL_ROOT** environment variable with the correct path:
-
-`MGL_ROOT="/path/to/anaconda/mgltools"` 
+> **Important:** This package installs automatically [MGLTools](http://mgltools.scripps.edu/) from [anaconda](https://anaconda.org/bioconda/mgltools). After the installation users must edit the **/path/to/anaconda/mgltools/bin/pythonsh** (MGLTools are usually in the pkgs/ folder of the anaconda folder) file and set the **MGL_ROOT** environment variable with the correct path:<br /><br />`MGL_ROOT="/path/to/anaconda/mgltools"` 
 
 ### Version
 v3.0.0 2020.3

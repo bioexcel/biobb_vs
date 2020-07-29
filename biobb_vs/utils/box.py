@@ -17,7 +17,7 @@ class Box():
         output_pdb_path (str): PDB protein structure coordinates including the annotation of the box center and size as REMARKs. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/utils/ref_output_box.pdb>`_. Accepted formats: pdb.
         properties (dic):
             * **offset** (*float*) - (2.0) Extra distance (Angstroms) between the last residue atom and the box boundary.
-            * **residue_offset** (*float*) - (2.0) TODO!!!.
+            * **residue_offset** (*int*) - (0) Residue id offset.
             * **box_coordinates** (*bool*) - (False) Add box coordinates as 8 ATOM records.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
@@ -35,7 +35,7 @@ class Box():
 
         # Properties specific for BB
         self.offset = float(properties.get('offset', 2.0))
-        self.residue_offset = float(properties.get('residue_offset', 2.0))
+        self.residue_offset = properties.get('residue_offset', 0)
         self.box_coordinates = float(properties.get('box_coordinates', False))
         self.properties = properties
 

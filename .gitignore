@@ -112,6 +112,9 @@ traj_comp.xtc
 # ipynb checkpoints
 .ipynb_checkpoints
 
+# reference log
+!biobb_vs/test/reference/vina/*.log
+
 # jupyter docs
 biobb_vs/docs/jupyter/data
 biobb_vs/docs/jupyter/log.*

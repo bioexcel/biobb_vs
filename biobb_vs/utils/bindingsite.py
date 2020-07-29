@@ -12,9 +12,9 @@ class BindingSite():
     """Finds the binding site of the input_pdb file based on the ligands' location of similar structures (members of the sequence identity cluster)
 
     Args:
-        input_pdb_path (str): Path to the PDB structure where the binding site is to be found. File type: input. `Sample file <>`_. Accepted formats: pdb.
-        input_clusters_zip (str): Path to the ZIP file with all the PDB members of the identity cluster. File type: input. `Sample file <>`_. Accepted formats: zip.
-        output_pdb_path (str): Path to the PDB containig the residues belonging to the binding site. File type: output. `Sample file <>`_. Accepted formats: pdb.
+        input_pdb_path (str): Path to the PDB structure where the binding site is to be found. File type: input. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/bindingsite.pdb>`_. Accepted formats: pdb.
+        input_clusters_zip (str): Path to the ZIP file with all the PDB members of the identity cluster. File type: input. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/bindingsite.zip>`_. Accepted formats: zip.
+        output_pdb_path (str): Path to the PDB containig the residues belonging to the binding site. File type: output. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/utils/ref_output_bindingsite.pdb>`_. Accepted formats: pdb.
         properties (dic):
             * **ligand** (*str*) - (None) Ligand to be found in the protein structure. If no ligand provided, no action will be executed.
             * **radius** (*float*) - (5.0) Cut-off distance(Angstroms) around ligand atoms to consider a protein atom as a binding site atom.

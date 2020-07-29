@@ -18,6 +18,7 @@ class Box():
         properties (dic):
             * **offset** (*float*) - (2.0) Extra distance (Angstroms) between the last residue atom and the box boundary.
             * **residue_offset** (*float*) - (2.0) TODO!!!.
+            * **box_coordinates** (*bool*) - (False) Add box coordinates as 8 ATOM records.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
     """
@@ -35,6 +36,7 @@ class Box():
         # Properties specific for BB
         self.offset = float(properties.get('offset', 2.0))
         self.residue_offset = float(properties.get('residue_offset', 2.0))
+        self.box_coordinates = float(properties.get('box_coordinates', False))
         self.properties = properties
 
         # Properties common in all BB
@@ -141,9 +143,11 @@ class Box():
         remarks = "REMARK BOX CENTER:%8.3f%8.3f%8.3f" % (selection_box_center[1],selection_box_center[1],selection_box_center[2])
         remarks += " SIZE:%8.3f%8.3f%8.3f" % (selection_box_size[0],selection_box_size[1],selection_box_size[2])
 
-        # add (optional) box coordinates as 8 ATOM records
-        #selection_box_coords_txt  = get_box_coordinates(selection_box_center,selection_box_size)
         selection_box_coords_txt   = ""
+        # add (optional) box coordinates as 8 ATOM records
+        if self.box_coordinates:
+            fu.log('Adding box coordinates', out_log, self.global_log)
+            selection_box_coords_txt  = get_box_coordinates(selection_box_center,selection_box_size)
 
         shutil.copy2(self.io_dict["in"]["input_pdb_path"], self.io_dict["out"]["output_pdb_path"])
 

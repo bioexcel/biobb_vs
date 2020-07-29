@@ -27,3 +27,33 @@ autodock_vina:
     ref_output_pdbqt_path: file:test_reference_dir/vina/ref_output_vina.pdbqt
     output_log_path: output_log_path.log
     ref_output_log_path: file:test_reference_dir/vina/ref_output_vina.log
+
+# UTILS
+
+bindingsite:
+  paths:
+    input_pdb_path: file:test_data_dir/utils/bindingsite.pdb
+    input_clusters_zip: file:test_data_dir/utils/bindingsite.zip
+    output_pdb_path: output_bindingsite.pdb
+    ref_output_pdb_path: file:test_reference_dir/utils/ref_output_bindingsite.pdb
+  properties:
+    ligand: PGA
+    matrix_name: blosum62
+    gap_open: -10.0
+    gap_extend: -0.5
+    max_num_ligands: 15
+    radius: 5
+
+box:
+  paths:
+    input_pdb_path: file:test_data_dir/utils/box.pdb
+    resid_pdb_path: file:test_data_dir/utils/resid_box.pdb
+    output_pdb_path: output_box.pdb
+    ref_output_pdb_path: file:test_reference_dir/utils/ref_output_box.pdb
+  properties:
+    ligand: PGA
+    matrix_name: blosum62
+    gap_open: -10.0
+    gap_extend: -0.5
+    max_num_ligands: 15
+    radius: 5

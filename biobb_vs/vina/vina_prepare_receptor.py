@@ -16,8 +16,8 @@ class VinaPrepareReceptor():
     Visit the `AutoDock official website <http://autodock.scripps.edu/faqs-help/how-to/how-to-prepare-a-receptor-file-for-autodock4>`_. 
 
     Args:
-        input_receptor_path (str): Path to the input PDB receptor structure. File type: input. `Sample file <>`_. Accepted formats: pdb.
-        output_receptor_path (str): Path to the output PDBQT receptor structure. File type: output. `Sample file <>`_. Accepted formats: pdbqt.
+        input_receptor_path (str): Path to the input PDB receptor structure. File type: input. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/vina/prepare_receptor.pdb>`_. Accepted formats: pdb.
+        output_receptor_path (str): Path to the output PDBQT receptor structure. File type: output. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/vina/ref_prepare_receptor.pdbqt>`_. Accepted formats: pdbqt.
         properties (dic):
             * **mgltools_path** (*string*) - ('mgltools') path to mgltools in your local computer (MGLTools are usually in the pkgs/ folder of the anaconda folder).
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.

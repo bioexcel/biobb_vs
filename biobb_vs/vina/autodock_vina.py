@@ -15,11 +15,11 @@ class AutoDockVina():
     Visit the `AutoDock official website <http://vina.scripps.edu/index.html>`_. 
 
     Args:
-        input_ligand_pdbqt_path (str): Path to the input PDBQT ligand. File type: input. `Sample file <>`_. Accepted formats: pdbqt.
-        input_receptor_pdbqt_path (str): Path to the input PDBQT receptor. File type: input. `Sample file <>`_. Accepted formats: pdbqt.
-        input_box_path (str): Path to the PDB containig the residues belonging to the binding site. File type: input. `Sample file <>`_. Accepted formats: pdb.
-        output_pdbqt_path (str): Path to the output PDBQT file. File type: output. `Sample file <>`_. Accepted formats: pdbqt.
-        output_log_path (str) (Optional): Path to the log file. File type: output. `Sample file <>`_. Accepted formats: log.
+        input_ligand_pdbqt_path (str): Path to the input PDBQT ligand. File type: input. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/vina/vina_ligand.pdbqt>`_. Accepted formats: pdbqt.
+        input_receptor_pdbqt_path (str): Path to the input PDBQT receptor. File type: input. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/vina/vina_receptor.pdbqt>`_. Accepted formats: pdbqt.
+        input_box_path (str): Path to the PDB containig the residues belonging to the binding site. File type: input. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/vina/vina_box.pdb>`_. Accepted formats: pdb.
+        output_pdbqt_path (str): Path to the output PDBQT file. File type: output. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/vina/ref_output_vina.pdbqt>`_. Accepted formats: pdbqt.
+        output_log_path (str) (Optional): Path to the log file. File type: output. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/vina/ref_output_vina.log>`_. Accepted formats: log.
         properties (dic):
             * **vina_path** (*string*) - ('vina') path to vina in your local computer.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.

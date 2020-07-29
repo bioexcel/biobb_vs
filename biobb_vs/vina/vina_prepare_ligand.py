@@ -16,8 +16,8 @@ class VinaPrepareLigand():
     Visit the `AutoDock official website <http://autodock.scripps.edu/faqs-help/how-to/how-to-prepare-a-ligand-file-for-autodock4>`_. 
 
     Args:
-        input_ligand_path (str): Path to the input PDB ligand. File type: input. `Sample file <>`_. Accepted formats: pdb.
-        output_ligand_path (str): Path to the output PDBQT ligand. File type: output. `Sample file <>`_. Accepted formats: pdbqt.
+        input_ligand_path (str): Path to the input PDB ligand. File type: input. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/vina/prepare_ligand.pdb>`_. Accepted formats: pdb.
+        output_ligand_path (str): Path to the output PDBQT ligand. File type: output. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/vina/ref_prepare_ligand.pdbqt>`_. Accepted formats: pdbqt.
         properties (dic):
             * **mgltools_path** (*string*) - ('mgltools') path to mgltools in your local computer (MGLTools are usually in the pkgs/ folder of the anaconda folder).
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.

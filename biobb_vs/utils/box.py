@@ -12,9 +12,9 @@ class Box():
     """Sets the center and the size of a rectangular parallelepiped box around a selection of residues found in a given PDB. The residue identifiers that compose the selection (i.e. binding site) are extracted from a second PDB.
 
     Args:
-        input_pdb_path (str): PDB protein structure for which the box will be build. Its size and center will be set around the 'resid_pdb_path' residues once mapped against this PDB. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/box.pdb>`_. Accepted formats: pdb.
-        resid_pdb_path (str): PDB file containing a selection of residue numbers mappable to 'input_pdb_path'. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/resid_box.pdb>`_. Accepted formats: pdb.
-        output_pdb_path (str): PDB protein structure coordinates including the annotation of the box center and size as REMARKs. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/utils/ref_output_box.pdb>`_. Accepted formats: pdb.
+        input_pdb_path (str): PDB protein structure for which the box will be build. Its size and center will be set around the 'resid_pdb_path' residues once mapped against this PDB. File type: input. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/box.pdb>`_. Accepted formats: pdb.
+        resid_pdb_path (str): PDB file containing a selection of residue numbers mappable to 'input_pdb_path'. File type: input.  `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/resid_box.pdb>`_. Accepted formats: pdb.
+        output_pdb_path (str): PDB protein structure coordinates including the annotation of the box center and size as REMARKs. File type: output. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/utils/ref_output_box.pdb>`_. Accepted formats: pdb.
         properties (dic):
             * **offset** (*float*) - (2.0) Extra distance (Angstroms) between the last residue atom and the box boundary.
             * **residue_offset** (*int*) - (0) Residue id offset.

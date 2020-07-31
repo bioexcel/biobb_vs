@@ -40,7 +40,9 @@ def is_valid_file(ext, argument):
 		'input_pdb_path': ['pdb'],
 		'input_clusters_zip': ['zip'],
         'resid_pdb_path': ['pdb'],
-		'output_pdb_path': ['pdb']
+        'input_pdbqt_path': ['pdbqt'],
+		'output_pdb_path': ['pdb'],
+        'output_pdbqt_path': ['pdbqt']
 	}
 	return ext in formats[argument]
 
@@ -192,8 +194,8 @@ def get_box_coordinates(box_center, box_size, pdb_format=True):
         occ    = 1
         bfact  = 50
         elem   = "ZN"
-        for coord in coords:
-            coords_txt += "HETATM%5d %-4s %3s %s%4d    %8.3f%8.3f%8.3f%6.2f%6.2f          %2s\n" % (at_num,at_nam,re_nam,chain,res_num,coord[0],coord[1],coord[2],occ,bfact,elem)
+        for i, coord in enumerate(coords):
+            coords_txt += "HETATM%5d %-4s %3s %s%4d    %8.3f%8.3f%8.3f%6.2f%6.2f          %2s\n" % (at_num,at_nam+str(i+1),re_nam,chain,res_num,coord[0],coord[1],coord[2],occ,bfact,elem)
             at_num +=1
         return coords_txt
     else:

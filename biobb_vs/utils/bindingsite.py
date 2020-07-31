@@ -130,7 +130,7 @@ class BindingSite():
             clusterPDB = {}
             clusterPDB = parser.get_structure(cluster_name, cluster_path)[0]
 
-            # Use only the fist chain
+            # Use only the first chain
             for cluster_chain in clusterPDB.get_chains():
                 clusterPDB = cluster_chain
 

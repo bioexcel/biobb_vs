@@ -20,3 +20,11 @@ utils.box module
     :members:
     :undoc-members:
     :show-inheritance:
+
+utils.extract_model_pdbqt module
+------------------------------------
+
+.. automodule:: utils.extract_model_pdbqt
+    :members:
+    :undoc-members:
+    :show-inheritance:

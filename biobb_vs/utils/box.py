@@ -127,7 +127,7 @@ class Box():
 
         # compute box center
         selection_box_center = sum(atom.coord for res in selection_res_list for atom in res.get_atoms()) / selection_atoms_num
-        fu.log('Binding site center (Angstroms): %8.3f%8.3f%8.3f' % (selection_box_center[1],selection_box_center[1],selection_box_center[2]), out_log, self.global_log)
+        fu.log('Binding site center (Angstroms): %8.3f%8.3f%8.3f' % (selection_box_center[0],selection_box_center[1],selection_box_center[2]), out_log, self.global_log)
 
         # compute box size
         selection_coords_max = np.amax([atom.coord for res in selection_res_list for atom in res.get_atoms()],axis=0)
@@ -140,7 +140,7 @@ class Box():
         fu.log('Volume (cubic Angstroms): %.0f' % (vol), out_log, self.global_log)
 
         # add box details as PDB remarks
-        remarks = "REMARK BOX CENTER:%8.3f%8.3f%8.3f" % (selection_box_center[1],selection_box_center[1],selection_box_center[2])
+        remarks = "REMARK BOX CENTER:%8.3f%8.3f%8.3f" % (selection_box_center[0],selection_box_center[1],selection_box_center[2])
         remarks += " SIZE:%8.3f%8.3f%8.3f" % (selection_box_size[0],selection_box_size[1],selection_box_size[2])
 
         selection_box_coords_txt   = ""

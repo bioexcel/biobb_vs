@@ -51,9 +51,13 @@ box:
     output_pdb_path: output_box.pdb
     ref_output_pdb_path: file:test_reference_dir/utils/ref_output_box.pdb
   properties:
-    ligand: PGA
-    matrix_name: blosum62
-    gap_open: -10.0
-    gap_extend: -0.5
-    max_num_ligands: 15
-    radius: 5
+    offset: 2
+    box_coordinates: true
+
+extract_model_pdbqt:
+  paths:
+    input_pdbqt_path: file:test_data_dir/utils/models.pdbqt
+    output_pdbqt_path: output_extract.pdbqt
+    ref_output_pdbqt_path: file:test_reference_dir/utils/ref_extract_model.pdbqt
+  properties:
+    model: 1

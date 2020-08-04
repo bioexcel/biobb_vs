@@ -24,13 +24,13 @@
         }
     ],
     "dep_pypi" : [
-        "install_requires=['biobb_common==3.0.0', 'biobb_structure_checking==3.0.2']", 
+        "install_requires=['biobb_common==3.0.0', 'biopython==1.76']", 
         "python_requires='==3.7.*'"
     ], 
     "dep_conda" : [
         "python ==3.7.*", 
         "biobb_common ==3.0.0", 
-        "biobb_structure_checking ==3.0.2",
+        "biopython ==1.76",
         "autodock-vina ==1.1.2"
     ],
     "keywords" : [

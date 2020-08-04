@@ -12,8 +12,8 @@ class ExtractModelPDBQT():
     """Extracts a model from a PDBQT file with several models
 
     Args:
-        input_pdbqt_path (str): Input PDBQT file. File type: input. `Sample file <>`_. Accepted formats: pdbqt.
-        output_pdbqt_path (str): Output PDBQT file. File type: output. `Sample file <>`_. Accepted formats: pdbqt.
+        input_pdbqt_path (str): Input PDBQT file. File type: input. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/models.pdbqt>`_. Accepted formats: pdbqt.
+        output_pdbqt_path (str): Output PDBQT file. File type: output. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/utils/ref_extract_model.pdbqt>`_. Accepted formats: pdbqt.
         properties (dic):
             * **model** (*int*) - (1) Model number to extract from input_pdbqt_path.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.

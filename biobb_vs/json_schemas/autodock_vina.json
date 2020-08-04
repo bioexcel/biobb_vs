@@ -1,0 +1,80 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://bioexcel.eu/biobb_vs/json_schemas/1.0/autodock_vina",
+    "title": "Docking of the ligand to a set of grids describing the target protein.",
+    "type": "object",
+    "required": [
+        "input_ligand_pdbqt_path",
+        "input_receptor_pdbqt_path",
+        "input_box_path",
+        "output_pdbqt_path"
+    ],
+    "properties": {
+        "input_ligand_pdbqt_path": {
+            "type": "string",
+            "description": "Path to the input PDBQT ligand",
+            "filetype": "input",
+            "sample": "https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/vina/vina_ligand.pdbqt",
+            "enum": [
+                ".*\\.pdbqt$"
+            ]
+        },
+        "input_receptor_pdbqt_path": {
+            "type": "string",
+            "description": "Path to the input PDBQT receptor",
+            "filetype": "input",
+            "sample": "https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/vina/vina_receptor.pdbqt",
+            "enum": [
+                ".*\\.pdbqt$"
+            ]
+        },
+        "input_box_path": {
+            "type": "string",
+            "description": "Path to the PDB containig the residues belonging to the binding site",
+            "filetype": "input",
+            "sample": "https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/vina/vina_box.pdb",
+            "enum": [
+                ".*\\.pdb$"
+            ]
+        },
+        "output_pdbqt_path": {
+            "type": "string",
+            "description": "Path to the output PDBQT file",
+            "filetype": "output",
+            "sample": "https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/vina/ref_output_vina.pdbqt",
+            "enum": [
+                ".*\\.pdbqt$"
+            ]
+        },
+        "output_log_path": {
+            "type": "string",
+            "description": "Path to the log file",
+            "filetype": "output",
+            "sample": "https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/vina/ref_output_vina.log",
+            "enum": [
+                ".*\\.log$"
+            ]
+        },
+        "properties": {
+            "type": "object",
+            "properties": {
+                "vina_path": {
+                    "type": "string",
+                    "default": "'vina'",
+                    "description": "path to vina in your local computer."
+                },
+                "remove_tmp": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "[WF property] Remove temporal files."
+                },
+                "restart": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "[WF property] Do not execute if output files exist."
+                }
+            }
+        }
+    },
+    "additionalProperties": false
+}

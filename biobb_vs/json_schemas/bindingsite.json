@@ -1,0 +1,128 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://bioexcel.eu/biobb_vs/json_schemas/1.0/bindingsite",
+    "title": "Finds the binding site of the input_pdb file based on the ligands' location of similar structures (members of the sequence identity cluster)",
+    "type": "object",
+    "required": [
+        "input_pdb_path",
+        "input_clusters_zip",
+        "output_pdb_path"
+    ],
+    "properties": {
+        "input_pdb_path": {
+            "type": "string",
+            "description": "Path to the PDB structure where the binding site is to be found",
+            "filetype": "input",
+            "sample": "https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/bindingsite.pdb",
+            "enum": [
+                ".*\\.pdb$"
+            ]
+        },
+        "input_clusters_zip": {
+            "type": "string",
+            "description": "Path to the ZIP file with all the PDB members of the identity cluster",
+            "filetype": "input",
+            "sample": "https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/bindingsite.zip",
+            "enum": [
+                ".*\\.zip$"
+            ]
+        },
+        "output_pdb_path": {
+            "type": "string",
+            "description": "Path to the PDB containig the residues belonging to the binding site",
+            "filetype": "output",
+            "sample": "https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/utils/ref_output_bindingsite.pdb",
+            "enum": [
+                ".*\\.pdb$"
+            ]
+        },
+        "properties": {
+            "type": "object",
+            "properties": {
+                "ligand": {
+                    "type": "string",
+                    "default": null,
+                    "description": "Ligand to be found in the protein structure. If no ligand provided, no action will be executed."
+                },
+                "radius": {
+                    "type": "float",
+                    "default": 5.0,
+                    "description": "around ligand atoms to consider a protein atom as a binding site atom."
+                },
+                "max_num_ligands": {
+                    "type": "number",
+                    "default": 15,
+                    "description": "Total number of superimposed ligands to be extracted from the identity cluster. For populated clusters, the restriction avoids to superimpose redundant structures. If 0, all ligands extracted will be considered."
+                },
+                "matrix_name": {
+                    "type": "string",
+                    "default": "'blosum62'",
+                    "description": "Substitution matrices for use in alignments.",
+                    "enum": [
+                        "'benner6'",
+                        "'benner22'",
+                        "'benner74'",
+                        "'blosum100'",
+                        "'blosum30'",
+                        "'blosum35'",
+                        "'blosum40'",
+                        "'blosum45'",
+                        "'blosum50'",
+                        "'blosum55'",
+                        "'blosum60'",
+                        "'blosum62'",
+                        "'blosum65'",
+                        "'blosum70'",
+                        "'blosum75'",
+                        "'blosum80'",
+                        "'blosum85'",
+                        "'blosum90'",
+                        "'blosum95'",
+                        "'feng'",
+                        "'fitch'",
+                        "'genetic'",
+                        "'gonnet'",
+                        "'grant'",
+                        "'ident'",
+                        "'johnson'",
+                        "'levin'",
+                        "'mclach'",
+                        "'miyata'",
+                        "'nwsgappep'",
+                        "'pam120'",
+                        "'pam180'",
+                        "'pam250'",
+                        "'pam30'",
+                        "'pam300'",
+                        "'pam60'",
+                        "'pam90'",
+                        "'rao'",
+                        "'risler'",
+                        "'structure'"
+                    ]
+                },
+                "gap_open": {
+                    "type": "float",
+                    "default": -10.0,
+                    "description": "Gap open penalty."
+                },
+                "gap_extend": {
+                    "type": "float",
+                    "default": -0.5,
+                    "description": "Gap extend penalty."
+                },
+                "remove_tmp": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "[WF property] Remove temporal files."
+                },
+                "restart": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "[WF property] Do not execute if output files exist."
+                }
+            }
+        }
+    },
+    "additionalProperties": false
+}

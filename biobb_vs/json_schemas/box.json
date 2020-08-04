@@ -1,0 +1,71 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://bioexcel.eu/biobb_vs/json_schemas/1.0/box",
+    "title": "Sets the center and the size of a rectangular parallelepiped box around a selection of residues found in a given PDB. The residue identifiers that compose the selection (i.e. binding site) are extracted from a second PDB.",
+    "type": "object",
+    "required": [
+        "input_pdb_path",
+        "resid_pdb_path",
+        "output_pdb_path"
+    ],
+    "properties": {
+        "input_pdb_path": {
+            "type": "string",
+            "description": "PDB protein structure for which the box will be build",
+            "filetype": "input",
+            "sample": "https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/box.pdb",
+            "enum": [
+                ".*\\.pdb$"
+            ]
+        },
+        "resid_pdb_path": {
+            "type": "string",
+            "description": "PDB file containing a selection of residue numbers mappable to 'input_pdb_path'",
+            "filetype": "input",
+            "sample": "https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/resid_box.pdb",
+            "enum": [
+                ".*\\.pdb$"
+            ]
+        },
+        "output_pdb_path": {
+            "type": "string",
+            "description": "PDB protein structure coordinates including the annotation of the box center and size as REMARKs",
+            "filetype": "output",
+            "sample": "https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/utils/ref_output_box.pdb",
+            "enum": [
+                ".*\\.pdb$"
+            ]
+        },
+        "properties": {
+            "type": "object",
+            "properties": {
+                "offset": {
+                    "type": "float",
+                    "default": 2.0,
+                    "description": "between the last residue atom and the box boundary."
+                },
+                "residue_offset": {
+                    "type": "number",
+                    "default": 0,
+                    "description": "Residue id offset."
+                },
+                "box_coordinates": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Add box coordinates as 8 ATOM records."
+                },
+                "remove_tmp": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "[WF property] Remove temporal files."
+                },
+                "restart": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "[WF property] Do not execute if output files exist."
+                }
+            }
+        }
+    },
+    "additionalProperties": false
+}

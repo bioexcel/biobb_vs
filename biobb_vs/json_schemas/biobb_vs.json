@@ -9,18 +9,32 @@
     "version": "3.0.0",
     "tools" : [
         {
-            "block" : "VinaPrepareLigand", 
-            "tool" : "MGLTools prepare_ligand4", 
-            "desc" : "Prepares input ligand for an Autodock Vina Virtual Screening.",
-            "exec" : "vina_prepare_ligand",
-            "docs": ""
+            "block" : "AutoDockVina", 
+            "tool" : "AutoDock Vina", 
+            "desc" : "Docking of the ligand to a set of grids describing the target protein.",
+            "exec" : "autodock_vina",
+            "docs": "https://biobb-vs.readthedocs.io/en/latest/vina.html#module-vina.autodock_vina"
         },
         {
-            "block" : "VinaPrepareReceptor", 
-            "tool" : "MGLTools prepare_receptor4", 
-            "desc" : "Prepares input receptor structure for an Autodock Vina Virtual Screening.",
-            "exec" : "vina_prepare_receptor",
-            "docs": ""
+            "block" : "BindingSite", 
+            "tool" : "in house using biopython", 
+            "desc" : "Finds the binding site of the input_pdb file based on the ligands' location of similar structures (members of the sequence identity cluster)",
+            "exec" : "bindingsite",
+            "docs": "https://biobb-vs.readthedocs.io/en/latest/utils.html#module-utils.bindingsite"
+        },
+        {
+            "block" : "Box", 
+            "tool" : "in house using biopython", 
+            "desc" : "Sets the center and the size of a rectangular parallelepiped box around a selection of residues found in a given PDB. The residue identifiers that compose the selection (i.e. binding site) are extracted from a second PDB.",
+            "exec" : "box",
+            "docs": "https://biobb-vs.readthedocs.io/en/latest/utils.html#module-utils.box"
+        },
+        {
+            "block" : "ExtractModelPDBQT", 
+            "tool" : "in house using biopython", 
+            "desc" : "Extracts a model from a PDBQT file with several models.",
+            "exec" : "extract_model_pdbqt",
+            "docs": "https://biobb-vs.readthedocs.io/en/latest/utils.html#module-utils.extract_model_pdbqt"
         }
     ],
     "dep_pypi" : [

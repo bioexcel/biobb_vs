@@ -1,3 +1,4 @@
+""" Common functions for package biobb_vs.utils """
 from pathlib import Path, PurePath
 import re
 import shutil
@@ -5,6 +6,7 @@ import numpy as np
 import Bio.PDB
 import Bio.pairwise2
 import Bio.SubsMat.MatrixInfo
+#from Bio.Align import substitution_matrices
 from Bio.Data.SCOPData import protein_letters_3to1 as prot_one_letter
 from biobb_common.tools import file_utils as fu
 
@@ -89,6 +91,10 @@ def align_sequences(seqA, seqB, matrix_name = 'blosum62', gap_open = -10.0, gap_
 
         # get matrix from matrix_name
         matrix = getattr(Bio.SubsMat.MatrixInfo, matrix_name)
+
+        #print(Bio.SubsMat.MatrixInfo)
+        #print(type(substitution_matrices.select()))
+        #matrix = getattr(substitution_matrices.load(), matrix_name)
 
         # Do pairwaise alignment
         alns = Bio.pairwise2.align.globalds(sequence_A, sequence_B, matrix, gap_open, gap_extend, penalize_end_gaps=(False, False) )

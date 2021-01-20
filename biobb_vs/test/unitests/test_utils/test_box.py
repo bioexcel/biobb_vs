@@ -1,5 +1,5 @@
 from biobb_common.tools import test_fixtures as fx
-from biobb_vs.utils.box import Box
+from biobb_vs.utils.box import box
 
 
 class TestBox():
@@ -11,6 +11,6 @@ class TestBox():
         pass
 
     def test_box(self):
-        Box(properties=self.properties, **self.paths).launch()
+        box(properties=self.properties, **self.paths)
         assert fx.not_empty(self.paths['output_pdb_path'])
         assert fx.equal(self.paths['output_pdb_path'], self.paths['ref_output_pdb_path'])

@@ -9,25 +9,55 @@ from biobb_common.command_wrapper import cmd_wrapper
 from biobb_vs.utils.common import *
 
 class BindingSite():
-    """Finds the binding site of the input_pdb file based on the ligands' location of similar structures (members of the sequence identity cluster)
+    """
+    | biobb_vs BindingSite
+    | This class finds the binding site of the input_pdb.
+    | Finds the binding site of the input_pdb_path file based on the ligands' location of similar structures (members of the sequence identity cluster)  
 
     Args:
-        input_pdb_path (str): Path to the PDB structure where the binding site is to be found. File type: input. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/bindingsite.pdb>`_. Accepted formats: pdb.
-        input_clusters_zip (str): Path to the ZIP file with all the PDB members of the identity cluster. File type: input. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/bindingsite.zip>`_. Accepted formats: zip.
-        output_pdb_path (str): Path to the PDB containig the residues belonging to the binding site. File type: output. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/utils/ref_output_bindingsite.pdb>`_. Accepted formats: pdb.
-        properties (dic):
+        input_pdb_path (str): Path to the PDB structure where the binding site is to be found. File type: input. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/bindingsite.pdb>`_. Accepted formats: pdb (edam:format_1476).
+        input_clusters_zip (str): Path to the ZIP file with all the PDB members of the identity cluster. File type: input. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/bindingsite.zip>`_. Accepted formats: zip (edam:format_3987).
+        output_pdb_path (str): Path to the PDB containig the residues belonging to the binding site. File type: output. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/utils/ref_output_bindingsite.pdb>`_. Accepted formats: pdb (edam:format_1476).
+        properties (dic - Python dictionary object containing the tool parameters, not input/output files):
             * **ligand** (*str*) - (None) Ligand to be found in the protein structure. If no ligand provided, no action will be executed.
-            * **radius** (*float*) - (5.0) Cut-off distance(Angstroms) around ligand atoms to consider a protein atom as a binding site atom.
-            * **max_num_ligands** (*int*) - (15) Total number of superimposed ligands to be extracted from the identity cluster. For populated clusters, the restriction avoids to superimpose redundant structures. If 0, all ligands extracted will be considered.
-            * **matrix_name** (*str*) - ('blosum62') Substitution matrices for use in alignments. Values: 'benner6', 'benner22', 'benner74', 'blosum100', 'blosum30', 'blosum35', 'blosum40', 'blosum45', 'blosum50', 'blosum55', 'blosum60', 'blosum62', 'blosum65', 'blosum70', 'blosum75', 'blosum80', 'blosum85', 'blosum90', 'blosum95', 'feng', 'fitch', 'genetic', 'gonnet', 'grant', 'ident', 'johnson', 'levin', 'mclach', 'miyata', 'nwsgappep', 'pam120', 'pam180', 'pam250', 'pam30', 'pam300', 'pam60', 'pam90', 'rao', 'risler', 'structure'.
-            * **gap_open** (*float*) - (-10.0) Gap open penalty.
-            * **gap_extend** (*float*) - (-0.5) Gap extend penalty.
+            * **radius** (*float*) - (5.0) [0.1~1000|0.1] Cut-off distance (Ångstroms) around ligand atoms to consider a protein atom as a binding site atom.
+            * **max_num_ligands** (*int*) - (15) [0~1000|1] Total number of superimposed ligands to be extracted from the identity cluster. For populated clusters, the restriction avoids to superimpose redundant structures. If 0, all ligands extracted will be considered.
+            * **matrix_name** (*str*) - ("blosum62") Substitution matrices for use in alignments. Values: benner6, benner22, benner74, blosum100, blosum30, blosum35, blosum40, blosum45, blosum50, blosum55, blosum60, blosum62, blosum65, blosum70, blosum75, blosum80, blosum85, blosum90, blosum95, feng, fitch, genetic, gonnet, grant, ident, johnson, levin, mclach, miyata, nwsgappep, pam120, pam180, pam250, pam30, pam300, pam60, pam90, rao, risler, structurebenner6, benner22, benner74, blosum100, blosum30, blosum35, blosum40, blosum45, blosum50, blosum55, blosum60, blosum62, blosum65, blosum70, blosum75, blosum80, blosum85, blosum90, blosum95, feng, fitch, genetic, gonnet, grant, ident, johnson, levin, mclach, miyata, nwsgappep, pam120, pam180, pam250, pam30, pam300, pam60, pam90, rao, risler, structurebenner6, benner22, benner74, blosum100, blosum30, blosum35, blosum40, blosum45, blosum50, blosum55, blosum60, blosum62, blosum65, blosum70, blosum75, blosum80, blosum85, blosum90, blosum95, feng, fitch, genetic, gonnet, grant, ident, johnson, levin, mclach, miyata, nwsgappep, pam120, pam180, pam250, pam30, pam300, pam60, pam90, rao, risler, structurebenner6, benner22, benner74, blosum100, blosum30, blosum35, blosum40, blosum45, blosum50, blosum55, blosum60, blosum62, blosum65, blosum70, blosum75, blosum80, blosum85, blosum90, blosum95, feng, fitch, genetic, gonnet, grant, ident, johnson, levin, mclach, miyata, nwsgappep, pam120, pam180, pam250, pam30, pam300, pam60, pam90, rao, risler, structurebenner6, benner22, benner74, blosum100, blosum30, blosum35, blosum40, blosum45, blosum50, blosum55, blosum60, blosum62, blosum65, blosum70, blosum75, blosum80, blosum85, blosum90, blosum95, feng, fitch, genetic, gonnet, grant, ident, johnson, levin, mclach, miyata, nwsgappep, pam120, pam180, pam250, pam30, pam300, pam60, pam90, rao, risler, structurebenner6, benner22, benner74, blosum100, blosum30, blosum35, blosum40, blosum45, blosum50, blosum55, blosum60, blosum62, blosum65, blosum70, blosum75, blosum80, blosum85, blosum90, blosum95, feng, fitch, genetic, gonnet, grant, ident, johnson, levin, mclach, miyata, nwsgappep, pam120, pam180, pam250, pam30, pam300, pam60, pam90, rao, risler, structure.
+            * **gap_open** (*float*) - (-10.0) [-1000~1000|0.1] Gap open penalty.
+            * **gap_extend** (*float*) - (-0.5) [-1000~1000|0.1] Gap extend penalty.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
+
+    Examples:
+        This is a use example of how to use the building block from Python::
+
+            from biobb_vs.utils.bindingsite import bindingsite
+            prop = { 
+                'ligand': 'PGA',
+                'matrix_name': 'blosum62',
+                'gap_open': -10.0,
+                'gap_extend': -0.5,
+                'max_num_ligands': 15,
+                'radius': 5
+            }
+            bindingsite(input_pdb_path='/path/to/myStructure.pdb', 
+                        input_clusters_zip='/path/to/myCluster.zip', 
+                        output_pdb_path='/path/to/newStructure.pdb', 
+                        properties=prop)
+
+    Info:
+        * wrapped_software:
+            * name: In house using Biopython
+            * version: >=1.76
+            * license: Apache-2.0
+        * ontology:
+            * name: EDAM
+            * schema: http://edamontology.org/EDAM.owl
+
     """
 
-    def __init__(self, input_pdb_path, input_clusters_zip,
-                output_pdb_path, properties=None, **kwargs) -> None:
+    def __init__(self, input_pdb_path, input_clusters_zip, output_pdb_path, 
+                properties=None, **kwargs) -> None:
         properties = properties or {}
 
         # Input/Output files
@@ -63,7 +93,7 @@ class BindingSite():
 
     @launchlogger
     def launch(self) -> int:
-        """Launches the execution of the BindingSite module."""
+        """Execute the :class:`BindingSite <utils.bindingsite.BindingSite>` utils.bindingsite.BindingSite object."""
 
         # Get local loggers from launchlogger decorator
         out_log = getattr(self, 'out_log', None)
@@ -282,7 +312,17 @@ class BindingSite():
 
         return 0
 
+def bindingsite(input_pdb_path: str, input_clusters_zip: str, output_pdb_path: str, properties: dict = None, **kwargs) -> int:
+    """Execute the :class:`BindingSite <utils.bindingsite.BindingSite>` class and
+    execute the :meth:`launch() <utils.bindingsite.BindingSite.launch>` method."""
+
+    return BindingSite(input_pdb_path=input_pdb_path,
+                        input_clusters_zip=input_clusters_zip,
+                        output_pdb_path=output_pdb_path,
+                        properties=properties, **kwargs).launch()
+
 def main():
+    """Command line execution of this building block. Please check the command line documentation."""
     parser = argparse.ArgumentParser(description="Finds the binding site of the input_pdb file based on the ligands' location of similar structures (members of the sequence identity cluster)", formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
     parser.add_argument('--config', required=False, help='Configuration file')
 
@@ -297,9 +337,10 @@ def main():
     properties = settings.ConfReader(config=args.config).get_prop_dic()
 
     # Specific call of each building block
-    BindingSite(input_pdb_path=args.input_pdb_path, input_clusters_zip=args.input_clusters_zip, 
-                    output_pdb_path=args.output_pdb_path, 
-                    properties=properties).launch()
+    bindingsite(input_pdb_path=args.input_pdb_path, 
+                input_clusters_zip=args.input_clusters_zip, 
+                output_pdb_path=args.output_pdb_path, 
+                properties=properties)
 
 if __name__ == '__main__':
     main()

@@ -1,5 +1,5 @@
 from biobb_common.tools import test_fixtures as fx
-from biobb_vs.vina.autodock_vina import AutoDockVina
+from biobb_vs.vina.autodock_vina import autodock_vina
 
 
 class TestAutoDockVina():
@@ -11,8 +11,6 @@ class TestAutoDockVina():
         pass
 
     def test_autodock_vina(self):
-        AutoDockVina(properties=self.properties, **self.paths).launch()
+        autodock_vina(properties=self.properties, **self.paths)
         assert fx.not_empty(self.paths['output_pdbqt_path'])
-        #assert fx.equal(self.paths['output_pdbqt_path'], self.paths['ref_output_pdbqt_path'])
         assert fx.not_empty(self.paths['output_log_path'])
-        #assert fx.equal(self.paths['output_log_path'], self.paths['ref_output_log_path'])

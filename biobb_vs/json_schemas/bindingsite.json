@@ -1,8 +1,21 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "$id": "http://bioexcel.eu/biobb_vs/json_schemas/1.0/bindingsite",
-    "title": "Finds the binding site of the input_pdb file based on the ligands' location of similar structures (members of the sequence identity cluster)",
+    "name": "biobb_vs BindingSite",
+    "title": "This class finds the binding site of the input_pdb.",
+    "description": "Finds the binding site of the input_pdb file based on the ligands' location of similar structures (members of the sequence identity cluster)",
     "type": "object",
+    "info": {
+        "wrapped_software": {
+            "name": "In house using Biopython",
+            "version": ">=1.76",
+            "license": "Apache-2.0"
+        },
+        "ontology": {
+            "name": "EDAM",
+            "schema": "http://edamontology.org/EDAM.owl"
+        }
+    },
     "required": [
         "input_pdb_path",
         "input_clusters_zip",
@@ -16,6 +29,13 @@
             "sample": "https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/bindingsite.pdb",
             "enum": [
                 ".*\\.pdb$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.pdb$",
+                    "description": "Path to the PDB structure where the binding site is to be found",
+                    "edam": "format_1476"
+                }
             ]
         },
         "input_clusters_zip": {
@@ -25,6 +45,13 @@
             "sample": "https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/bindingsite.zip",
             "enum": [
                 ".*\\.zip$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.zip$",
+                    "description": "Path to the ZIP file with all the PDB members of the identity cluster",
+                    "edam": "format_3987"
+                }
             ]
         },
         "output_pdb_path": {
@@ -34,6 +61,13 @@
             "sample": "https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/utils/ref_output_bindingsite.pdb",
             "enum": [
                 ".*\\.pdb$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.pdb$",
+                    "description": "Path to the PDB containig the residues belonging to the binding site",
+                    "edam": "format_1476"
+                }
             ]
         },
         "properties": {
@@ -42,84 +76,1241 @@
                 "ligand": {
                     "type": "string",
                     "default": null,
+                    "wf_prop": false,
                     "description": "Ligand to be found in the protein structure. If no ligand provided, no action will be executed."
                 },
                 "radius": {
-                    "type": "float",
+                    "type": "number",
                     "default": 5.0,
-                    "description": "around ligand atoms to consider a protein atom as a binding site atom."
+                    "wf_prop": false,
+                    "description": "Cut-off distance (\u00c5ngstroms) around ligand atoms to consider a protein atom as a binding site atom.",
+                    "min": 0.1,
+                    "max": 1000.0,
+                    "step": 0.1
                 },
                 "max_num_ligands": {
-                    "type": "number",
+                    "type": "integer",
                     "default": 15,
-                    "description": "Total number of superimposed ligands to be extracted from the identity cluster. For populated clusters, the restriction avoids to superimpose redundant structures. If 0, all ligands extracted will be considered."
+                    "wf_prop": false,
+                    "description": "Total number of superimposed ligands to be extracted from the identity cluster. For populated clusters, the restriction avoids to superimpose redundant structures. If 0, all ligands extracted will be considered.",
+                    "min": 0,
+                    "max": 1000,
+                    "step": 1
                 },
                 "matrix_name": {
                     "type": "string",
-                    "default": "'blosum62'",
-                    "description": "Substitution matrices for use in alignments.",
+                    "default": "blosum62",
+                    "wf_prop": false,
+                    "description": "Substitution matrices for use in alignments. ",
                     "enum": [
-                        "'benner6'",
-                        "'benner22'",
-                        "'benner74'",
-                        "'blosum100'",
-                        "'blosum30'",
-                        "'blosum35'",
-                        "'blosum40'",
-                        "'blosum45'",
-                        "'blosum50'",
-                        "'blosum55'",
-                        "'blosum60'",
-                        "'blosum62'",
-                        "'blosum65'",
-                        "'blosum70'",
-                        "'blosum75'",
-                        "'blosum80'",
-                        "'blosum85'",
-                        "'blosum90'",
-                        "'blosum95'",
-                        "'feng'",
-                        "'fitch'",
-                        "'genetic'",
-                        "'gonnet'",
-                        "'grant'",
-                        "'ident'",
-                        "'johnson'",
-                        "'levin'",
-                        "'mclach'",
-                        "'miyata'",
-                        "'nwsgappep'",
-                        "'pam120'",
-                        "'pam180'",
-                        "'pam250'",
-                        "'pam30'",
-                        "'pam300'",
-                        "'pam60'",
-                        "'pam90'",
-                        "'rao'",
-                        "'risler'",
-                        "'structure'"
+                        "benner6",
+                        "benner22",
+                        "benner74",
+                        "blosum100",
+                        "blosum30",
+                        "blosum35",
+                        "blosum40",
+                        "blosum45",
+                        "blosum50",
+                        "blosum55",
+                        "blosum60",
+                        "blosum62",
+                        "blosum65",
+                        "blosum70",
+                        "blosum75",
+                        "blosum80",
+                        "blosum85",
+                        "blosum90",
+                        "blosum95",
+                        "feng",
+                        "fitch",
+                        "genetic",
+                        "gonnet",
+                        "grant",
+                        "ident",
+                        "johnson",
+                        "levin",
+                        "mclach",
+                        "miyata",
+                        "nwsgappep",
+                        "pam120",
+                        "pam180",
+                        "pam250",
+                        "pam30",
+                        "pam300",
+                        "pam60",
+                        "pam90",
+                        "rao",
+                        "risler",
+                        "structurebenner6",
+                        "benner22",
+                        "benner74",
+                        "blosum100",
+                        "blosum30",
+                        "blosum35",
+                        "blosum40",
+                        "blosum45",
+                        "blosum50",
+                        "blosum55",
+                        "blosum60",
+                        "blosum62",
+                        "blosum65",
+                        "blosum70",
+                        "blosum75",
+                        "blosum80",
+                        "blosum85",
+                        "blosum90",
+                        "blosum95",
+                        "feng",
+                        "fitch",
+                        "genetic",
+                        "gonnet",
+                        "grant",
+                        "ident",
+                        "johnson",
+                        "levin",
+                        "mclach",
+                        "miyata",
+                        "nwsgappep",
+                        "pam120",
+                        "pam180",
+                        "pam250",
+                        "pam30",
+                        "pam300",
+                        "pam60",
+                        "pam90",
+                        "rao",
+                        "risler",
+                        "structurebenner6",
+                        "benner22",
+                        "benner74",
+                        "blosum100",
+                        "blosum30",
+                        "blosum35",
+                        "blosum40",
+                        "blosum45",
+                        "blosum50",
+                        "blosum55",
+                        "blosum60",
+                        "blosum62",
+                        "blosum65",
+                        "blosum70",
+                        "blosum75",
+                        "blosum80",
+                        "blosum85",
+                        "blosum90",
+                        "blosum95",
+                        "feng",
+                        "fitch",
+                        "genetic",
+                        "gonnet",
+                        "grant",
+                        "ident",
+                        "johnson",
+                        "levin",
+                        "mclach",
+                        "miyata",
+                        "nwsgappep",
+                        "pam120",
+                        "pam180",
+                        "pam250",
+                        "pam30",
+                        "pam300",
+                        "pam60",
+                        "pam90",
+                        "rao",
+                        "risler",
+                        "structurebenner6",
+                        "benner22",
+                        "benner74",
+                        "blosum100",
+                        "blosum30",
+                        "blosum35",
+                        "blosum40",
+                        "blosum45",
+                        "blosum50",
+                        "blosum55",
+                        "blosum60",
+                        "blosum62",
+                        "blosum65",
+                        "blosum70",
+                        "blosum75",
+                        "blosum80",
+                        "blosum85",
+                        "blosum90",
+                        "blosum95",
+                        "feng",
+                        "fitch",
+                        "genetic",
+                        "gonnet",
+                        "grant",
+                        "ident",
+                        "johnson",
+                        "levin",
+                        "mclach",
+                        "miyata",
+                        "nwsgappep",
+                        "pam120",
+                        "pam180",
+                        "pam250",
+                        "pam30",
+                        "pam300",
+                        "pam60",
+                        "pam90",
+                        "rao",
+                        "risler",
+                        "structurebenner6",
+                        "benner22",
+                        "benner74",
+                        "blosum100",
+                        "blosum30",
+                        "blosum35",
+                        "blosum40",
+                        "blosum45",
+                        "blosum50",
+                        "blosum55",
+                        "blosum60",
+                        "blosum62",
+                        "blosum65",
+                        "blosum70",
+                        "blosum75",
+                        "blosum80",
+                        "blosum85",
+                        "blosum90",
+                        "blosum95",
+                        "feng",
+                        "fitch",
+                        "genetic",
+                        "gonnet",
+                        "grant",
+                        "ident",
+                        "johnson",
+                        "levin",
+                        "mclach",
+                        "miyata",
+                        "nwsgappep",
+                        "pam120",
+                        "pam180",
+                        "pam250",
+                        "pam30",
+                        "pam300",
+                        "pam60",
+                        "pam90",
+                        "rao",
+                        "risler",
+                        "structurebenner6",
+                        "benner22",
+                        "benner74",
+                        "blosum100",
+                        "blosum30",
+                        "blosum35",
+                        "blosum40",
+                        "blosum45",
+                        "blosum50",
+                        "blosum55",
+                        "blosum60",
+                        "blosum62",
+                        "blosum65",
+                        "blosum70",
+                        "blosum75",
+                        "blosum80",
+                        "blosum85",
+                        "blosum90",
+                        "blosum95",
+                        "feng",
+                        "fitch",
+                        "genetic",
+                        "gonnet",
+                        "grant",
+                        "ident",
+                        "johnson",
+                        "levin",
+                        "mclach",
+                        "miyata",
+                        "nwsgappep",
+                        "pam120",
+                        "pam180",
+                        "pam250",
+                        "pam30",
+                        "pam300",
+                        "pam60",
+                        "pam90",
+                        "rao",
+                        "risler",
+                        "structure"
+                    ],
+                    "property_formats": [
+                        {
+                            "name": "benner6",
+                            "description": null
+                        },
+                        {
+                            "name": "benner22",
+                            "description": null
+                        },
+                        {
+                            "name": "benner74",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum100",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum30",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum35",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum40",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum45",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum50",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum55",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum60",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum62",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum65",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum70",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum75",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum80",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum85",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum90",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum95",
+                            "description": null
+                        },
+                        {
+                            "name": "feng",
+                            "description": null
+                        },
+                        {
+                            "name": "fitch",
+                            "description": null
+                        },
+                        {
+                            "name": "genetic",
+                            "description": null
+                        },
+                        {
+                            "name": "gonnet",
+                            "description": null
+                        },
+                        {
+                            "name": "grant",
+                            "description": null
+                        },
+                        {
+                            "name": "ident",
+                            "description": null
+                        },
+                        {
+                            "name": "johnson",
+                            "description": null
+                        },
+                        {
+                            "name": "levin",
+                            "description": null
+                        },
+                        {
+                            "name": "mclach",
+                            "description": null
+                        },
+                        {
+                            "name": "miyata",
+                            "description": null
+                        },
+                        {
+                            "name": "nwsgappep",
+                            "description": null
+                        },
+                        {
+                            "name": "pam120",
+                            "description": null
+                        },
+                        {
+                            "name": "pam180",
+                            "description": null
+                        },
+                        {
+                            "name": "pam250",
+                            "description": null
+                        },
+                        {
+                            "name": "pam30",
+                            "description": null
+                        },
+                        {
+                            "name": "pam300",
+                            "description": null
+                        },
+                        {
+                            "name": "pam60",
+                            "description": null
+                        },
+                        {
+                            "name": "pam90",
+                            "description": null
+                        },
+                        {
+                            "name": "rao",
+                            "description": null
+                        },
+                        {
+                            "name": "risler",
+                            "description": null
+                        },
+                        {
+                            "name": "structurebenner6",
+                            "description": null
+                        },
+                        {
+                            "name": "benner22",
+                            "description": null
+                        },
+                        {
+                            "name": "benner74",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum100",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum30",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum35",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum40",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum45",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum50",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum55",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum60",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum62",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum65",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum70",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum75",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum80",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum85",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum90",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum95",
+                            "description": null
+                        },
+                        {
+                            "name": "feng",
+                            "description": null
+                        },
+                        {
+                            "name": "fitch",
+                            "description": null
+                        },
+                        {
+                            "name": "genetic",
+                            "description": null
+                        },
+                        {
+                            "name": "gonnet",
+                            "description": null
+                        },
+                        {
+                            "name": "grant",
+                            "description": null
+                        },
+                        {
+                            "name": "ident",
+                            "description": null
+                        },
+                        {
+                            "name": "johnson",
+                            "description": null
+                        },
+                        {
+                            "name": "levin",
+                            "description": null
+                        },
+                        {
+                            "name": "mclach",
+                            "description": null
+                        },
+                        {
+                            "name": "miyata",
+                            "description": null
+                        },
+                        {
+                            "name": "nwsgappep",
+                            "description": null
+                        },
+                        {
+                            "name": "pam120",
+                            "description": null
+                        },
+                        {
+                            "name": "pam180",
+                            "description": null
+                        },
+                        {
+                            "name": "pam250",
+                            "description": null
+                        },
+                        {
+                            "name": "pam30",
+                            "description": null
+                        },
+                        {
+                            "name": "pam300",
+                            "description": null
+                        },
+                        {
+                            "name": "pam60",
+                            "description": null
+                        },
+                        {
+                            "name": "pam90",
+                            "description": null
+                        },
+                        {
+                            "name": "rao",
+                            "description": null
+                        },
+                        {
+                            "name": "risler",
+                            "description": null
+                        },
+                        {
+                            "name": "structurebenner6",
+                            "description": null
+                        },
+                        {
+                            "name": "benner22",
+                            "description": null
+                        },
+                        {
+                            "name": "benner74",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum100",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum30",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum35",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum40",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum45",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum50",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum55",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum60",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum62",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum65",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum70",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum75",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum80",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum85",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum90",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum95",
+                            "description": null
+                        },
+                        {
+                            "name": "feng",
+                            "description": null
+                        },
+                        {
+                            "name": "fitch",
+                            "description": null
+                        },
+                        {
+                            "name": "genetic",
+                            "description": null
+                        },
+                        {
+                            "name": "gonnet",
+                            "description": null
+                        },
+                        {
+                            "name": "grant",
+                            "description": null
+                        },
+                        {
+                            "name": "ident",
+                            "description": null
+                        },
+                        {
+                            "name": "johnson",
+                            "description": null
+                        },
+                        {
+                            "name": "levin",
+                            "description": null
+                        },
+                        {
+                            "name": "mclach",
+                            "description": null
+                        },
+                        {
+                            "name": "miyata",
+                            "description": null
+                        },
+                        {
+                            "name": "nwsgappep",
+                            "description": null
+                        },
+                        {
+                            "name": "pam120",
+                            "description": null
+                        },
+                        {
+                            "name": "pam180",
+                            "description": null
+                        },
+                        {
+                            "name": "pam250",
+                            "description": null
+                        },
+                        {
+                            "name": "pam30",
+                            "description": null
+                        },
+                        {
+                            "name": "pam300",
+                            "description": null
+                        },
+                        {
+                            "name": "pam60",
+                            "description": null
+                        },
+                        {
+                            "name": "pam90",
+                            "description": null
+                        },
+                        {
+                            "name": "rao",
+                            "description": null
+                        },
+                        {
+                            "name": "risler",
+                            "description": null
+                        },
+                        {
+                            "name": "structurebenner6",
+                            "description": null
+                        },
+                        {
+                            "name": "benner22",
+                            "description": null
+                        },
+                        {
+                            "name": "benner74",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum100",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum30",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum35",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum40",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum45",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum50",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum55",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum60",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum62",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum65",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum70",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum75",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum80",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum85",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum90",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum95",
+                            "description": null
+                        },
+                        {
+                            "name": "feng",
+                            "description": null
+                        },
+                        {
+                            "name": "fitch",
+                            "description": null
+                        },
+                        {
+                            "name": "genetic",
+                            "description": null
+                        },
+                        {
+                            "name": "gonnet",
+                            "description": null
+                        },
+                        {
+                            "name": "grant",
+                            "description": null
+                        },
+                        {
+                            "name": "ident",
+                            "description": null
+                        },
+                        {
+                            "name": "johnson",
+                            "description": null
+                        },
+                        {
+                            "name": "levin",
+                            "description": null
+                        },
+                        {
+                            "name": "mclach",
+                            "description": null
+                        },
+                        {
+                            "name": "miyata",
+                            "description": null
+                        },
+                        {
+                            "name": "nwsgappep",
+                            "description": null
+                        },
+                        {
+                            "name": "pam120",
+                            "description": null
+                        },
+                        {
+                            "name": "pam180",
+                            "description": null
+                        },
+                        {
+                            "name": "pam250",
+                            "description": null
+                        },
+                        {
+                            "name": "pam30",
+                            "description": null
+                        },
+                        {
+                            "name": "pam300",
+                            "description": null
+                        },
+                        {
+                            "name": "pam60",
+                            "description": null
+                        },
+                        {
+                            "name": "pam90",
+                            "description": null
+                        },
+                        {
+                            "name": "rao",
+                            "description": null
+                        },
+                        {
+                            "name": "risler",
+                            "description": null
+                        },
+                        {
+                            "name": "structurebenner6",
+                            "description": null
+                        },
+                        {
+                            "name": "benner22",
+                            "description": null
+                        },
+                        {
+                            "name": "benner74",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum100",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum30",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum35",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum40",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum45",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum50",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum55",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum60",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum62",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum65",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum70",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum75",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum80",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum85",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum90",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum95",
+                            "description": null
+                        },
+                        {
+                            "name": "feng",
+                            "description": null
+                        },
+                        {
+                            "name": "fitch",
+                            "description": null
+                        },
+                        {
+                            "name": "genetic",
+                            "description": null
+                        },
+                        {
+                            "name": "gonnet",
+                            "description": null
+                        },
+                        {
+                            "name": "grant",
+                            "description": null
+                        },
+                        {
+                            "name": "ident",
+                            "description": null
+                        },
+                        {
+                            "name": "johnson",
+                            "description": null
+                        },
+                        {
+                            "name": "levin",
+                            "description": null
+                        },
+                        {
+                            "name": "mclach",
+                            "description": null
+                        },
+                        {
+                            "name": "miyata",
+                            "description": null
+                        },
+                        {
+                            "name": "nwsgappep",
+                            "description": null
+                        },
+                        {
+                            "name": "pam120",
+                            "description": null
+                        },
+                        {
+                            "name": "pam180",
+                            "description": null
+                        },
+                        {
+                            "name": "pam250",
+                            "description": null
+                        },
+                        {
+                            "name": "pam30",
+                            "description": null
+                        },
+                        {
+                            "name": "pam300",
+                            "description": null
+                        },
+                        {
+                            "name": "pam60",
+                            "description": null
+                        },
+                        {
+                            "name": "pam90",
+                            "description": null
+                        },
+                        {
+                            "name": "rao",
+                            "description": null
+                        },
+                        {
+                            "name": "risler",
+                            "description": null
+                        },
+                        {
+                            "name": "structurebenner6",
+                            "description": null
+                        },
+                        {
+                            "name": "benner22",
+                            "description": null
+                        },
+                        {
+                            "name": "benner74",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum100",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum30",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum35",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum40",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum45",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum50",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum55",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum60",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum62",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum65",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum70",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum75",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum80",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum85",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum90",
+                            "description": null
+                        },
+                        {
+                            "name": "blosum95",
+                            "description": null
+                        },
+                        {
+                            "name": "feng",
+                            "description": null
+                        },
+                        {
+                            "name": "fitch",
+                            "description": null
+                        },
+                        {
+                            "name": "genetic",
+                            "description": null
+                        },
+                        {
+                            "name": "gonnet",
+                            "description": null
+                        },
+                        {
+                            "name": "grant",
+                            "description": null
+                        },
+                        {
+                            "name": "ident",
+                            "description": null
+                        },
+                        {
+                            "name": "johnson",
+                            "description": null
+                        },
+                        {
+                            "name": "levin",
+                            "description": null
+                        },
+                        {
+                            "name": "mclach",
+                            "description": null
+                        },
+                        {
+                            "name": "miyata",
+                            "description": null
+                        },
+                        {
+                            "name": "nwsgappep",
+                            "description": null
+                        },
+                        {
+                            "name": "pam120",
+                            "description": null
+                        },
+                        {
+                            "name": "pam180",
+                            "description": null
+                        },
+                        {
+                            "name": "pam250",
+                            "description": null
+                        },
+                        {
+                            "name": "pam30",
+                            "description": null
+                        },
+                        {
+                            "name": "pam300",
+                            "description": null
+                        },
+                        {
+                            "name": "pam60",
+                            "description": null
+                        },
+                        {
+                            "name": "pam90",
+                            "description": null
+                        },
+                        {
+                            "name": "rao",
+                            "description": null
+                        },
+                        {
+                            "name": "risler",
+                            "description": null
+                        },
+                        {
+                            "name": "structure",
+                            "description": null
+                        }
                     ]
                 },
                 "gap_open": {
-                    "type": "float",
+                    "type": "number",
                     "default": -10.0,
-                    "description": "Gap open penalty."
+                    "wf_prop": false,
+                    "description": "Gap open penalty.",
+                    "min": -1000.0,
+                    "max": 1000.0,
+                    "step": 0.1
                 },
                 "gap_extend": {
-                    "type": "float",
+                    "type": "number",
                     "default": -0.5,
-                    "description": "Gap extend penalty."
+                    "wf_prop": false,
+                    "description": "Gap extend penalty.",
+                    "min": -1000.0,
+                    "max": 1000.0,
+                    "step": 0.1
                 },
                 "remove_tmp": {
                     "type": "boolean",
                     "default": true,
-                    "description": "[WF property] Remove temporal files."
+                    "wf_prop": true,
+                    "description": "Remove temporal files."
                 },
                 "restart": {
                     "type": "boolean",
                     "default": false,
-                    "description": "[WF property] Do not execute if output files exist."
+                    "wf_prop": true,
+                    "description": "Do not execute if output files exist."
                 }
             }
         }

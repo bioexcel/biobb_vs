@@ -61,3 +61,17 @@ extract_model_pdbqt:
     ref_output_pdbqt_path: file:test_reference_dir/utils/ref_extract_model.pdbqt
   properties:
     model: 1
+
+# FPOCKET 
+
+fpocket:
+  paths:
+    input_pdb_path: file:test_data_dir/fpocket/fpocket_input.pdb
+    output_pockets_zip: output_pockets.zip
+    ref_output_pockets_zip: file:test_reference_dir/fpocket/ref_output_pockets.zip
+    output_summary: output_summary.json
+    ref_output_summary: file:test_reference_dir/fpocket/ref_output_summary.json
+  properties:
+    min_radius: 3
+    max_radius: 6
+    num_spheres: 35

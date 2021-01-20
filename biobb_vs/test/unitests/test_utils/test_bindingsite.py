@@ -1,6 +1,5 @@
 from biobb_common.tools import test_fixtures as fx
-from biobb_vs.utils.bindingsite import BindingSite
-
+from biobb_vs.utils.bindingsite import bindingsite
 
 class TestBindingSite():
     def setUp(self):
@@ -11,6 +10,6 @@ class TestBindingSite():
         pass
 
     def test_bindingsite(self):
-        BindingSite(properties=self.properties, **self.paths).launch()
+        bindingsite(properties=self.properties, **self.paths)
         assert fx.not_empty(self.paths['output_pdb_path'])
         assert fx.equal(self.paths['output_pdb_path'], self.paths['ref_output_pdb_path'])

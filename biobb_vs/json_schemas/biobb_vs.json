@@ -4,28 +4,28 @@
     "github": "https://github.com/bioexcel/biobb_vs",
     "readthedocs": "https://biobb-vs.readthedocs.io/en/latest/",
     "conda": "https://anaconda.org/bioconda/biobb_vs",
-    "docker": "https://quay.io/repository/biocontainers/biobb_vs",
+    "docker": "https://quay.io/biocontainers/biobb_vs:3.7.0--py_0",
     "singularity": "",
-    "version": "3.0.0",
+    "version": "3.7.0",
     "tools" : [
         {
             "block" : "AutoDockVina", 
             "tool" : "AutoDock Vina", 
-            "desc" : "Docking of the ligand to a set of grids describing the target protein.",
+            "desc" : "Wrapper of the AutoDock Vina software.",
             "exec" : "autodock_vina",
             "docs": "https://biobb-vs.readthedocs.io/en/latest/vina.html#module-vina.autodock_vina"
         },
         {
             "block" : "BindingSite", 
             "tool" : "in house using biopython", 
-            "desc" : "Finds the binding site of the input_pdb file based on the ligands' location of similar structures (members of the sequence identity cluster)",
+            "desc" : "This class finds the binding site of the input_pdb.",
             "exec" : "bindingsite",
             "docs": "https://biobb-vs.readthedocs.io/en/latest/utils.html#module-utils.bindingsite"
         },
         {
             "block" : "Box", 
             "tool" : "in house using biopython", 
-            "desc" : "Sets the center and the size of a rectangular parallelepiped box around a selection of residues found in a given PDB. The residue identifiers that compose the selection (i.e. binding site) are extracted from a second PDB.",
+            "desc" : "This class sets the center and the size of a rectangular parallelepiped box around a selection of residues.",
             "exec" : "box",
             "docs": "https://biobb-vs.readthedocs.io/en/latest/utils.html#module-utils.box"
         },
@@ -38,18 +38,20 @@
         }
     ],
     "dep_pypi" : [
-        "install_requires=['biobb_common==3.0.0', 'biopython==1.76']", 
+        "install_requires=['biobb_common==3.5.1', 'biobb_structure_checking==3.7.3']", 
         "python_requires='==3.7.*'"
     ], 
     "dep_conda" : [
         "python ==3.7.*", 
-        "biobb_common ==3.0.0", 
-        "biopython ==1.76",
-        "autodock-vina ==1.1.2"
+        "biobb_common ==3.5.1", 
+        "biobb_structure_checking==3.7.3",
+        "autodock-vina ==1.1.2",
+        "fpocket==3.1.4.2"
     ],
     "keywords" : [
         "virtual screening",
         "autodock",
-        "vina"
+        "vina",
+        "fpocket"
     ]
 }

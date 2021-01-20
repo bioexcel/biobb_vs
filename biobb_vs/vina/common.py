@@ -1,3 +1,4 @@
+""" Common functions for package biobb_vs.vina """
 from pathlib import Path, PurePath
 from biobb_common.tools import file_utils as fu
 

@@ -9,19 +9,42 @@ from biobb_common.command_wrapper import cmd_wrapper
 from biobb_vs.utils.common import *
 
 class ExtractModelPDBQT():
-    """Extracts a model from a PDBQT file with several models
+    """
+    | biobb_vs ExtractModelPDBQT
+    | Extracts a model from a PDBQT file with several models.
 
     Args:
-        input_pdbqt_path (str): Input PDBQT file. File type: input. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/models.pdbqt>`_. Accepted formats: pdbqt.
-        output_pdbqt_path (str): Output PDBQT file. File type: output. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/utils/ref_extract_model.pdbqt>`_. Accepted formats: pdbqt.
-        properties (dic):
-            * **model** (*int*) - (1) Model number to extract from input_pdbqt_path.
+        input_pdbqt_path (str): Input PDBQT file. File type: input. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/models.pdbqt>`_. Accepted formats: pdbqt (edam:format_1476).
+        output_pdbqt_path (str): Output PDBQT file. File type: output. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/utils/ref_extract_model.pdbqt>`_. Accepted formats: pdbqt (edam:format_1476).
+        properties (dic - Python dictionary object containing the tool parameters, not input/output files):
+            * **model** (*int*) - (1) [0~1000|1] Model number to extract from input_pdbqt_path.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
+
+    Examples:
+        This is a use example of how to use the building block from Python::
+
+            from biobb_vs.utils.extract_model_pdbqt import extract_model_pdbqt
+            prop = { 
+                'model': 1
+            }
+            extract_model_pdbqt(input_pdbqt_path='/path/to/myStructure.pdbqt', 
+                                output_pdbqt_path='/path/to/newStructure.pdbqt', 
+                                properties=prop)
+
+    Info:
+        * wrapped_software:
+            * name: In house using Biopython
+            * version: >=1.76
+            * license: Apache-2.0
+        * ontology:
+            * name: EDAM
+            * schema: http://edamontology.org/EDAM.owl
+
     """
 
-    def __init__(self, input_pdbqt_path,
-                output_pdbqt_path, properties=None, **kwargs) -> None:
+    def __init__(self, input_pdbqt_path, output_pdbqt_path, 
+                properties=None, **kwargs) -> None:
         properties = properties or {}
 
         # Input/Output files
@@ -48,10 +71,9 @@ class ExtractModelPDBQT():
         self.io_dict["in"]["input_pdbqt_path"] = check_input_path(self.io_dict["in"]["input_pdbqt_path"],"input_pdbqt_path", out_log, self.__class__.__name__)
         self.io_dict["out"]["output_pdbqt_path"] = check_output_path(self.io_dict["out"]["output_pdbqt_path"],"output_pdbqt_path", False, out_log, self.__class__.__name__)
 
-
     @launchlogger
     def launch(self) -> int:
-        """Launches the execution of the ExtractModelPDBQT module."""
+        """Execute the :class:`ExtractModelPDBQT <utils.extract_model_pdbqt.ExtractModelPDBQT>` utils.extract_model_pdbqt.ExtractModelPDBQT object."""
 
         # Get local loggers from launchlogger decorator
         out_log = getattr(self, 'out_log', None)
@@ -97,7 +119,16 @@ class ExtractModelPDBQT():
 
         return 0
 
+def extract_model_pdbqt(input_pdbqt_path: str, output_pdbqt_path: str, properties: dict = None, **kwargs) -> int:
+    """Execute the :class:`ExtractModelPDBQT <utils.extract_model_pdbqt.ExtractModelPDBQT>` class and
+    execute the :meth:`launch() <utils.extract_model_pdbqt.ExtractModelPDBQT.launch>` method."""
+
+    return ExtractModelPDBQT(input_pdbqt_path=input_pdbqt_path,
+                            output_pdbqt_path=output_pdbqt_path,
+                            properties=properties, **kwargs).launch()
+
 def main():
+    """Command line execution of this building block. Please check the command line documentation."""
     parser = argparse.ArgumentParser(description="Extracts a model from a PDBQT file with several models.", formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
     parser.add_argument('--config', required=False, help='Configuration file')
 
@@ -111,9 +142,9 @@ def main():
     properties = settings.ConfReader(config=args.config).get_prop_dic()
 
     # Specific call of each building block
-    ExtractModelPDBQT(input_pdbqt_path=args.input_pdbqt_path, 
-                    output_pdbqt_path=args.output_pdbqt_path, 
-                    properties=properties).launch()
+    extract_model_pdbqt(input_pdbqt_path=args.input_pdbqt_path, 
+                        output_pdbqt_path=args.output_pdbqt_path, 
+                        properties=properties)
 
 if __name__ == '__main__':
     main()

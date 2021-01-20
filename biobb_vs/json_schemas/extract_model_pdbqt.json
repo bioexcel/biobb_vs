@@ -1,8 +1,21 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "$id": "http://bioexcel.eu/biobb_vs/json_schemas/1.0/extract_model_pdbqt",
-    "title": "Extracts a model from a PDBQT file with several models",
+    "name": "biobb_vs ExtractModelPDBQT",
+    "title": "Extracts a model from a PDBQT file with several models.",
+    "description": null,
     "type": "object",
+    "info": {
+        "wrapped_software": {
+            "name": "In house using Biopython",
+            "version": ">=1.76",
+            "license": "Apache-2.0"
+        },
+        "ontology": {
+            "name": "EDAM",
+            "schema": "http://edamontology.org/EDAM.owl"
+        }
+    },
     "required": [
         "input_pdbqt_path",
         "output_pdbqt_path"
@@ -15,6 +28,13 @@
             "sample": "https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/models.pdbqt",
             "enum": [
                 ".*\\.pdbqt$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.pdbqt$",
+                    "description": "Input PDBQT file",
+                    "edam": "format_1476"
+                }
             ]
         },
         "output_pdbqt_path": {
@@ -24,25 +44,38 @@
             "sample": "https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/utils/ref_extract_model.pdbqt",
             "enum": [
                 ".*\\.pdbqt$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.pdbqt$",
+                    "description": "Output PDBQT file",
+                    "edam": "format_1476"
+                }
             ]
         },
         "properties": {
             "type": "object",
             "properties": {
                 "model": {
-                    "type": "number",
+                    "type": "integer",
                     "default": 1,
-                    "description": "Model number to extract from input_pdbqt_path."
+                    "wf_prop": false,
+                    "description": "Model number to extract from input_pdbqt_path.",
+                    "min": 0,
+                    "max": 1000,
+                    "step": 1
                 },
                 "remove_tmp": {
                     "type": "boolean",
                     "default": true,
-                    "description": "[WF property] Remove temporal files."
+                    "wf_prop": true,
+                    "description": "Remove temporal files."
                 },
                 "restart": {
                     "type": "boolean",
                     "default": false,
-                    "description": "[WF property] Do not execute if output files exist."
+                    "wf_prop": true,
+                    "description": "Do not execute if output files exist."
                 }
             }
         }

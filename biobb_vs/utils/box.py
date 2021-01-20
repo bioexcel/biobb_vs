@@ -9,22 +9,48 @@ from biobb_common.command_wrapper import cmd_wrapper
 from biobb_vs.utils.common import *
 
 class Box():
-    """Sets the center and the size of a rectangular parallelepiped box around a selection of residues found in a given PDB. The residue identifiers that compose the selection (i.e. binding site) are extracted from a second PDB.
+    """
+    | biobb_vs Box
+    | This class sets the center and the size of a rectangular parallelepiped box around a selection of residues.
+    | Sets the center and the size of a rectangular parallelepiped box around a selection of residues found in a given PDB. The residue identifiers that compose the selection (i.e. binding site) are extracted from a second PDB.
 
     Args:
-        input_pdb_path (str): PDB protein structure for which the box will be build. Its size and center will be set around the 'resid_pdb_path' residues once mapped against this PDB. File type: input. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/box.pdb>`_. Accepted formats: pdb.
-        resid_pdb_path (str): PDB file containing a selection of residue numbers mappable to 'input_pdb_path'. File type: input.  `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/resid_box.pdb>`_. Accepted formats: pdb.
-        output_pdb_path (str): PDB protein structure coordinates including the annotation of the box center and size as REMARKs. File type: output. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/utils/ref_output_box.pdb>`_. Accepted formats: pdb.
-        properties (dic):
-            * **offset** (*float*) - (2.0) Extra distance (Angstroms) between the last residue atom and the box boundary.
-            * **residue_offset** (*int*) - (0) Residue id offset.
+        input_pdb_path (str): PDB protein structure for which the box will be build. Its size and center will be set around the 'resid_pdb_path' residues once mapped against this PDB. File type: input. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/box.pdb>`_. Accepted formats: pdb (edam:format_1476).
+        resid_pdb_path (str): PDB file containing a selection of residue numbers mappable to 'input_pdb_path'. File type: input.  `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/resid_box.pdb>`_. Accepted formats: pdb (edam:format_1476).
+        output_pdb_path (str): PDB protein structure coordinates including the annotation of the box center and size as REMARKs. File type: output. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/utils/ref_output_box.pdb>`_. Accepted formats: pdb (edam:format_1476).
+        properties (dic - Python dictionary object containing the tool parameters, not input/output files):
+            * **offset** (*float*) - (2.0) [0.1~1000|0.1] Extra distance (Angstroms) between the last residue atom and the box boundary.
+            * **residue_offset** (*int*) - (0) [0~1000|1] Residue id offset.
             * **box_coordinates** (*bool*) - (False) Add box coordinates as 8 ATOM records.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
+
+    Examples:
+        This is a use example of how to use the building block from Python::
+
+            from biobb_vs.utils.box import box
+            prop = { 
+                'offset': 2,
+                'box_coordinates': True
+            }
+            box(input_pdb_path='/path/to/myStructure.pdb', 
+                resid_pdb_path='/path/to/myResidues.pdb', 
+                output_pdb_path='/path/to/newStructure.pdb', 
+                properties=prop)
+
+    Info:
+        * wrapped_software:
+            * name: In house using Biopython
+            * version: >=1.76
+            * license: Apache-2.0
+        * ontology:
+            * name: EDAM
+            * schema: http://edamontology.org/EDAM.owl
+
     """
 
-    def __init__(self, input_pdb_path, resid_pdb_path,
-                output_pdb_path, properties=None, **kwargs) -> None:
+    def __init__(self, input_pdb_path, resid_pdb_path, output_pdb_path, 
+                properties=None, **kwargs) -> None:
         properties = properties or {}
 
         # Input/Output files
@@ -57,7 +83,7 @@ class Box():
 
     @launchlogger
     def launch(self) -> int:
-        """Launches the execution of the Box module."""
+        """Execute the :class:`Box <utils.box.Box>` utils.box.Box object."""
 
         # Get local loggers from launchlogger decorator
         out_log = getattr(self, 'out_log', None)
@@ -164,7 +190,17 @@ class Box():
 
         return 0
 
+def box(input_pdb_path: str, resid_pdb_path: str, output_pdb_path: str, properties: dict = None, **kwargs) -> int:
+    """Execute the :class:`Box <utils.box.Box>` class and
+    execute the :meth:`launch() <utils.box.Box.launch>` method."""
+
+    return Box(input_pdb_path=input_pdb_path,
+                resid_pdb_path=resid_pdb_path,
+                output_pdb_path=output_pdb_path,
+                properties=properties, **kwargs).launch()
+
 def main():
+    """Command line execution of this building block. Please check the command line documentation."""
     parser = argparse.ArgumentParser(description="Sets the center and the size of a rectangular parallelepiped box around a selection of residues found in a given PDB. The residue identifiers that compose the selection (i.e. binding site) are extracted from a second PDB.", formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
     parser.add_argument('--config', required=False, help='Configuration file')
 
@@ -179,9 +215,10 @@ def main():
     properties = settings.ConfReader(config=args.config).get_prop_dic()
 
     # Specific call of each building block
-    Box(input_pdb_path=args.input_pdb_path, resid_pdb_path=args.resid_pdb_path, 
-                    output_pdb_path=args.output_pdb_path, 
-                    properties=properties).launch()
+    box(input_pdb_path=args.input_pdb_path, 
+        resid_pdb_path=args.resid_pdb_path, 
+        output_pdb_path=args.output_pdb_path, 
+        properties=properties)
 
 if __name__ == '__main__':
     main()

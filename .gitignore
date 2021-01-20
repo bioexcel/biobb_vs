@@ -131,3 +131,10 @@ biobb_vs/test/data/vina/prepare_ligand.pdb
 biobb_vs/test/data/vina/prepare_receptor.pdb
 biobb_vs/test/reference/vina/ref_prepare_ligand.pdbqt
 biobb_vs/test/reference/vina/ref_prepare_receptor.pdbqt
+
+# tutorials
+biobb_vs/tutorial/*/*.pdb
+biobb_vs/tutorial/*/*.pdbqt
+biobb_vs/tutorial/*/*.zip
+biobb_vs/tutorial/*/*.sdf
+*_out/

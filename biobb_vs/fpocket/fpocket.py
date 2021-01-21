@@ -16,9 +16,9 @@ class FPocket():
     | Finds the binding site of the input_pdb_path file via the `fpocket <https://github.com/Discngine/fpocket>`_ software.
 
     Args:
-        input_pdb_path (str): Path to the PDB structure where the binding site is to be found. File type: input. `Sample file <>`_. Accepted formats: pdb (edam:format_1476).
-        output_pockets_zip (str): Path to all the pockets found by fpocket in the input_pdb_path structure. File type: output. `Sample file <>`_. Accepted formats: zip (edam:format_3987).
-        output_summary (str): Path to the JSON summary file. File type: output. `Sample file <>`_. Accepted formats: json (edam:format_3464).
+        input_pdb_path (str): Path to the PDB structure where the binding site is to be found. File type: input. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/fpocket/fpocket_input>`_. Accepted formats: pdb (edam:format_1476).
+        output_pockets_zip (str): Path to all the pockets found by fpocket in the input_pdb_path structure. File type: output. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/fpocket/ref_output_pockets.zip>`_. Accepted formats: zip (edam:format_3987).
+        output_summary (str): Path to the JSON summary file. File type: output. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/fpocket/ref_output_summary.json>`_. Accepted formats: json (edam:format_3464).
         properties (dic - Python dictionary object containing the tool parameters, not input/output files):
             * **min_radius** (*float*) - (None) [0.1~1000|0.1] The minimum radius in Ångstroms an alpha sphere might have in a binding pocket.
             * **max_radius** (*float*) - (None) [2~1000|0.1] The maximum radius in Ångstroms of alpha spheres in a pocket.
@@ -99,7 +99,7 @@ class FPocket():
         fu.check_properties(self, self.properties)
 
         if self.restart:
-            output_file_list = [self.io_dict["out"]["output_pdbqt_path"],self.io_dict["out"]["output_log_path"]]
+            output_file_list = [self.io_dict["out"]["output_pockets_zip"],self.io_dict["out"]["output_summary"]]
             if fu.check_complete_files(output_file_list):
                 fu.log('Restart is enabled, this step: %s will the skipped' % self.step, out_log, self.global_log)
                 return 0

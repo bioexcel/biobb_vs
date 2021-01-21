@@ -35,6 +35,20 @@
             "desc" : "Extracts a model from a PDBQT file with several models.",
             "exec" : "extract_model_pdbqt",
             "docs": "https://biobb-vs.readthedocs.io/en/latest/utils.html#module-utils.extract_model_pdbqt"
+        },
+        {
+            "block" : "FPocket", 
+            "tool" : "fpocket", 
+            "desc" : "Wrapper of the fpocket software for finding the binding sites of a structure.",
+            "exec" : "fpocket",
+            "docs": "https://biobb-vs.readthedocs.io/en/latest/utils.html#module-fpocket.fpocket"
+        },
+        {
+            "block" : "FPocketSelect", 
+            "tool" : "fpocket_select", 
+            "desc" : "Parses the outputs of the fpocket building block.",
+            "exec" : "fpocket_select",
+            "docs": "https://biobb-vs.readthedocs.io/en/latest/utils.html#module-fpocket.fpocket_select"
         }
     ],
     "dep_pypi" : [

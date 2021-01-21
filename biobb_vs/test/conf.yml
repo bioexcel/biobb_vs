@@ -75,3 +75,14 @@ fpocket:
     min_radius: 3
     max_radius: 6
     num_spheres: 35
+
+fpocket_select:
+  paths:
+    input_pockets_zip: file:test_data_dir/fpocket/input_pockets.zip
+    input_summary: file:test_data_dir/fpocket/input_summary.json
+    output_sel_pockets_zip: output_sel_pockets.zip
+    ref_output_sel_pockets_zip: file:test_reference_dir/fpocket/ref_output_sel_pockets.zip
+  properties:
+    score: [0.2, 1]
+    druggability_score: [0.2, 0.8]
+    volume: [100, 600]

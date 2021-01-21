@@ -36,9 +36,29 @@ def is_valid_file(ext, argument):
 	formats = {
 		'input_pdb_path': ['pdb'],
 		'output_pockets_zip': ['zip'],
-		'output_summary': ['json']
+		'output_summary': ['json'],
+		'input_pockets_zip': ['zip'],
+		'input_summary': ['json'],
+		'output_sel_pockets_zip': ['zip']
 	}
 	return ext in formats[argument]
+
+# CHECK PROPERTIES
+
+def check_range(name, property, values, out_log, classname):
+	""" Checks the format of a range for fpocket_select """
+
+	if not type(property) == list or len(property) != 2 or not all(isinstance(n, int) or isinstance(n, float) for n in property):
+		fu.log(classname + ': Incorrect format for %s property, exiting' % name, out_log)
+		raise SystemExit(classname + ': Incorrect format for %s property, exiting' % name)
+
+	if property[0] < values[0] or property[1] > values[1]:
+		fu.log(classname + ': %s is out of [%s] range, exiting' % (name, ', '.join(str(v) for v in values)), out_log)
+		raise SystemExit(classname + ': %s is out of [%s] range, exiting' % (name, ', '.join(str(v) for v in values)))
+
+	return property
+
+# PROCESS OUTPUTS
 
 def process_output_fpocket(tmp_folder, output_pockets_zip, output_summary, remove_tmp, out_log, classname):
 	""" Creates the output_pockets_zip and generates the  output_summary """
@@ -84,10 +104,9 @@ def process_output_fpocket(tmp_folder, output_pockets_zip, output_summary, remov
 	fu.log('%d pockets found' % (len(data)), out_log)
 
 	# compress pockets
-	fu.log('Compressing all pockets to %s file' % (output_pockets_zip), out_log)
 	pockets = PurePath(path).joinpath('pockets')
-	file_name = PurePath(output_pockets_zip).parent.joinpath(PurePath(output_pockets_zip).stem)
-	shutil.make_archive(file_name, 'zip', pockets)
+	files_list = [str(i) for i in Path(pockets).iterdir()]
+	fu.zip_list(zip_file = output_pockets_zip, file_list = files_list, out_log = out_log)
 
 	# save summary
 	fu.log('Saving summary to %s file' % (output_summary), out_log)
@@ -99,6 +118,20 @@ def process_output_fpocket(tmp_folder, output_pockets_zip, output_summary, remov
 		fu.rm(tmp_folder)
 		fu.log('Removed temporary folder: %s' % tmp_folder, out_log)
 	
+def process_output_fpocket_select(search_list, tmp_folder, input_pockets_zip, output_sel_pockets_zip, remove_tmp, out_log):
+	""" Creates the output_sel_pockets_zip """
 
+	# decompress the input_pockets_zip file to tmp_folder
+	cluster_list = fu.unzip_list(zip_file = input_pockets_zip, dest_dir = tmp_folder, out_log = out_log)
 
+	pockets_list = [str(i) for i in Path(tmp_folder).iterdir()]
+
+	sel_pockets_list = [p for p in pockets_list for s in search_list if s in p ]
+
+	fu.zip_list(zip_file = output_sel_pockets_zip, file_list = sel_pockets_list, out_log = out_log)
+
+	if remove_tmp:
+		# remove temporary folder
+		fu.rm(tmp_folder)
+		fu.log('Removed temporary folder: %s' % tmp_folder, out_log)
 

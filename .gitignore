@@ -135,6 +135,9 @@ biobb_vs/test/reference/vina/ref_prepare_receptor.pdbqt
 # tutorials
 biobb_vs/tutorial/*/*.pdb
 biobb_vs/tutorial/*/*.pdbqt
+biobb_vs/tutorial/*/*.pqr
 biobb_vs/tutorial/*/*.zip
 biobb_vs/tutorial/*/*.sdf
+biobb_vs/tutorial/*/*.json
+biobb_vs/tutorial/*/pockets/
 *_out/

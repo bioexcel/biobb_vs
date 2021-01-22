@@ -12,17 +12,15 @@ from biobb_vs.fpocket.common import *
 class FPocketSelect():
     """
     | biobb_vs FPocketSelect
-    | Parses the outputs of the fpocket building block.
-    | Finds one or more binding sites in the outputs of the fpocket building block from given parameters.
+    | Selects a single pocket in the outputs of the fpocket building block.
+    | Selects a single pocket in the outputs of the fpocket building block from a given parameter.
 
     Args:
-        input_pockets_zip (str): Path to all the pockets found by fpocket. File type: input. `Sample file <>`_. Accepted formats: zip (edam:format_3987).
-        input_summary (str): Path to the JSON summary file returned by fpocket. File type: input. `Sample file <>`_. Accepted formats: json (edam:format_3464).
-        output_sel_pockets_zip (str): Path to the selected pockets after filtering. File type: output. `Sample file <>`_. Accepted formats: zip (edam:format_3987).
+        input_pockets_zip (str): Path to the pockets found by fpocket. File type: input. `Sample file <>`_. Accepted formats: zip (edam:format_3987).
+        output_pocket_pdb (str): Path to the PDB file with the cavity found by fpocket. File type: output. `Sample file <>`_. Accepted formats: pdb (edam:format_1476).
+        output_pocket_pqr (str): Path to the PQR file with the pocket found by fpocket. File type: output. `Sample file <>`_. Accepted formats: pdb (edam:format_1476).
         properties (dic - Python dictionary object containing the tool parameters, not input/output files):
-            * **score** (*list*) - (None) List of two float numbers between 0 and 1 indicating the score range. Indicates the fpocket score after the evaluation of pocket prediction accuracy.
-            * **druggability_score** (*list*) - (None) List of two float numbers between 0 and 1 indicating the druggability_score range. It's a value between 0 and 1, 0 signifying that the pocket is likely to not bind a drug like molecule and 1, that it is very likely to bind the latter.
-            * **volume** (*list*) - (None) List of two float numbers indicating the volume range. Indicates the pocket volume.
+            * **pocket** (*int*) - (1) [1~1000|1] Pocket id from the summary json given by the fpocket building block.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
 
@@ -31,13 +29,11 @@ class FPocketSelect():
 
             from biobb_vs.fpocket.fpocket_select import fpocket_select
             prop = { 
-                'score': [0.2, 1],
-                'druggability_score': [0.2, 0.8],
-                'volume': [100, 600.2]
+                'pocket': 2
             }
             fpocket_select(input_pockets_zip='/path/to/myPockets.zip', 
-                    input_summary='/path/to/mySummary.json', 
-                    output_sel_pockets_zip='/path/to/newPockets.json', 
+                    output_pocket_pdb='/path/to/myCavity.pdb', 
+                    output_pocket_pqr='/path/to/myPocket.pqr', 
                     properties=prop)
 
     Info:
@@ -50,20 +46,18 @@ class FPocketSelect():
 
     """
 
-    def __init__(self, input_pockets_zip, input_summary, output_sel_pockets_zip, 
+    def __init__(self, input_pockets_zip, output_pocket_pdb, output_pocket_pqr, 
                 properties=None, **kwargs) -> None:
         properties = properties or {}
 
         # Input/Output files
         self.io_dict = { 
-            "in": { "input_pockets_zip": input_pockets_zip, "input_summary": input_summary }, 
-            "out": { "output_sel_pockets_zip": output_sel_pockets_zip } 
+            "in": { "input_pockets_zip": input_pockets_zip }, 
+            "out": { "output_pocket_pdb": output_pocket_pdb, "output_pocket_pqr": output_pocket_pqr } 
         }
 
         # Properties specific for BB
-        self.score = properties.get('score', None)
-        self.druggability_score = properties.get('druggability_score', None)
-        self.volume = properties.get('volume', None)
+        self.pocket = properties.get('pocket', None)
         self.properties = properties
 
         # Properties common in all BB
@@ -78,17 +72,8 @@ class FPocketSelect():
     def check_data_params(self, out_log, err_log):
         """ Checks all the input/output paths and parameters """
         self.io_dict["in"]["input_pockets_zip"] = check_input_path(self.io_dict["in"]["input_pockets_zip"], "input_pockets_zip", out_log, self.__class__.__name__)
-        self.io_dict["in"]["input_summary"] = check_output_path(self.io_dict["in"]["input_summary"],"input_summary", False, out_log, self.__class__.__name__)
-        self.io_dict["out"]["output_sel_pockets_zip"] = check_output_path(self.io_dict["out"]["output_sel_pockets_zip"],"output_sel_pockets_zip", True, out_log, self.__class__.__name__)
-
-    def score_matcher(self, score):
-        return lambda d: d['score'] > score[0] and d['score'] <= score[1]
-
-    def druggability_score_matcher(self, druggability_score):
-        return lambda d: d['druggability_score'] > druggability_score[0] and d['druggability_score'] <= druggability_score[1]
-
-    def volume_matcher(self, volume):
-        return lambda d: d['volume'] > volume[0] and d['volume'] <= volume[1]
+        self.io_dict["out"]["output_pocket_pdb"] = check_output_path(self.io_dict["out"]["output_pocket_pdb"],"output_pocket_pdb", False, out_log, self.__class__.__name__)
+        self.io_dict["out"]["output_pocket_pqr"] = check_output_path(self.io_dict["out"]["output_pocket_pqr"],"output_pocket_pqr", True, out_log, self.__class__.__name__)
 
     @launchlogger
     def launch(self) -> int:
@@ -105,77 +90,52 @@ class FPocketSelect():
         fu.check_properties(self, self.properties)
 
         if self.restart:
-            output_file_list = [self.io_dict["out"]["output_sel_pockets_zip"]]
+            output_file_list = [self.io_dict["out"]["output_pocket_pdb"], self.io_dict["out"]["output_pocket_pqr"]]
             if fu.check_complete_files(output_file_list):
                 fu.log('Restart is enabled, this step: %s will the skipped' % self.step, out_log, self.global_log)
                 return 0
-
-        # load input_summary into a dictionary
-        with open(self.io_dict["in"]["input_summary"]) as json_file:
-            data = json.load(json_file)
-
-        # build search_list
-        search_list = []
-        ranges = {}
-        if self.score: 
-            check_range('score', self.score, [0,1], out_log, self.__class__.__name__)
-            search_list.append(self.score_matcher(self.score))
-            ranges['score'] = self.score
-        if self.druggability_score: 
-            check_range('druggability_score', self.druggability_score, [0,1], out_log, self.__class__.__name__)
-            search_list.append(self.druggability_score_matcher(self.druggability_score))
-            ranges['druggability_score'] = self.druggability_score
-        if self.volume: 
-            check_range('volume', self.volume, [0,10000], out_log, self.__class__.__name__)
-            search_list.append(self.volume_matcher(self.volume))
-            ranges['volume'] = self.volume
-
-        fu.log('Performing a search under the next parameters: %s' % (', '.join(['{0}: {1}'.format(k, v) for k,v in ranges.items()])), out_log)
-
-        # perform search
-        search = [ x for x in data if all([f(data[x]) for f in search_list]) ]
-
-        if len(search) == 0:
-            fu.log('No matches found', out_log)
-            return 0
-
-        fu.log('Found %d matches:' % (len(search)), out_log)
-
-        for s in search:
-            fu.log('\n\t**********\n\t%s\n\t**********\n\tscore: %s\n\tdruggability_score: %s\n\tvolume: %s\n' % (s, data[s]["score"], data[s]["druggability_score"], data[s]["volume"]), out_log)
 
         # create tmp_folder
         self.tmp_folder = fu.create_unique_dir()
         fu.log('Creating %s temporary folder' % self.tmp_folder, out_log)
 
-        process_output_fpocket_select(search,
-                                    self.tmp_folder,
-                                    self.io_dict["in"]["input_pockets_zip"],
-                                    self.io_dict["out"]["output_sel_pockets_zip"],
-                                    self.remove_tmp, 
-                                    out_log)
+        # decompress the input_pockets_zip file to tmp_folder
+        all_pockets = fu.unzip_list(zip_file = self.io_dict["in"]["input_pockets_zip"], dest_dir = self.tmp_folder, out_log = out_log)
+
+        pockets_list = [i for i in all_pockets if ('pocket' + str(self.pocket)) in i]
+
+        for p in pockets_list:
+            if PurePath(p).suffix == '.pdb':
+                shutil.copy(p, self.io_dict["out"]["output_pocket_pdb"])
+            else:
+                shutil.copy(p, self.io_dict["out"]["output_pocket_pqr"])
+
+        if self.remove_tmp:
+            # remove temporary folder
+            fu.rm(self.tmp_folder)
+            fu.log('Removed temporary folder: %s' % self.tmp_folder, out_log)
 
         return 0
 
-def fpocket_select(input_pockets_zip: str, input_summary: str, output_sel_pockets_zip:str, properties: dict = None, **kwargs) -> int:
+def fpocket_select(input_pockets_zip: str, output_pocket_pdb: str, output_pocket_pqr:str, properties: dict = None, **kwargs) -> int:
     """Execute the :class:`FPocketSelect <fpocket.fpocket_select.FPocketSelect>` class and
     execute the :meth:`launch() <fpocket.fpocket_select.FPocketSelect.launch>` method."""
 
     return FPocketSelect(input_pockets_zip=input_pockets_zip,
-                input_summary=input_summary,
-                output_sel_pockets_zip=output_sel_pockets_zip,
+                output_pocket_pdb=output_pocket_pdb,
+                output_pocket_pqr=output_pocket_pqr,
                 properties=properties, **kwargs).launch()
 
 def main():
     """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(description="Finds one or more binding sites in the outputs of the fpocket building block from given parameters.", formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
+    parser = argparse.ArgumentParser(description="Selects a single pocket in the outputs of the fpocket building block from a given parameter.", formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
     parser.add_argument('--config', required=False, help='Configuration file')
 
     # Specific args of each building block
     required_args = parser.add_argument_group('required arguments')
     required_args.add_argument('--input_pockets_zip', required=True, help='Path to all the pockets found by fpocket. Accepted formats: zip.')
-    required_args.add_argument('--input_summary', required=True, help='Path to the JSON summary file returned by fpocket. Accepted formats: json.')
-    required_args.add_argument('--output_sel_pockets_zip', required=True, help='Path to the selected pockets after filtering. Accepted formats: zip.')
+    required_args.add_argument('--output_pocket_pdb', required=True, help='Path to the PDB file with the cavity found by fpocket. Accepted formats: pdb.')
+    required_args.add_argument('--output_pocket_pqr', required=True, help='Path to the PQR file with the pocket found by fpocket. Accepted formats: pqr.')
 
     args = parser.parse_args()
     args.config = args.config or "{}"
@@ -183,9 +143,9 @@ def main():
 
     # Specific call of each building block
     fpocket_select(input_pockets_zip=args.input_pockets_zip, 
-            input_summary=args.input_summary, 
-            output_sel_pockets_zip=args.output_sel_pockets_zip, 
-            properties=properties)
+                    output_pocket_pdb=args.output_pocket_pdb, 
+                    output_pocket_pqr=args.output_pocket_pqr, 
+                    properties=properties)
 
 if __name__ == '__main__':
     main()

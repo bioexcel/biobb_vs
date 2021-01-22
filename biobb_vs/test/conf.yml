@@ -76,13 +76,23 @@ fpocket:
     max_radius: 6
     num_spheres: 35
 
-fpocket_select:
+fpocket_filter:
   paths:
     input_pockets_zip: file:test_data_dir/fpocket/input_pockets.zip
     input_summary: file:test_data_dir/fpocket/input_summary.json
-    output_sel_pockets_zip: output_sel_pockets.zip
-    ref_output_sel_pockets_zip: file:test_reference_dir/fpocket/ref_output_sel_pockets.zip
+    output_filter_pockets_zip: output_filter_pockets.zip
+    ref_output_filter_pockets_zip: file:test_reference_dir/fpocket/ref_output_filter_pockets.zip
   properties:
     score: [0.2, 1]
-    druggability_score: [0.2, 0.8]
+    druggability_score: [0.2, 0.9]
     volume: [100, 600]
+
+fpocket_select:
+  paths:
+    input_pockets_zip: file:test_data_dir/fpocket/input_pockets.zip
+    output_pocket_pdb: output_pocket.pdb
+    ref_output_pocket_pdb: file:test_reference_dir/fpocket/ref_output_pocket.pdb
+    output_pocket_pqr: output_pocket.pqr
+    ref_output_pocket_pqr: file:test_reference_dir/fpocket/ref_output_pocket.pqr
+  properties:
+    pocket: 4

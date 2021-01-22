@@ -44,21 +44,28 @@
             "docs": "https://biobb-vs.readthedocs.io/en/latest/utils.html#module-fpocket.fpocket"
         },
         {
+            "block" : "FPocketFilter", 
+            "tool" : "in house", 
+            "desc" : "Performs a search over the outputs of the fpocket building block.",
+            "exec" : "fpocket_filter",
+            "docs": "https://biobb-vs.readthedocs.io/en/latest/utils.html#module-fpocket.fpocket_filter"
+        },
+        {
             "block" : "FPocketSelect", 
-            "tool" : "fpocket_select", 
-            "desc" : "Parses the outputs of the fpocket building block.",
+            "tool" : "in house", 
+            "desc" : "Selects a single pocket in the outputs of the fpocket building block..",
             "exec" : "fpocket_select",
             "docs": "https://biobb-vs.readthedocs.io/en/latest/utils.html#module-fpocket.fpocket_select"
         }
     ],
     "dep_pypi" : [
-        "install_requires=['biobb_common==3.5.1', 'biobb_structure_checking==3.7.3']", 
+        "install_requires=['biobb_common==3.5.1', 'biopython']", 
         "python_requires='==3.7.*'"
     ], 
     "dep_conda" : [
         "python ==3.7.*", 
         "biobb_common ==3.5.1", 
-        "biobb_structure_checking==3.7.3",
+        "biopython",
         "autodock-vina ==1.1.2",
         "fpocket==3.1.4.2"
     ],

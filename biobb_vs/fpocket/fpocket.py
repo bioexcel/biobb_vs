@@ -16,7 +16,7 @@ class FPocket():
     | Finds the binding site of the input_pdb_path file via the `fpocket <https://github.com/Discngine/fpocket>`_ software.
 
     Args:
-        input_pdb_path (str): Path to the PDB structure where the binding site is to be found. File type: input. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/fpocket/fpocket_input>`_. Accepted formats: pdb (edam:format_1476).
+        input_pdb_path (str): Path to the PDB structure where the binding site is to be found. File type: input. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/fpocket/fpocket_input.pdb>`_. Accepted formats: pdb (edam:format_1476).
         output_pockets_zip (str): Path to all the pockets found by fpocket in the input_pdb_path structure. File type: output. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/fpocket/ref_output_pockets.zip>`_. Accepted formats: zip (edam:format_3987).
         output_summary (str): Path to the JSON summary file. File type: output. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/fpocket/ref_output_summary.json>`_. Accepted formats: json (edam:format_3464).
         properties (dic - Python dictionary object containing the tool parameters, not input/output files):

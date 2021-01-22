@@ -39,14 +39,16 @@ def is_valid_file(ext, argument):
 		'output_summary': ['json'],
 		'input_pockets_zip': ['zip'],
 		'input_summary': ['json'],
-		'output_sel_pockets_zip': ['zip']
+		'output_filter_pockets_zip': ['zip'],
+		'output_pocket_pdb': ['pdb'],
+		'output_pocket_pqr': ['pqr']
 	}
 	return ext in formats[argument]
 
 # CHECK PROPERTIES
 
 def check_range(name, property, values, out_log, classname):
-	""" Checks the format of a range for fpocket_select """
+	""" Checks the format of a range for fpocket_filter """
 
 	if not type(property) == list or len(property) != 2 or not all(isinstance(n, int) or isinstance(n, float) for n in property):
 		fu.log(classname + ': Incorrect format for %s property, exiting' % name, out_log)
@@ -118,17 +120,19 @@ def process_output_fpocket(tmp_folder, output_pockets_zip, output_summary, remov
 		fu.rm(tmp_folder)
 		fu.log('Removed temporary folder: %s' % tmp_folder, out_log)
 	
-def process_output_fpocket_select(search_list, tmp_folder, input_pockets_zip, output_sel_pockets_zip, remove_tmp, out_log):
-	""" Creates the output_sel_pockets_zip """
+def process_output_fpocket_filter(search_list, tmp_folder, input_pockets_zip, output_filter_pockets_zip, remove_tmp, out_log):
+	""" Creates the output_filter_pockets_zip """
 
 	# decompress the input_pockets_zip file to tmp_folder
 	cluster_list = fu.unzip_list(zip_file = input_pockets_zip, dest_dir = tmp_folder, out_log = out_log)
 
 	pockets_list = [str(i) for i in Path(tmp_folder).iterdir()]
 
-	sel_pockets_list = [p for p in pockets_list for s in search_list if s in p ]
+	sel_pockets_list = [p for p in pockets_list for s in search_list if s + '_' in p ]
 
-	fu.zip_list(zip_file = output_sel_pockets_zip, file_list = sel_pockets_list, out_log = out_log)
+	fu.log('Creating %s output file' % output_filter_pockets_zip, out_log)
+
+	fu.zip_list(zip_file = output_filter_pockets_zip, file_list = sel_pockets_list, out_log = out_log)
 
 	if remove_tmp:
 		# remove temporary folder

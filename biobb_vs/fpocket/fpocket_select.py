@@ -106,8 +106,10 @@ class FPocketSelect():
 
         for p in pockets_list:
             if PurePath(p).suffix == '.pdb':
+                fu.log('Saving %s file' % self.io_dict["out"]["output_pocket_pdb"], out_log)
                 shutil.copy(p, self.io_dict["out"]["output_pocket_pdb"])
             else:
+                fu.log('Saving %s file' % self.io_dict["out"]["output_pocket_pqr"], out_log)
                 shutil.copy(p, self.io_dict["out"]["output_pocket_pqr"])
 
         if self.remove_tmp:

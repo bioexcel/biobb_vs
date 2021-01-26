@@ -1,0 +1,5 @@
+properties:
+  max_radius: 6
+  min_radius: 3
+  num_spheres: 35
+  sort_by: druggability_score

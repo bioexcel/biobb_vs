@@ -20,7 +20,7 @@ class FPocketFilter():
         input_summary (str): Path to the JSON summary file returned by fpocket. File type: input. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/fpocket/input_summary.json>`_. Accepted formats: json (edam:format_3464).
         output_filter_pockets_zip (str): Path to the selected pockets after filtering. File type: output. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/fpocket/ref_output_filter_pockets.zip>`_. Accepted formats: zip (edam:format_3987).
         properties (dic - Python dictionary object containing the tool parameters, not input/output files):
-            * **score** (*list*) - (None) List of two float numbers between 0 and 1 indicating the score range. Indicates the fpocket score after the evaluation of pocket prediction accuracy.
+            * **score** (*list*) - (None) List of two float numbers between 0 and 1 indicating the score range. Indicates the fpocket score after the evaluation of pocket prediction accuracy as defined in the `fpocket paper <https://doi.org/10.1186/1471-2105-10-168>`_.
             * **druggability_score** (*list*) - (None) List of two float numbers between 0 and 1 indicating the druggability_score range. It's a value between 0 and 1, 0 signifying that the pocket is likely to not bind a drug like molecule and 1, that it is very likely to bind the latter.
             * **volume** (*list*) - (None) List of two float numbers indicating the volume range. Indicates the pocket volume.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.

@@ -1,0 +1,10 @@
+properties:
+  druggability_score:
+  - 0.2
+  - 0.9
+  score:
+  - 0.2
+  - 1
+  volume:
+  - 100
+  - 600

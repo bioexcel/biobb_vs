@@ -1,0 +1,100 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://bioexcel.eu/biobb_vs/json_schemas/1.0/fpocket_select",
+    "name": "biobb_vs FPocketSelect",
+    "title": "Selects a single pocket in the outputs of the fpocket building block.",
+    "description": "Selects a single pocket in the outputs of the fpocket building block from a given parameter.",
+    "type": "object",
+    "info": {
+        "wrapped_software": {
+            "name": "In house",
+            "license": "Apache-2.0"
+        },
+        "ontology": {
+            "name": "EDAM",
+            "schema": "http://edamontology.org/EDAM.owl"
+        }
+    },
+    "required": [
+        "input_pockets_zip",
+        "output_pocket_pdb",
+        "output_pocket_pqr"
+    ],
+    "properties": {
+        "input_pockets_zip": {
+            "type": "string",
+            "description": "Path to the pockets found by fpocket",
+            "filetype": "input",
+            "sample": "https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/fpocket/input_pockets.zip",
+            "enum": [
+                ".*\\.zip$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.zip$",
+                    "description": "Path to the pockets found by fpocket",
+                    "edam": "format_3987"
+                }
+            ]
+        },
+        "output_pocket_pdb": {
+            "type": "string",
+            "description": "Path to the PDB file with the cavity found by fpocket",
+            "filetype": "output",
+            "sample": "https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/fpocket/ref_output_pocket.pdb",
+            "enum": [
+                ".*\\.pdb$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.pdb$",
+                    "description": "Path to the PDB file with the cavity found by fpocket",
+                    "edam": "format_1476"
+                }
+            ]
+        },
+        "output_pocket_pqr": {
+            "type": "string",
+            "description": "Path to the PQR file with the pocket found by fpocket",
+            "filetype": "output",
+            "sample": "https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/fpocket/ref_output_pocket.pqr",
+            "enum": [
+                ".*\\.pqr$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.pqr$",
+                    "description": "Path to the PQR file with the pocket found by fpocket",
+                    "edam": "format_1476"
+                }
+            ]
+        },
+        "properties": {
+            "type": "object",
+            "properties": {
+                "pocket": {
+                    "type": "integer",
+                    "default": 1,
+                    "wf_prop": false,
+                    "description": "Pocket id from the summary json given by the fpocket building block.",
+                    "min": 1,
+                    "max": 1000,
+                    "step": 1
+                },
+                "remove_tmp": {
+                    "type": "boolean",
+                    "default": true,
+                    "wf_prop": true,
+                    "description": "Remove temporal files."
+                },
+                "restart": {
+                    "type": "boolean",
+                    "default": false,
+                    "wf_prop": true,
+                    "description": "Do not execute if output files exist."
+                }
+            }
+        }
+    },
+    "additionalProperties": false
+}

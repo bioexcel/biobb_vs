@@ -3,7 +3,7 @@
     "$id": "http://bioexcel.eu/biobb_vs/json_schemas/1.0/bindingsite",
     "name": "biobb_vs BindingSite",
     "title": "This class finds the binding site of the input_pdb.",
-    "description": "Finds the binding site of the input_pdb file based on the ligands' location of similar structures (members of the sequence identity cluster)",
+    "description": "Finds the binding site of the input_pdb_path file based on the ligands' location of similar structures (members of the sequence identity cluster)",
     "type": "object",
     "info": {
         "wrapped_software": {

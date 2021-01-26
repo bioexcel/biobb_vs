@@ -1,0 +1,19 @@
+{
+  "properties": {
+    "resid_list": [
+      718,
+      743,
+      745,
+      762,
+      766,
+      796,
+      790,
+      791,
+      793,
+      794,
+      788
+    ],
+    "offset": 2,
+    "box_coordinates": true
+  }
+}

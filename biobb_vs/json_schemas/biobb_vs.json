@@ -24,10 +24,17 @@
         },
         {
             "block" : "Box", 
-            "tool" : "in house using biopython", 
-            "desc" : "This class sets the center and the size of a rectangular parallelepiped box around a selection of residues.",
+            "tool" : "in house", 
+            "desc" : "This class sets the center and the size of a rectangular parallelepiped box around a set of residues or a pocket.",
             "exec" : "box",
             "docs": "https://biobb-vs.readthedocs.io/en/latest/utils.html#module-utils.box"
+        },
+        {
+            "block" : "BoxResidues", 
+            "tool" : "in house using biopython", 
+            "desc" : "This class sets the center and the size of a rectangular parallelepiped box around a set of residues.",
+            "exec" : "box_residues",
+            "docs": "https://biobb-vs.readthedocs.io/en/latest/utils.html#module-utils.box_residues"
         },
         {
             "block" : "ExtractModelPDBQT", 
@@ -67,12 +74,13 @@
         "biobb_common ==3.5.1", 
         "biopython",
         "autodock-vina ==1.1.2",
-        "fpocket==3.1.4.2"
+        "fpocket ==3.1.4.2"
     ],
     "keywords" : [
         "virtual screening",
         "autodock",
         "vina",
-        "fpocket"
+        "fpocket",
+        "binding site"
     ]
 }

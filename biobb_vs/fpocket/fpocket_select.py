@@ -16,9 +16,9 @@ class FPocketSelect():
     | Selects a single pocket in the outputs of the fpocket building block from a given parameter.
 
     Args:
-        input_pockets_zip (str): Path to the pockets found by fpocket. File type: input. `Sample file <>`_. Accepted formats: zip (edam:format_3987).
-        output_pocket_pdb (str): Path to the PDB file with the cavity found by fpocket. File type: output. `Sample file <>`_. Accepted formats: pdb (edam:format_1476).
-        output_pocket_pqr (str): Path to the PQR file with the pocket found by fpocket. File type: output. `Sample file <>`_. Accepted formats: pdb (edam:format_1476).
+        input_pockets_zip (str): Path to the pockets found by fpocket. File type: input. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/fpocket/input_pockets.zip>`_. Accepted formats: zip (edam:format_3987).
+        output_pocket_pdb (str): Path to the PDB file with the cavity found by fpocket. File type: output. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/fpocket/ref_output_pocket.pdb>`_. Accepted formats: pdb (edam:format_1476).
+        output_pocket_pqr (str): Path to the PQR file with the pocket found by fpocket. File type: output. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/fpocket/ref_output_pocket.pqr>`_. Accepted formats: pqr (edam:format_1476).
         properties (dic - Python dictionary object containing the tool parameters, not input/output files):
             * **pocket** (*int*) - (1) [1~1000|1] Pocket id from the summary json given by the fpocket building block.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.

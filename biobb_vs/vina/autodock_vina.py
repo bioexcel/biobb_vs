@@ -116,6 +116,10 @@ class AutoDockVina():
         # calculating box position and size
         x0, y0, z0, sidex, sidey, sidez = self.calculate_box(self.io_dict["in"]["input_box_path"])
 
+        # in case ligand or receptor end with END, remove last line
+        check_input_autodock(self.io_dict["in"]["input_ligand_pdbqt_path"], out_log)
+        check_input_autodock(self.io_dict["in"]["input_receptor_pdbqt_path"], out_log)
+
         # create cmd
         cmd = [self.vina_path,
                '--ligand', self.io_dict["in"]["input_ligand_pdbqt_path"],

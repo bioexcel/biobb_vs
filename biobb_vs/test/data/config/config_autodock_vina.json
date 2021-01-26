@@ -1,5 +1,5 @@
 {
   "properties": {
-    "model": 1
+    "remove_tmp": true
   }
 }

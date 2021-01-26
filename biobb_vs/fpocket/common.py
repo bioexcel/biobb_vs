@@ -62,7 +62,7 @@ def check_range(name, property, values, out_log, classname):
 
 # PROCESS OUTPUTS
 
-def process_output_fpocket(tmp_folder, output_pockets_zip, output_summary, remove_tmp, out_log, classname):
+def process_output_fpocket(tmp_folder, output_pockets_zip, output_summary, sort_by, remove_tmp, out_log, classname):
 	""" Creates the output_pockets_zip and generates the  output_summary """
 
 	path = str(PurePath(tmp_folder).joinpath('input_out'))
@@ -105,6 +105,10 @@ def process_output_fpocket(tmp_folder, output_pockets_zip, output_summary, remov
 	# get number of pockets
 	fu.log('%d pockets found' % (len(data)), out_log)
 
+	# sort data by sort_by property
+	fu.log('Sorting output data by %s' % (sort_by), out_log)
+	data = sorted(data.items(), key=lambda item: float(item[1][sort_by]), reverse = True)
+
 	# compress pockets
 	pockets = PurePath(path).joinpath('pockets')
 	files_list = [str(i) for i in Path(pockets).iterdir()]
@@ -126,12 +130,15 @@ def process_output_fpocket_filter(search_list, tmp_folder, input_pockets_zip, ou
 	# decompress the input_pockets_zip file to tmp_folder
 	cluster_list = fu.unzip_list(zip_file = input_pockets_zip, dest_dir = tmp_folder, out_log = out_log)
 
+	# list all files of tmp_folder
 	pockets_list = [str(i) for i in Path(tmp_folder).iterdir()]
 
+	# select search_list items from pockets_list
 	sel_pockets_list = [p for p in pockets_list for s in search_list if s + '_' in p ]
 
 	fu.log('Creating %s output file' % output_filter_pockets_zip, out_log)
 
+	# compress output to output_filter_pockets_zip
 	fu.zip_list(zip_file = output_filter_pockets_zip, file_list = sel_pockets_list, out_log = out_log)
 
 	if remove_tmp:

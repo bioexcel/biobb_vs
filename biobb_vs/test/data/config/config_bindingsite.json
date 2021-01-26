@@ -1,10 +1,10 @@
 {
-    "properties": {
-        "ligand": "PGA",
-        "matrix_name": "blosum62",
-        "gap_open": -10.0,
-        "gap_extend": -0.5,
-        "max_num_ligands": 15,
-        "radius": 5
-    }
+  "properties": {
+    "ligand": "PGA",
+    "matrix_name": "blosum62",
+    "gap_open": -10.0,
+    "gap_extend": -0.5,
+    "max_num_ligands": 15,
+    "radius": 5
+  }
 }

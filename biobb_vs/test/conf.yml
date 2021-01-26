@@ -2,22 +2,6 @@ working_dir_path: /tmp/biobb/unitests
 
 # VINA
 
-# vina_prepare_ligand:
-#   paths:
-#     input_ligand_path: file:test_data_dir/vina/prepare_ligand.pdb
-#     output_ligand_path: prepare_ligand.pdbqt
-#     ref_output_ligand_path: file:test_reference_dir/vina/ref_prepare_ligand.pdbqt
-#   properties:
-#     mgltools_path: '/anaconda3/pkgs/mgltools-1.5.7-0'
-
-# vina_prepare_receptor:
-#   paths:
-#     input_receptor_path: file:test_data_dir/vina/prepare_receptor.pdb
-#     output_receptor_path: prepare_receptor.pdbqt
-#     ref_output_receptor_path: file:test_reference_dir/vina/ref_prepare_receptor.pdbqt
-#   properties:
-#     mgltools_path: '/anaconda3/pkgs/mgltools-1.5.7-0'
-
 autodock_vina:
   paths:
     input_ligand_pdbqt_path: file:test_data_dir/vina/vina_ligand.pdbqt
@@ -27,6 +11,8 @@ autodock_vina:
     ref_output_pdbqt_path: file:test_reference_dir/vina/ref_output_vina.pdbqt
     output_log_path: output_log_path.log
     ref_output_log_path: file:test_reference_dir/vina/ref_output_vina.log
+  properties:
+    remove_tmp: true
 
 # UTILS
 
@@ -46,11 +32,20 @@ bindingsite:
 
 box:
   paths:
-    input_pdb_path: file:test_data_dir/utils/box.pdb
-    resid_pdb_path: file:test_data_dir/utils/resid_box.pdb
+    input_pdb_path: file:test_data_dir/utils/input_box.pqr
     output_pdb_path: output_box.pdb
     ref_output_pdb_path: file:test_reference_dir/utils/ref_output_box.pdb
   properties:
+    offset: 2
+    box_coordinates: true
+
+box_residues:
+  paths:
+    input_pdb_path: file:test_data_dir/utils/input_box_residues.pdb
+    output_pdb_path: output_box_residues.pdb
+    ref_output_pdb_path: file:test_reference_dir/utils/ref_output_box_residues.pdb
+  properties:
+    resid_list: [718, 743, 745, 762, 766, 796, 790, 791, 793, 794, 788]
     offset: 2
     box_coordinates: true
 
@@ -75,6 +70,7 @@ fpocket:
     min_radius: 3
     max_radius: 6
     num_spheres: 35
+    sort_by: druggability_score
 
 fpocket_filter:
   paths:

@@ -39,7 +39,7 @@ def check_output_path(path, argument, optional, out_log, classname):
 def is_valid_file(ext, argument):
 	""" Checks if file format is compatible """
 	formats = {
-		'input_pdb_path': ['pdb'],
+		'input_pdb_path': ['pdb', 'pqr'],
 		'input_clusters_zip': ['zip'],
         'resid_pdb_path': ['pdb'],
         'input_pdbqt_path': ['pdbqt'],

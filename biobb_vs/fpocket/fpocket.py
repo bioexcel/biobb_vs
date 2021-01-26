@@ -23,6 +23,7 @@ class FPocket():
             * **min_radius** (*float*) - (None) [0.1~1000|0.1] The minimum radius in Ångstroms an alpha sphere might have in a binding pocket.
             * **max_radius** (*float*) - (None) [2~1000|0.1] The maximum radius in Ångstroms of alpha spheres in a pocket.
             * **num_spheres** (*int*) - (None) [1~1000|1] Indicates how many alpha spheres a pocket must contain at least in order to figure in the results.
+            * **sort_by** (*str*) - ('druggability_score') From which property the output will be sorted. Values: druggability_score (this score intends to assess the likeliness of the pocket to bind a small drug like molecule), score (fpocket score as defined in the `fpocket paper <https://doi.org/10.1186/1471-2105-10-168>`_), volume (volume of the pocket).
             * **fpocket_path** (*string*) - ('fpocket') path to fpocket in your local computer.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
@@ -34,7 +35,8 @@ class FPocket():
             prop = { 
                 'min_radius': 3,
                 'max_radius': 6,
-                'num_spheres': 35
+                'num_spheres': 35,
+                'sort_by': 'druggability_score'
             }
             fpocket(input_pdb_path='/path/to/myStructure.pdb', 
                     output_pockets_zip='/path/to/newPockets.zip', 
@@ -67,6 +69,7 @@ class FPocket():
         self.min_radius = properties.get('min_radius', None)
         self.max_radius = properties.get('max_radius', None)
         self.num_spheres = properties.get('num_spheres', None)
+        self.sort_by = properties.get('sort_by', 'druggability_score')
         self.properties = properties
 
         # Properties common in all BB
@@ -135,6 +138,7 @@ class FPocket():
         process_output_fpocket(self.tmp_folder,
                                self.io_dict["out"]["output_pockets_zip"], 
                                self.io_dict["out"]["output_summary"],
+                               self.sort_by,
                                self.remove_tmp, 
                                out_log, 
                                self.__class__.__name__)

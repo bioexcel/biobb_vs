@@ -112,6 +112,9 @@ traj_comp.xtc
 # ipynb checkpoints
 .ipynb_checkpoints
 
+# backup files
+*.bk
+
 # reference log
 !biobb_vs/test/reference/vina/*.log
 

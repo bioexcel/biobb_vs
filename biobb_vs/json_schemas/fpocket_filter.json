@@ -1,0 +1,109 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://bioexcel.eu/biobb_vs/json_schemas/1.0/fpocket_filter",
+    "name": "biobb_vs FPocketFilter",
+    "title": "Performs a search over the outputs of the fpocket building block.",
+    "description": "Finds one or more binding sites in the outputs of the fpocket building block from given parameters.",
+    "type": "object",
+    "info": {
+        "wrapped_software": {
+            "name": "In house",
+            "license": "Apache-2.0"
+        },
+        "ontology": {
+            "name": "EDAM",
+            "schema": "http://edamontology.org/EDAM.owl"
+        }
+    },
+    "required": [
+        "input_pockets_zip",
+        "input_summary",
+        "output_filter_pockets_zip"
+    ],
+    "properties": {
+        "input_pockets_zip": {
+            "type": "string",
+            "description": "Path to all the pockets found by fpocket",
+            "filetype": "input",
+            "sample": "https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/fpocket/input_pockets.zip",
+            "enum": [
+                ".*\\.zip$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.zip$",
+                    "description": "Path to all the pockets found by fpocket",
+                    "edam": "format_3987"
+                }
+            ]
+        },
+        "input_summary": {
+            "type": "string",
+            "description": "Path to the JSON summary file returned by fpocket",
+            "filetype": "input",
+            "sample": "https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/fpocket/input_summary.json",
+            "enum": [
+                ".*\\.json$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.json$",
+                    "description": "Path to the JSON summary file returned by fpocket",
+                    "edam": "format_3464"
+                }
+            ]
+        },
+        "output_filter_pockets_zip": {
+            "type": "string",
+            "description": "Path to the selected pockets after filtering",
+            "filetype": "output",
+            "sample": "https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/fpocket/ref_output_filter_pockets.zip",
+            "enum": [
+                ".*\\.zip$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.zip$",
+                    "description": "Path to the selected pockets after filtering",
+                    "edam": "format_3987"
+                }
+            ]
+        },
+        "properties": {
+            "type": "object",
+            "properties": {
+                "score": {
+                    "type": "array",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "List of two float numbers between 0 and 1 indicating the score range. Indicates the fpocket score after the evaluation of pocket prediction accuracy as defined in the fpocket paper."
+                },
+                "druggability_score": {
+                    "type": "array",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "List of two float numbers between 0 and 1 indicating the druggability_score range. It's a value between 0 and 1, 0 signifying that the pocket is likely to not bind a drug like molecule and 1, that it is very likely to bind the latter."
+                },
+                "volume": {
+                    "type": "array",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "List of two float numbers indicating the volume range. Indicates the pocket volume."
+                },
+                "remove_tmp": {
+                    "type": "boolean",
+                    "default": true,
+                    "wf_prop": true,
+                    "description": "Remove temporal files."
+                },
+                "restart": {
+                    "type": "boolean",
+                    "default": false,
+                    "wf_prop": true,
+                    "description": "Do not execute if output files exist."
+                }
+            }
+        }
+    },
+    "additionalProperties": false
+}

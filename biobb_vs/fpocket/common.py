@@ -107,7 +107,7 @@ def process_output_fpocket(tmp_folder, output_pockets_zip, output_summary, sort_
 
 	# sort data by sort_by property
 	fu.log('Sorting output data by %s' % (sort_by), out_log)
-	data = sorted(data.items(), key=lambda item: float(item[1][sort_by]), reverse = True)
+	data = dict(sorted(data.items(), key=lambda item: float(item[1][sort_by]), reverse = True))
 
 	# compress pockets
 	pockets = PurePath(path).joinpath('pockets')

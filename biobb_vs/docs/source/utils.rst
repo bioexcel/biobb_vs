@@ -21,6 +21,14 @@ utils.box module
     :undoc-members:
     :show-inheritance:
 
+utils.box_residues module
+------------------------------------
+
+.. automodule:: utils.box_residues
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 utils.extract_model_pdbqt module
 ------------------------------------
 

@@ -1,16 +1,11 @@
 # Biobb Virtual Screening changelog
 
-## What's new in version [3.0.0](https://github.com/bioexcel/biobb_vs/releases/tag/v3.0.0)?
-In version 3.0.0 Python has been updated to version 3.7. Big changes in the documentation style and content. Finally a new conda installation recipe has been introduced.
+## What's new in version [3.5.0](https://github.com/bioexcel/biobb_vs/releases/tag/v3.5.0)?
+The version 3.5.0 is the first release of biobb_vs. There have been added the fpocket and autodock-vina tools as well as utilities for getting a binding site, calculate box or extract a desired model from a PDBQT file.
 
 ### New features
 
-* Update to Python 3.7 (general)
-* New conda installer (installation)
-* Adding type hinting for easier usage (API)
-* Deprecating os.path in favour of pathlib.path (modules)
-* New command line documentation (documentation)
-
-### Other changes
-
-* New documentation styles (documentation)
+* First release
+* Fpocket module: FPocket, FPocketFilter and FPocketSelect tools
+* Vina module: AutoDockVina tool
+* Utils module: BindingSite, Box, BoxResidues and ExtractModelPDBQT tools

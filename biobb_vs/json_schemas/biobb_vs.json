@@ -48,21 +48,21 @@
             "tool" : "fpocket", 
             "desc" : "Wrapper of the fpocket software for finding the binding sites of a structure.",
             "exec" : "fpocket",
-            "docs": "https://biobb-vs.readthedocs.io/en/latest/utils.html#module-fpocket.fpocket"
+            "docs": "https://biobb-vs.readthedocs.io/en/latest/fpocket.html#module-fpocket.fpocket"
         },
         {
             "block" : "FPocketFilter", 
             "tool" : "in house", 
             "desc" : "Performs a search over the outputs of the fpocket building block.",
             "exec" : "fpocket_filter",
-            "docs": "https://biobb-vs.readthedocs.io/en/latest/utils.html#module-fpocket.fpocket_filter"
+            "docs": "https://biobb-vs.readthedocs.io/en/latest/fpocket.html#module-fpocket.fpocket_filter"
         },
         {
             "block" : "FPocketSelect", 
             "tool" : "in house", 
             "desc" : "Selects a single pocket in the outputs of the fpocket building block..",
             "exec" : "fpocket_select",
-            "docs": "https://biobb-vs.readthedocs.io/en/latest/utils.html#module-fpocket.fpocket_select"
+            "docs": "https://biobb-vs.readthedocs.io/en/latest/fpocket.html#module-fpocket.fpocket_select"
         }
     ],
     "dep_pypi" : [

@@ -129,6 +129,55 @@ box --config config_box.yml --input_pdb_path input_box.pqr --output_pdb_path ref
 box --config config_box.json --input_pdb_path input_box.pqr --output_pdb_path ref_output_box.pdb
 ```
 
+## Autodock_vina_run
+Wrapper of the AutoDock Vina software.
+### Get help
+Command:
+```python
+autodock_vina_run -h
+```
+    /bin/sh: 1: autodock_vina_run: not found
+### I / O Arguments
+Syntax: input_argument (datatype) : Definition
+
+Config input / output arguments for this building block:
+* **input_ligand_pdbqt_path** (*string*): Path to the input PDBQT ligand. File type: input. [Sample file](https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/vina/vina_ligand.pdbqt). Accepted formats: PDBQT
+* **input_receptor_pdbqt_path** (*string*): Path to the input PDBQT receptor. File type: input. [Sample file](https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/vina/vina_receptor.pdbqt). Accepted formats: PDBQT
+* **input_box_path** (*string*): Path to the PDB containig the residues belonging to the binding site. File type: input. [Sample file](https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/vina/vina_box.pdb). Accepted formats: PDB
+* **output_pdbqt_path** (*string*): Path to the output PDBQT file. File type: output. [Sample file](https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/vina/ref_output_vina.pdbqt). Accepted formats: PDBQT
+* **output_log_path** (*string*): Path to the log file. File type: output. [Sample file](https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/vina/ref_output_vina.log). Accepted formats: LOG
+### Config
+Syntax: input_parameter (datatype) - (default_value) Definition
+
+Config parameters for this building block:
+* **vina_path** (*string*): (vina) path to vina in your local computer..
+* **remove_tmp** (*boolean*): (True) Remove temporal files..
+* **restart** (*boolean*): (False) Do not execute if output files exist..
+### YAML
+#### [Common config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_autodock_vina_run.yml)
+```python
+properties:
+  remove_tmp: true
+
+```
+#### Command line
+```python
+autodock_vina_run --config config_autodock_vina_run.yml --input_ligand_pdbqt_path vina_ligand.pdbqt --input_receptor_pdbqt_path vina_receptor.pdbqt --input_box_path vina_box.pdb --output_pdbqt_path ref_output_vina.pdbqt --output_log_path ref_output_vina.log
+```
+### JSON
+#### [Common config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_autodock_vina_run.json)
+```python
+{
+  "properties": {
+    "remove_tmp": true
+  }
+}
+```
+#### Command line
+```python
+autodock_vina_run --config config_autodock_vina_run.json --input_ligand_pdbqt_path vina_ligand.pdbqt --input_receptor_pdbqt_path vina_receptor.pdbqt --input_box_path vina_box.pdb --output_pdbqt_path ref_output_vina.pdbqt --output_log_path ref_output_vina.log
+```
+
 ## Fpocket_filter
 Performs a search over the outputs of the fpocket building block.
 ### Get help
@@ -211,73 +260,6 @@ fpocket_filter --config config_fpocket_filter.yml --input_pockets_zip input_pock
 fpocket_filter --config config_fpocket_filter.json --input_pockets_zip input_pockets.zip --input_summary input_summary.json --output_filter_pockets_zip ref_output_filter_pockets.zip
 ```
 
-## Autodock_vina
-Wrapper of the AutoDock Vina software.
-### Get help
-Command:
-```python
-autodock_vina -h
-```
-    usage: autodock_vina [-h] [--config CONFIG] --input_ligand_pdbqt_path INPUT_LIGAND_PDBQT_PATH --input_receptor_pdbqt_path INPUT_RECEPTOR_PDBQT_PATH --input_box_path INPUT_BOX_PATH --output_pdbqt_path OUTPUT_PDBQT_PATH [--output_log_path OUTPUT_LOG_PATH]
-    
-    Prepares input ligand for an Autodock Vina Virtual Screening.
-    
-    optional arguments:
-      -h, --help            show this help message and exit
-      --config CONFIG       Configuration file
-      --output_log_path OUTPUT_LOG_PATH
-                            Path to the log file. Accepted formats: log.
-    
-    required arguments:
-      --input_ligand_pdbqt_path INPUT_LIGAND_PDBQT_PATH
-                            Path to the input PDBQT ligand. Accepted formats: pdbqt.
-      --input_receptor_pdbqt_path INPUT_RECEPTOR_PDBQT_PATH
-                            Path to the input PDBQT receptor. Accepted formats: pdbqt.
-      --input_box_path INPUT_BOX_PATH
-                            Path to the PDB containig the residues belonging to the binding site. Accepted formats: pdb.
-      --output_pdbqt_path OUTPUT_PDBQT_PATH
-                            Path to the output PDBQT file. Accepted formats: pdbqt.
-### I / O Arguments
-Syntax: input_argument (datatype) : Definition
-
-Config input / output arguments for this building block:
-* **input_ligand_pdbqt_path** (*string*): Path to the input PDBQT ligand. File type: input. [Sample file](https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/vina/vina_ligand.pdbqt). Accepted formats: PDBQT
-* **input_receptor_pdbqt_path** (*string*): Path to the input PDBQT receptor. File type: input. [Sample file](https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/vina/vina_receptor.pdbqt). Accepted formats: PDBQT
-* **input_box_path** (*string*): Path to the PDB containig the residues belonging to the binding site. File type: input. [Sample file](https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/vina/vina_box.pdb). Accepted formats: PDB
-* **output_pdbqt_path** (*string*): Path to the output PDBQT file. File type: output. [Sample file](https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/vina/ref_output_vina.pdbqt). Accepted formats: PDBQT
-* **output_log_path** (*string*): Path to the log file. File type: output. [Sample file](https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/vina/ref_output_vina.log). Accepted formats: LOG
-### Config
-Syntax: input_parameter (datatype) - (default_value) Definition
-
-Config parameters for this building block:
-* **vina_path** (*string*): (vina) path to vina in your local computer..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-### YAML
-#### [Common config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_autodock_vina.yml)
-```python
-properties:
-  remove_tmp: true
-
-```
-#### Command line
-```python
-autodock_vina --config config_autodock_vina.yml --input_ligand_pdbqt_path vina_ligand.pdbqt --input_receptor_pdbqt_path vina_receptor.pdbqt --input_box_path vina_box.pdb --output_pdbqt_path ref_output_vina.pdbqt --output_log_path ref_output_vina.log
-```
-### JSON
-#### [Common config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_autodock_vina.json)
-```python
-{
-  "properties": {
-    "remove_tmp": true
-  }
-}
-```
-#### Command line
-```python
-autodock_vina --config config_autodock_vina.json --input_ligand_pdbqt_path vina_ligand.pdbqt --input_receptor_pdbqt_path vina_receptor.pdbqt --input_box_path vina_box.pdb --output_pdbqt_path ref_output_vina.pdbqt --output_log_path ref_output_vina.log
-```
-
 ## Fpocket_select
 Selects a single pocket in the outputs of the fpocket building block.
 ### Get help
@@ -339,59 +321,14 @@ fpocket_select --config config_fpocket_select.yml --input_pockets_zip input_pock
 fpocket_select --config config_fpocket_select.json --input_pockets_zip input_pockets.zip --output_pocket_pdb ref_output_pocket.pdb --output_pocket_pqr ref_output_pocket.pqr
 ```
 
-## Fpocket
+## Fpocket_run
 Wrapper of the fpocket software.
 ### Get help
 Command:
 ```python
-fpocket -h
+fpocket_run -h
 ```
-    ***** POCKET HUNTING BEGINS ***** 
-    ! Invalid pdb name given.
-    
-    :||: [1mfpocket 3.0[0m :||:
-            
-    [1mMandatory parameters[0m : 
-    	fpocket -f --file pdbFile                                       
-    	[ fpocket -F --fileList fileList ]                                  
-    
-    
-    [1mOptional output parameters[0m
-    	-x --calculate_interaction_grids	: Specify this flag if you want fpocket to     
-    						  calculate VdW and Coulomb grids for each pocket
-    	-d --pocket_descr_stdout		: Put this flag if you want to write fpocket
-    						  descriptors to the standard output
-    
-    
-    [1mOptional input parameters[0m
-    	-l --model_number (int)			: Number of Model to analyze.	
-    	-y --topology_file (string)		: File name of a topology file (Amber prmtop).	
-    	-r --custom_ligand (string)		: String specifying a ligand like: residuenumber:residuename:chain_code (ie. 1224:PU8:A).	
-    
-    
-    [1mOptional pocket detection parameters[0m (default parameters)           
-    	-m --min_alpha_size (float)		: Minimum radius of an alpha-sphere.	(6.2)
-    	-M --max_alpha_size (float)		: Maximum radius of an alpha-sphere.	(3.4)
-    	-D --clustering_distance (float)	: Distance threshold for clustering algorithm	(2.4)
-    	-C --clustering_method (char)		: Specify the clustering method wanted for     
-    						  grouping voronoi vertices together (s)
-    						  s : single linkage clustering
-    						  m : complete linkage clustering
-    						  a : average linkage clustering 
-    						  c : centroid linkage clustering
-    	-e --clustering_measure (char)		: Specify the distance measure for clustering	(e) 
-    						  e : euclidean distance
-    						  b : Manhattan distance
-    	-i --min_spheres_per_pocket (int)	: Minimum number of a-sphere per pocket.	(15)
-    	-p --ratio_apol_spheres_pocket (float)	: Minimum proportion of apolar sphere in       
-    						  a pocket (remove otherwise) (0.0)
-    	-A --number_apol_asph_pocket (int)	: Minimum number of apolar neighbor for        
-    						  an a-sphere to be considered as apolar.   (3)
-    	-v --iterations_volume_mc (integer)	: Number of Monte-Carlo iteration for the      
-    						  calculation of each pocket volume.(300)
-    
-    [1mFor more information: http://fpocket.sourceforge.net[0m
-    ***** POCKET HUNTING ENDS ***** 
+    /bin/sh: 1: fpocket_run: not found
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -411,7 +348,7 @@ Config parameters for this building block:
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
 ### YAML
-#### [Common config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_fpocket.yml)
+#### [Common config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_fpocket_run.yml)
 ```python
 properties:
   max_radius: 6
@@ -422,10 +359,10 @@ properties:
 ```
 #### Command line
 ```python
-fpocket --config config_fpocket.yml --input_pdb_path fpocket_input.pdb --output_pockets_zip ref_output_pockets.zip --output_summary ref_output_summary.json
+fpocket_run --config config_fpocket_run.yml --input_pdb_path fpocket_input.pdb --output_pockets_zip ref_output_pockets.zip --output_summary ref_output_summary.json
 ```
 ### JSON
-#### [Common config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_fpocket.json)
+#### [Common config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_fpocket_run.json)
 ```python
 {
   "properties": {
@@ -438,7 +375,7 @@ fpocket --config config_fpocket.yml --input_pdb_path fpocket_input.pdb --output_
 ```
 #### Command line
 ```python
-fpocket --config config_fpocket.json --input_pdb_path fpocket_input.pdb --output_pockets_zip ref_output_pockets.zip --output_summary ref_output_summary.json
+fpocket_run --config config_fpocket_run.json --input_pdb_path fpocket_input.pdb --output_pockets_zip ref_output_pockets.zip --output_summary ref_output_summary.json
 ```
 
 ## Box_residues
@@ -566,7 +503,7 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **ligand** (*string*): (None) Ligand to be found in the protein structure. If no ligand provided, no action will be executed..
+* **ligand** (*string*): (None) Ligand to be found in the protein structure. If no ligand provided, the largest one will be selected, if more than one..
 * **radius** (*number*): (5.0) Cut-off distance (Ångstroms) around ligand atoms to consider a protein atom as a binding site atom..
 * **max_num_ligands** (*integer*): (15) Total number of superimposed ligands to be extracted from the identity cluster. For populated clusters, the restriction avoids to superimpose redundant structures. If 0, all ligands extracted will be considered..
 * **matrix_name** (*string*): (blosum62) Substitution matrices for use in alignments. .

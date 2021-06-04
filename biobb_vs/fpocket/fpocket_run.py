@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""Module containing the FPocket class and the command line interface."""
+"""Module containing the FPocketRun class and the command line interface."""
 import argparse
 import os
 from biobb_common.configuration import  settings
@@ -9,9 +9,9 @@ from biobb_common.tools.file_utils import launchlogger
 from biobb_common.command_wrapper import cmd_wrapper
 from biobb_vs.fpocket.common import *
 
-class FPocket():
+class FPocketRun():
     """
-    | biobb_vs FPocket
+    | biobb_vs FPocketRun
     | Wrapper of the fpocket software.
     | Finds the binding site of the input_pdb_path file via the `fpocket <https://github.com/Discngine/fpocket>`_ software.
 
@@ -31,14 +31,14 @@ class FPocket():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_vs.fpocket.fpocket import fpocket
+            from biobb_vs.fpocket.fpocket_run import fpocket_run
             prop = { 
                 'min_radius': 3,
                 'max_radius': 6,
                 'num_spheres': 35,
                 'sort_by': 'druggability_score'
             }
-            fpocket(input_pdb_path='/path/to/myStructure.pdb', 
+            fpocket_run(input_pdb_path='/path/to/myStructure.pdb', 
                     output_pockets_zip='/path/to/newPockets.zip', 
                     output_summary='/path/to/newSummary.json', 
                     properties=prop)
@@ -89,7 +89,7 @@ class FPocket():
 
     @launchlogger
     def launch(self) -> int:
-        """Execute the :class:`FPocket <fpocket.fpocket.FPocket>` fpocket.fpocket.FPocket object."""
+        """Execute the :class:`FPocketRun <fpocket.fpocket_run.FPocketRun>` fpocket.fpocket_run.FPocketRun object."""
 
         # Get local loggers from launchlogger decorator
         out_log = getattr(self, 'out_log', None)
@@ -145,11 +145,11 @@ class FPocket():
 
         return returncode
 
-def fpocket(input_pdb_path: str, output_pockets_zip: str, output_summary:str, properties: dict = None, **kwargs) -> int:
-    """Execute the :class:`FPocket <fpocket.fpocket.FPocket>` class and
-    execute the :meth:`launch() <fpocket.fpocket.FPocket.launch>` method."""
+def fpocket_run(input_pdb_path: str, output_pockets_zip: str, output_summary:str, properties: dict = None, **kwargs) -> int:
+    """Execute the :class:`FPocketRun <fpocket.fpocket_run.FPocketRun>` class and
+    execute the :meth:`launch() <fpocket.fpocket_run.FPocketRun.launch>` method."""
 
-    return FPocket(input_pdb_path=input_pdb_path,
+    return FPocketRun(input_pdb_path=input_pdb_path,
                 output_pockets_zip=output_pockets_zip,
                 output_summary=output_summary,
                 properties=properties, **kwargs).launch()
@@ -170,7 +170,7 @@ def main():
     properties = settings.ConfReader(config=args.config).get_prop_dic()
 
     # Specific call of each building block
-    fpocket(input_pdb_path=args.input_pdb_path, 
+    fpocket_run(input_pdb_path=args.input_pdb_path, 
             output_pockets_zip=args.output_pockets_zip, 
             output_summary=args.output_summary, 
             properties=properties)

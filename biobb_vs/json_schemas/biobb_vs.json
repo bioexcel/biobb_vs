@@ -4,16 +4,16 @@
     "github": "https://github.com/bioexcel/biobb_vs",
     "readthedocs": "https://biobb-vs.readthedocs.io/en/latest/",
     "conda": "https://anaconda.org/bioconda/biobb_vs",
-    "docker": "",
+    "docker": "https://quay.io/biocontainers/biobb_vs:3.5.1--py_0",
     "singularity": "",
-    "version": "3.5.0",
+    "version": "3.5.1",
     "tools" : [
         {
-            "block" : "AutoDockVina", 
+            "block" : "AutoDockVinaRun", 
             "tool" : "AutoDock Vina", 
             "desc" : "Wrapper of the AutoDock Vina software.",
-            "exec" : "autodock_vina",
-            "docs": "https://biobb-vs.readthedocs.io/en/latest/vina.html#module-vina.autodock_vina"
+            "exec" : "autodock_vina_run",
+            "docs": "https://biobb-vs.readthedocs.io/en/latest/vina.html#module-vina.autodock_vina_run"
         },
         {
             "block" : "BindingSite", 
@@ -44,11 +44,11 @@
             "docs": "https://biobb-vs.readthedocs.io/en/latest/utils.html#module-utils.extract_model_pdbqt"
         },
         {
-            "block" : "FPocket", 
-            "tool" : "fpocket", 
+            "block" : "FPocketRun", 
+            "tool" : "fpocket_run", 
             "desc" : "Wrapper of the fpocket software for finding the binding sites of a structure.",
             "exec" : "fpocket",
-            "docs": "https://biobb-vs.readthedocs.io/en/latest/fpocket.html#module-fpocket.fpocket"
+            "docs": "https://biobb-vs.readthedocs.io/en/latest/fpocket.html#module-fpocket.fpocket_run"
         },
         {
             "block" : "FPocketFilter", 

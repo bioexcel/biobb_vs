@@ -1,2 +1,2 @@
 name = "vina"
-__all__ = ["autodock_vina"]
+__all__ = ["autodock_vina_run"]

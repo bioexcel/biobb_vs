@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""Module containing the AutoDockVina class and the command line interface."""
+"""Module containing the AutoDockVinaRun class and the command line interface."""
 import argparse
 import os
 from biobb_common.configuration import  settings
@@ -9,9 +9,9 @@ from biobb_common.tools.file_utils import launchlogger
 from biobb_common.command_wrapper import cmd_wrapper
 from biobb_vs.vina.common import *
 
-class AutoDockVina():
+class AutoDockVinaRun():
     """
-    | biobb_vs AutoDockVina
+    | biobb_vs AutoDockVinaRun
     | Wrapper of the AutoDock Vina software.
     | This class performs docking of the ligand to a set of grids describing the target protein via the `AutoDock Vina <http://vina.scripps.edu/index.html>`_ software.
 
@@ -29,16 +29,16 @@ class AutoDockVina():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_vs.vina.autodock_vina import autodock_vina
+            from biobb_vs.vina.autodock_vina_run import autodock_vina_run
             prop = { 
                 'vina_path': 'vina'
             }
-            autodock_vina(input_ligand_pdbqt_path='/path/to/myLigand.pdbqt', 
-                        input_receptor_pdbqt_path='/path/to/myReceptor.pdbqt', 
-                        input_box_path='/path/to/myBox.pdb', 
-                        output_pdbqt_path='/path/to/newStructure.pdbqt', 
-                        output_log_path='/path/to/newLog.log', 
-                        properties=prop)
+            autodock_vina_run(input_ligand_pdbqt_path='/path/to/myLigand.pdbqt', 
+                            input_receptor_pdbqt_path='/path/to/myReceptor.pdbqt', 
+                            input_box_path='/path/to/myBox.pdb', 
+                            output_pdbqt_path='/path/to/newStructure.pdbqt', 
+                            output_log_path='/path/to/newLog.log', 
+                            properties=prop)
 
     Info:
         * wrapped_software:
@@ -95,7 +95,7 @@ class AutoDockVina():
 
     @launchlogger
     def launch(self) -> int:
-        """Execute the :class:`AutoDockVina <vina.autodock_vina.AutoDockVina>` vina.autodock_vina.AutoDockVina object."""
+        """Execute the :class:`AutoDockVinaRun_run <vina.autodock_vina_run.AutoDockVinaRun_run>` vina.autodock_vina_run.AutoDockVinaRun_run object."""
 
         # Get local loggers from launchlogger decorator
         out_log = getattr(self, 'out_log', None)
@@ -136,11 +136,11 @@ class AutoDockVina():
 
         return returncode
 
-def autodock_vina(input_ligand_pdbqt_path: str, input_receptor_pdbqt_path: str, input_box_path: str, output_pdbqt_path:str, output_log_path: str = None, properties: dict = None, **kwargs) -> int:
-    """Execute the :class:`AutoDockVina <vina.autodock_vina.AutoDockVina>` class and
-    execute the :meth:`launch() <vina.autodock_vina.AutoDockVina.launch>` method."""
+def autodock_vina_run(input_ligand_pdbqt_path: str, input_receptor_pdbqt_path: str, input_box_path: str, output_pdbqt_path:str, output_log_path: str = None, properties: dict = None, **kwargs) -> int:
+    """Execute the :class:`AutoDockVinaRun <vina.autodock_vina_run.AutoDockVinaRun>` class and
+    execute the :meth:`launch() <vina.autodock_vina_run.AutoDockVinaRun.launch>` method."""
 
-    return AutoDockVina(input_ligand_pdbqt_path=input_ligand_pdbqt_path,
+    return AutoDockVinaRun(input_ligand_pdbqt_path=input_ligand_pdbqt_path,
                 input_receptor_pdbqt_path=input_receptor_pdbqt_path,
                 input_box_path=input_box_path,
                 output_pdbqt_path=output_pdbqt_path,
@@ -165,7 +165,7 @@ def main():
     properties = settings.ConfReader(config=args.config).get_prop_dic()
 
     # Specific call of each building block
-    autodock_vina(input_ligand_pdbqt_path=args.input_ligand_pdbqt_path, 
+    autodock_vina_run(input_ligand_pdbqt_path=args.input_ligand_pdbqt_path, 
                     input_receptor_pdbqt_path=args.input_receptor_pdbqt_path, 
                     input_box_path=args.input_box_path,
                     output_pdbqt_path=args.output_pdbqt_path, 

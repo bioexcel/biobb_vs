@@ -2,7 +2,7 @@ working_dir_path: /tmp/biobb/unitests
 
 # VINA
 
-autodock_vina:
+autodock_vina_run:
   paths:
     input_ligand_pdbqt_path: file:test_data_dir/vina/vina_ligand.pdbqt
     input_receptor_pdbqt_path: file:test_data_dir/vina/vina_receptor.pdbqt
@@ -59,7 +59,7 @@ extract_model_pdbqt:
 
 # FPOCKET 
 
-fpocket:
+fpocket_run:
   paths:
     input_pdb_path: file:test_data_dir/fpocket/fpocket_input.pdb
     output_pockets_zip: output_pockets.zip

@@ -45,9 +45,9 @@
         },
         {
             "block" : "FPocketRun", 
-            "tool" : "fpocket_run", 
+            "tool" : "fpocket", 
             "desc" : "Wrapper of the fpocket software for finding the binding sites of a structure.",
-            "exec" : "fpocket",
+            "exec" : "fpocket_run",
             "docs": "https://biobb-vs.readthedocs.io/en/latest/fpocket.html#module-fpocket.fpocket_run"
         },
         {

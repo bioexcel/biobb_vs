@@ -1,6 +1,6 @@
 {
     "_id": "biobb_vs",
-    "desc": "Biobb_vs is the Biobb module collection to perform virtual screening studies",
+    "desc": "Biobb_vs is the Biobb module collection to perform virtual screening studies.",
     "github": "https://github.com/bioexcel/biobb_vs",
     "readthedocs": "https://biobb-vs.readthedocs.io/en/latest/",
     "conda": "https://anaconda.org/bioconda/biobb_vs",

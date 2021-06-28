@@ -1,5 +1,12 @@
 # Biobb Virtual Screening changelog
 
+## What's new in version [3.6.0](https://github.com/bioexcel/biobb_vs/releases/tag/v3.6.0)?
+In version 3.6.0 the dependency biobb_common has been updated to 3.6.0 version. 
+
+### New features
+
+* Update to biobb_common 3.6.0 (general)
+
 ## What's new in version [3.5.1](https://github.com/bioexcel/biobb_vs/releases/tag/v3.5.1)?
 In version 3.5.1 the tools fpocket and autodock_vina have been renamed to fpocket_run and autodock_vina_run in order to avoid conflicts with the wrapped softwares.
 

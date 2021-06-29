@@ -5,10 +5,10 @@ Submodules
 -----------
 
 
-vina.autodock_vina module
+vina.autodock_vina_run module
 ------------------------------------
 
-.. automodule:: vina.autodock_vina
+.. automodule:: vina.autodock_vina_run
     :members:
     :undoc-members:
     :show-inheritance:

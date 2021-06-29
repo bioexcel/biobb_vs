@@ -5,10 +5,10 @@ Submodules
 -----------
 
 
-fpocket.fpocket module
+fpocket.fpocket_run module
 ------------------------------------
 
-.. automodule:: fpocket.fpocket
+.. automodule:: fpocket.fpocket_run
     :members:
     :undoc-members:
     :show-inheritance:

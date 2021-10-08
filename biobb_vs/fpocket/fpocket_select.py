@@ -2,14 +2,14 @@
 
 """Module containing the FPocketSelect class and the command line interface."""
 import argparse
-import os
+from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import  settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
-from biobb_common.command_wrapper import cmd_wrapper
 from biobb_vs.fpocket.common import *
 
-class FPocketSelect():
+
+class FPocketSelect(BiobbObject):
     """
     | biobb_vs FPocketSelect
     | Selects a single pocket in the outputs of the fpocket building block.
@@ -50,6 +50,9 @@ class FPocketSelect():
                 properties=None, **kwargs) -> None:
         properties = properties or {}
 
+        # Call parent class constructor
+        super().__init__(properties)
+
         # Input/Output files
         self.io_dict = { 
             "in": { "input_pockets_zip": input_pockets_zip }, 
@@ -60,14 +63,8 @@ class FPocketSelect():
         self.pocket = properties.get('pocket', None)
         self.properties = properties
 
-        # Properties common in all BB
-        self.can_write_console_log = properties.get('can_write_console_log', True)
-        self.global_log = properties.get('global_log', None)
-        self.prefix = properties.get('prefix', None)
-        self.step = properties.get('step', None)
-        self.path = properties.get('path', '')
-        self.remove_tmp = properties.get('remove_tmp', True)
-        self.restart = properties.get('restart', False)
+        # Check the properties
+        self.check_properties(properties)
 
     def check_data_params(self, out_log, err_log):
         """ Checks all the input/output paths and parameters """
@@ -79,43 +76,32 @@ class FPocketSelect():
     def launch(self) -> int:
         """Execute the :class:`FPocketSelect <fpocket.fpocket_select.FPocketSelect>` fpocket.fpocket_select.FPocketSelect object."""
 
-        # Get local loggers from launchlogger decorator
-        out_log = getattr(self, 'out_log', None)
-        err_log = getattr(self, 'err_log', None)
-
         # check input/output paths and parameters
-        self.check_data_params(out_log, err_log)
+        self.check_data_params(self.out_log, self.err_log)
 
-        # Check the properties
-        fu.check_properties(self, self.properties)
-
-        if self.restart:
-            output_file_list = [self.io_dict["out"]["output_pocket_pdb"], self.io_dict["out"]["output_pocket_pqr"]]
-            if fu.check_complete_files(output_file_list):
-                fu.log('Restart is enabled, this step: %s will the skipped' % self.step, out_log, self.global_log)
-                return 0
+        # Setup Biobb
+        if self.check_restart(): return 0
+        self.stage_files()
 
         # create tmp_folder
         self.tmp_folder = fu.create_unique_dir()
-        fu.log('Creating %s temporary folder' % self.tmp_folder, out_log)
+        fu.log('Creating %s temporary folder' % self.tmp_folder, self.out_log)
 
         # decompress the input_pockets_zip file to tmp_folder
-        all_pockets = fu.unzip_list(zip_file = self.io_dict["in"]["input_pockets_zip"], dest_dir = self.tmp_folder, out_log = out_log)
+        all_pockets = fu.unzip_list(zip_file = self.io_dict["in"]["input_pockets_zip"], dest_dir = self.tmp_folder, out_log = self.out_log)
 
         pockets_list = [i for i in all_pockets if ('pocket' + str(self.pocket)) in i]
 
         for p in pockets_list:
             if PurePath(p).suffix == '.pdb':
-                fu.log('Saving %s file' % self.io_dict["out"]["output_pocket_pdb"], out_log)
+                fu.log('Saving %s file' % self.io_dict["out"]["output_pocket_pdb"], self.out_log)
                 shutil.copy(p, self.io_dict["out"]["output_pocket_pdb"])
             else:
-                fu.log('Saving %s file' % self.io_dict["out"]["output_pocket_pqr"], out_log)
+                fu.log('Saving %s file' % self.io_dict["out"]["output_pocket_pqr"], self.out_log)
                 shutil.copy(p, self.io_dict["out"]["output_pocket_pqr"])
 
-        if self.remove_tmp:
-            # remove temporary folder
-            fu.rm(self.tmp_folder)
-            fu.log('Removed temporary folder: %s' % self.tmp_folder, out_log)
+        self.tmp_files.append(self.tmp_folder)
+        self.remove_tmp_files()
 
         return 0
 

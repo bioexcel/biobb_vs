@@ -2,13 +2,14 @@
 
 """Module containing the BoxResidues class and the command line interface."""
 import argparse
+from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import  settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
-from biobb_common.command_wrapper import cmd_wrapper
 from biobb_vs.utils.common import *
 
-class BoxResidues():
+
+class BoxResidues(BiobbObject):
     """
     | biobb_vs BoxResidues
     | This class sets the center and the size of a rectangular parallelepiped box around a set of residues.
@@ -53,6 +54,9 @@ class BoxResidues():
                 properties=None, **kwargs) -> None:
         properties = properties or {}
 
+        # Call parent class constructor
+        super().__init__(properties)
+
         # Input/Output files
         self.io_dict = { 
             "in": { "input_pdb_path": input_pdb_path },
@@ -66,43 +70,27 @@ class BoxResidues():
         self.residue_offset = properties.get('residue_offset', 0)
         self.properties = properties
 
-        # Properties common in all BB
-        self.can_write_console_log = properties.get('can_write_console_log', True)
-        self.global_log = properties.get('global_log', None)
-        self.prefix = properties.get('prefix', None)
-        self.step = properties.get('step', None)
-        self.path = properties.get('path', '')
-        self.remove_tmp = properties.get('remove_tmp', True)
-        self.restart = properties.get('restart', False)
+        # Check the properties
+        self.check_properties(properties)
 
     def check_data_params(self, out_log, err_log):
         """ Checks all the input/output paths and parameters """
-        self.io_dict["in"]["input_pdb_path"] = check_input_path(self.io_dict["in"]["input_pdb_path"],"input_pdb_path", out_log, self.__class__.__name__)
-        self.io_dict["out"]["output_pdb_path"] = check_output_path(self.io_dict["out"]["output_pdb_path"],"output_pdb_path", False, out_log, self.__class__.__name__)
-
+        self.io_dict["in"]["input_pdb_path"] = check_input_path(self.io_dict["in"]["input_pdb_path"],"input_pdb_path", self.out_log, self.__class__.__name__)
+        self.io_dict["out"]["output_pdb_path"] = check_output_path(self.io_dict["out"]["output_pdb_path"],"output_pdb_path", False, self.out_log, self.__class__.__name__)
 
     @launchlogger
     def launch(self) -> int:
         """Execute the :class:`BoxResidues <utils.box_residues.BoxResidues>` utils.box_residues.BoxResidues object."""
 
-        # Get local loggers from launchlogger decorator
-        out_log = getattr(self, 'out_log', None)
-        err_log = getattr(self, 'err_log', None)
-
         # check input/output paths and parameters
-        self.check_data_params(out_log, err_log)
+        self.check_data_params(self.out_log, self.err_log)
 
-        # Check the properties
-        fu.check_properties(self, self.properties)
-
-        if self.restart:
-            output_file_list = [self.io_dict["out"]["output_pdb_path"]]
-            if fu.check_complete_files(output_file_list):
-                fu.log('Restart is enabled, this step: %s will the skipped' % self.step, out_log, self.global_log)
-                return 0
+        # Setup Biobb
+        if self.check_restart(): return 0
+        self.stage_files()
 
         # Parse structure
-        fu.log('Loading input PDB structure %s' % (self.io_dict["in"]["input_pdb_path"]), out_log, self.global_log)
+        fu.log('Loading input PDB structure %s' % (self.io_dict["in"]["input_pdb_path"]), self.out_log, self.global_log)
         structure_name = PurePath(self.io_dict["in"]["input_pdb_path"]).name
         parser      = Bio.PDB.PDBParser(QUIET = True)
         structPDB   = parser.get_structure(structure_name, self.io_dict["in"]["input_pdb_path"])
@@ -112,7 +100,7 @@ class BoxResidues():
 
         ## Mapping residue structure into input structure
 
-        fu.log('Mapping residue structure into input structure', out_log, self.global_log)
+        fu.log('Mapping residue structure into input structure', self.out_log, self.global_log)
 
         # Listing residues to be selected from the residue structure
         residPDB_res_list = []
@@ -131,29 +119,29 @@ class BoxResidues():
                     selection_atoms_num += len(struct_res.get_list())
 
         if len(selection_res_list) == 0:
-            fu.log(self.__class__.__name__ + ': Cannot match any of the residues listed in [%s] into %s' % (', '.join(str(v) for v in self.resid_list), self.io_dict["in"]["input_pdb_path"]), out_log)
+            fu.log(self.__class__.__name__ + ': Cannot match any of the residues listed in [%s] into %s' % (', '.join(str(v) for v in self.resid_list), self.io_dict["in"]["input_pdb_path"]), self.out_log)
             raise SystemExit(self.__class__.__name__ + ': Cannot match any of the residues listed in [%s] into %s' % (', '.join(str(v) for v in self.resid_list), self.io_dict["in"]["input_pdb_path"]))
         elif len(selection_res_list) !=  len(residPDB_res_list):
-            fu.log('Cannot match all the residues listed in %s into %s. Found %s out of %s' % (', '.join(str(v) for v in self.resid_list),self.io_dict["in"]["input_pdb_path"], len(selection_res_list),len(residPDB_res_list)), out_log)
+            fu.log('Cannot match all the residues listed in %s into %s. Found %s out of %s' % (', '.join(str(v) for v in self.resid_list),self.io_dict["in"]["input_pdb_path"], len(selection_res_list),len(residPDB_res_list)), self.out_log)
         else:
-            fu.log('Selection of residues successfully matched', out_log, self.global_log)
+            fu.log('Selection of residues successfully matched', self.out_log, self.global_log)
 
         ## Compute binding site box size
 
         # compute box center
         selection_box_center = sum(atom.coord for res in selection_res_list for atom in res.get_atoms()) / selection_atoms_num
-        fu.log('Binding site center (Angstroms): %10.3f%10.3f%10.3f' % (selection_box_center[0],selection_box_center[1],selection_box_center[2]), out_log, self.global_log)
+        fu.log('Binding site center (Angstroms): %10.3f%10.3f%10.3f' % (selection_box_center[0],selection_box_center[1],selection_box_center[2]), self.out_log, self.global_log)
 
         # compute box size
         selection_coords_max = np.amax([atom.coord for res in selection_res_list for atom in res.get_atoms()],axis=0)
         selection_box_size   = selection_coords_max - selection_box_center
         if self.offset:
             selection_box_size = [c + self.offset for c in selection_box_size]
-        fu.log('Binding site size (Angstroms):   %10.3f%10.3f%10.3f' % (selection_box_size[0],selection_box_size[1],selection_box_size[2]), out_log, self.global_log)
+        fu.log('Binding site size (Angstroms):   %10.3f%10.3f%10.3f' % (selection_box_size[0],selection_box_size[1],selection_box_size[2]), self.out_log, self.global_log)
 
         # compute volume
         vol = np.prod(selection_box_size) * 2**3
-        fu.log('Volume (cubic Angstroms): %.0f' % (vol), out_log, self.global_log)
+        fu.log('Volume (cubic Angstroms): %.0f' % (vol), self.out_log, self.global_log)
 
         # add box details as PDB remarks
         remarks = "REMARK BOX CENTER:%10.3f%10.3f%10.3f" % (selection_box_center[0],selection_box_center[1],selection_box_center[2])
@@ -162,14 +150,14 @@ class BoxResidues():
         selection_box_coords_txt   = ""
         # add (optional) box coordinates as 8 ATOM records
         if self.box_coordinates:
-            fu.log('Adding box coordinates', out_log, self.global_log)
+            fu.log('Adding box coordinates', self.out_log, self.global_log)
             selection_box_coords_txt  = get_box_coordinates(selection_box_center,selection_box_size)
 
         with open(self.io_dict["out"]["output_pdb_path"], 'w') as f:
             f.seek(0, 0)
             f.write(remarks.rstrip('\r\n') + '\n' + selection_box_coords_txt)
 
-        fu.log('Saving output PDB file (with box setting annotations): %s' % (self.io_dict["out"]["output_pdb_path"]), out_log, self.global_log)
+        fu.log('Saving output PDB file (with box setting annotations): %s' % (self.io_dict["out"]["output_pdb_path"]), self.out_log, self.global_log)
 
         return 0
 

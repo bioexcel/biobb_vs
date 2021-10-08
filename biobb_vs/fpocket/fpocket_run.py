@@ -2,14 +2,14 @@
 
 """Module containing the FPocketRun class and the command line interface."""
 import argparse
-import os
+from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import  settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
-from biobb_common.command_wrapper import cmd_wrapper
 from biobb_vs.fpocket.common import *
 
-class FPocketRun():
+
+class FPocketRun(BiobbObject):
     """
     | biobb_vs FPocketRun
     | Wrapper of the fpocket software.
@@ -58,6 +58,9 @@ class FPocketRun():
                 properties=None, **kwargs) -> None:
         properties = properties or {}
 
+        # Call parent class constructor
+        super().__init__(properties)
+
         # Input/Output files
         self.io_dict = { 
             "in": { "input_pdb_path": input_pdb_path }, 
@@ -72,14 +75,8 @@ class FPocketRun():
         self.sort_by = properties.get('sort_by', 'druggability_score')
         self.properties = properties
 
-        # Properties common in all BB
-        self.can_write_console_log = properties.get('can_write_console_log', True)
-        self.global_log = properties.get('global_log', None)
-        self.prefix = properties.get('prefix', None)
-        self.step = properties.get('step', None)
-        self.path = properties.get('path', '')
-        self.remove_tmp = properties.get('remove_tmp', True)
-        self.restart = properties.get('restart', False)
+        # Check the properties
+        self.check_properties(properties)
 
     def check_data_params(self, out_log, err_log):
         """ Checks all the input/output paths and parameters """
@@ -91,25 +88,16 @@ class FPocketRun():
     def launch(self) -> int:
         """Execute the :class:`FPocketRun <fpocket.fpocket_run.FPocketRun>` fpocket.fpocket_run.FPocketRun object."""
 
-        # Get local loggers from launchlogger decorator
-        out_log = getattr(self, 'out_log', None)
-        err_log = getattr(self, 'err_log', None)
-
         # check input/output paths and parameters
-        self.check_data_params(out_log, err_log)
+        self.check_data_params(self.out_log, self.err_log)
 
-        # Check the properties
-        fu.check_properties(self, self.properties)
-
-        if self.restart:
-            output_file_list = [self.io_dict["out"]["output_pockets_zip"],self.io_dict["out"]["output_summary"]]
-            if fu.check_complete_files(output_file_list):
-                fu.log('Restart is enabled, this step: %s will the skipped' % self.step, out_log, self.global_log)
-                return 0
+        # Setup Biobb
+        if self.check_restart(): return 0
+        self.stage_files()
 
         # create tmp_folder
         self.tmp_folder = fu.create_unique_dir()
-        fu.log('Creating %s temporary folder' % self.tmp_folder, out_log)
+        fu.log('Creating %s temporary folder' % self.tmp_folder, self.out_log)
 
         tmp_input = str(PurePath(self.tmp_folder).joinpath('input.pdb'))
 
@@ -117,33 +105,36 @@ class FPocketRun():
         shutil.copy(self.io_dict["in"]["input_pdb_path"], tmp_input)
 
         # create cmd
-        cmd = [self.fpocket_path,
+        self.cmd = [self.fpocket_path,
                '-f', tmp_input]
 
         # adding extra properties
         if self.min_radius:
-            cmd.extend(['-m', str(self.min_radius)])
+            self.cmd.extend(['-m', str(self.min_radius)])
 
         if self.max_radius:
-            cmd.extend(['-M', str(self.max_radius)])
+            self.cmd.extend(['-M', str(self.max_radius)])
 
         if self.num_spheres:
-            cmd.extend(['-i', str(self.num_spheres)])
+            self.cmd.extend(['-i', str(self.num_spheres)])
 
-        fu.log('Executing fpocket', out_log, self.global_log)
+        fu.log('Executing fpocket', self.out_log, self.global_log)
 
-        cmd = fu.create_cmd_line(cmd, out_log=out_log, global_log=self.global_log)
-        returncode = cmd_wrapper.CmdWrapper(cmd, out_log, err_log, self.global_log).launch()
+        # Run Biobb block
+        self.run_biobb()
+
+        # Copy files to host
+        self.copy_to_host()
 
         process_output_fpocket(self.tmp_folder,
                                self.io_dict["out"]["output_pockets_zip"], 
                                self.io_dict["out"]["output_summary"],
                                self.sort_by,
                                self.remove_tmp, 
-                               out_log, 
+                               self.out_log, 
                                self.__class__.__name__)
 
-        return returncode
+        return self.return_code
 
 def fpocket_run(input_pdb_path: str, output_pockets_zip: str, output_summary:str, properties: dict = None, **kwargs) -> int:
     """Execute the :class:`FPocketRun <fpocket.fpocket_run.FPocketRun>` class and

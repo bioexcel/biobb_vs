@@ -2,14 +2,14 @@
 
 """Module containing the FPocketFilter class and the command line interface."""
 import argparse
-import os
+from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import  settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
-from biobb_common.command_wrapper import cmd_wrapper
 from biobb_vs.fpocket.common import *
 
-class FPocketFilter():
+
+class FPocketFilter(BiobbObject):
     """
     | biobb_vs FPocketFilter
     | Performs a search over the outputs of the fpocket building block.
@@ -54,6 +54,9 @@ class FPocketFilter():
                 properties=None, **kwargs) -> None:
         properties = properties or {}
 
+        # Call parent class constructor
+        super().__init__(properties)
+
         # Input/Output files
         self.io_dict = { 
             "in": { "input_pockets_zip": input_pockets_zip, "input_summary": input_summary }, 
@@ -66,14 +69,8 @@ class FPocketFilter():
         self.volume = properties.get('volume', None)
         self.properties = properties
 
-        # Properties common in all BB
-        self.can_write_console_log = properties.get('can_write_console_log', True)
-        self.global_log = properties.get('global_log', None)
-        self.prefix = properties.get('prefix', None)
-        self.step = properties.get('step', None)
-        self.path = properties.get('path', '')
-        self.remove_tmp = properties.get('remove_tmp', True)
-        self.restart = properties.get('restart', False)
+        # Check the properties
+        self.check_properties(properties)
 
     def check_data_params(self, out_log, err_log):
         """ Checks all the input/output paths and parameters """
@@ -94,21 +91,12 @@ class FPocketFilter():
     def launch(self) -> int:
         """Execute the :class:`FPocketFilter <fpocket.fpocket_filter.FPocketFilter>` fpocket.fpocket_filter.FPocketFilter object."""
 
-        # Get local loggers from launchlogger decorator
-        out_log = getattr(self, 'out_log', None)
-        err_log = getattr(self, 'err_log', None)
-
         # check input/output paths and parameters
-        self.check_data_params(out_log, err_log)
+        self.check_data_params(self.out_log, self.err_log)
 
-        # Check the properties
-        fu.check_properties(self, self.properties)
-
-        if self.restart:
-            output_file_list = [self.io_dict["out"]["output_filter_pockets_zip"]]
-            if fu.check_complete_files(output_file_list):
-                fu.log('Restart is enabled, this step: %s will the skipped' % self.step, out_log, self.global_log)
-                return 0
+        # Setup Biobb
+        if self.check_restart(): return 0
+        self.stage_files()
 
         # load input_summary into a dictionary
         with open(self.io_dict["in"]["input_summary"]) as json_file:
@@ -118,43 +106,43 @@ class FPocketFilter():
         search_list = []
         ranges = {}
         if self.score: 
-            check_range('score', self.score, [0,1], out_log, self.__class__.__name__)
+            check_range('score', self.score, [0,1], self.out_log, self.__class__.__name__)
             search_list.append(self.score_matcher(self.score))
             ranges['score'] = self.score
         if self.druggability_score: 
-            check_range('druggability_score', self.druggability_score, [0,1], out_log, self.__class__.__name__)
+            check_range('druggability_score', self.druggability_score, [0,1], self.out_log, self.__class__.__name__)
             search_list.append(self.druggability_score_matcher(self.druggability_score))
             ranges['druggability_score'] = self.druggability_score
         if self.volume: 
-            check_range('volume', self.volume, [0,10000], out_log, self.__class__.__name__)
+            check_range('volume', self.volume, [0,10000], self.out_log, self.__class__.__name__)
             search_list.append(self.volume_matcher(self.volume))
             ranges['volume'] = self.volume
 
-        fu.log('Performing a search under the next parameters: %s' % (', '.join(['{0}: {1}'.format(k, v) for k,v in ranges.items()])), out_log)
+        fu.log('Performing a search under the next parameters: %s' % (', '.join(['{0}: {1}'.format(k, v) for k,v in ranges.items()])), self.out_log)
 
         # perform search
         search = [ x for x in data if all([f(data[x]) for f in search_list]) ]
 
         if len(search) == 0:
-            fu.log('No matches found', out_log)
+            fu.log('No matches found', self.out_log)
             return 0
 
         str_out = '';
         for s in search:
             str_out = str_out + ('\n**********\n%s\n**********\nscore: %s\ndruggability_score: %s\nvolume: %s\n' % (s, data[s]["score"], data[s]["druggability_score"], data[s]["volume"]))
 
-        fu.log('Found %d matches:%s' % (len(search), str_out), out_log)
+        fu.log('Found %d matches:%s' % (len(search), str_out), self.out_log)
 
         # create tmp_folder
         self.tmp_folder = fu.create_unique_dir()
-        fu.log('Creating %s temporary folder' % self.tmp_folder, out_log)
+        fu.log('Creating %s temporary folder' % self.tmp_folder, self.out_log)
 
         process_output_fpocket_filter(search,
                                     self.tmp_folder,
                                     self.io_dict["in"]["input_pockets_zip"],
                                     self.io_dict["out"]["output_filter_pockets_zip"],
                                     self.remove_tmp, 
-                                    out_log)
+                                    self.out_log)
 
         return 0
 

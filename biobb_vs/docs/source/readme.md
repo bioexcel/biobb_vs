@@ -14,7 +14,7 @@ The latest documentation of this package can be found in our readthedocs site:
 [latest API documentation](http://biobb_vs.readthedocs.io/en/latest/).
 
 ### Version
-v3.6.0 2021.2
+v3.7.0 2021.3
 
 ### Installation
 Using PIP:
@@ -24,7 +24,7 @@ Using PIP:
 * Installation:
 
 
-        pip install "biobb_vs>=3.6.0"
+        pip install "biobb_vs>=3.7.0"
 
 
 * Usage: [Python API documentation](https://biobb-vs.readthedocs.io/en/latest/modules.html)
@@ -34,7 +34,7 @@ Using ANACONDA:
 * Installation:
 
 
-        conda install -c bioconda "biobb_vs>=3.6.0"
+        conda install -c bioconda "biobb_vs>=3.7.0"
 
 
 * Usage: With conda installation BioBBs can be used with the [Python API documentation](https://biobb-vs.readthedocs.io/en/latest/modules.html) and the [Command Line documentation](https://biobb-vs.readthedocs.io/en/latest/command_line.html)
@@ -44,29 +44,13 @@ Using DOCKER:
 * Installation:
 
 
-        docker pull quay.io/biocontainers/biobb_vs:3.6.0--pyhdfd78af_0
+        docker pull quay.io/biocontainers/biobb_vs:3.7.0--pyhdfd78af_0
 
 
 * Usage:
 
 
-        docker run quay.io/biocontainers/biobb_vs:3.6.0--pyhdfd78af_0 <command>
-
-
-[//]: # (Using SINGULARITY:)
-
-[//]: # (**MacOS users**: it's strongly recommended to avoid Singularity and use **Docker** as containerization system.)
-
-[//]: # (* Installation:)
-
-
-[//]: # (singularity pull --name biobb_vs.sif shub://bioexcel/biobb_vs)
-
-
-[//]: # (* Usage:)
-
-
-[//]: # (singularity exec biobb_vs.sif <command>)
+        docker run quay.io/biocontainers/biobb_vs:3.7.0--pyhdfd78af_0 <command>
 
 
 The command list and specification can be found at the [Command Line documentation](https://biobb-vs.readthedocs.io/en/latest/command_line.html).

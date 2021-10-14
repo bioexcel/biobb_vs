@@ -127,7 +127,7 @@ class FPocketFilter(BiobbObject):
             fu.log('No matches found', self.out_log)
             return 0
 
-        str_out = '';
+        str_out = ''
         for s in search:
             str_out = str_out + ('\n**********\n%s\n**********\nscore: %s\ndruggability_score: %s\nvolume: %s\n' % (s, data[s]["score"], data[s]["druggability_score"], data[s]["volume"]))
 

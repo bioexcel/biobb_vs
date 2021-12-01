@@ -13,6 +13,8 @@ Command:
 ```python
 extract_model_pdbqt -h
 ```
+    /anaconda3/envs/biobb_dev_37/lib/python3.7/site-packages/Bio/SubsMat/__init__.py:131: BiopythonDeprecationWarning: Bio.SubsMat has been deprecated, and we intend to remove it in a future release of Biopython. As an alternative, please consider using Bio.Align.substitution_matrices as a replacement, and contact the Biopython developers if you still need the Bio.SubsMat module.
+      BiopythonDeprecationWarning,
     usage: extract_model_pdbqt [-h] [--config CONFIG] --input_pdbqt_path INPUT_PDBQT_PATH --output_pdbqt_path OUTPUT_PDBQT_PATH
     
     Extracts a model from a PDBQT file with several models.
@@ -71,6 +73,8 @@ Command:
 ```python
 box -h
 ```
+    /anaconda3/envs/biobb_dev_37/lib/python3.7/site-packages/Bio/SubsMat/__init__.py:131: BiopythonDeprecationWarning: Bio.SubsMat has been deprecated, and we intend to remove it in a future release of Biopython. As an alternative, please consider using Bio.Align.substitution_matrices as a replacement, and contact the Biopython developers if you still need the Bio.SubsMat module.
+      BiopythonDeprecationWarning,
     usage: box [-h] [--config CONFIG] --input_pdb_path INPUT_PDB_PATH --output_pdb_path OUTPUT_PDB_PATH
     
     Sets the center and the size of a rectangular parallelepiped box around a set of residues from a given PDB or a pocket from a given PQR.
@@ -381,6 +385,8 @@ Command:
 ```python
 box_residues -h
 ```
+    /anaconda3/envs/biobb_dev_37/lib/python3.7/site-packages/Bio/SubsMat/__init__.py:131: BiopythonDeprecationWarning: Bio.SubsMat has been deprecated, and we intend to remove it in a future release of Biopython. As an alternative, please consider using Bio.Align.substitution_matrices as a replacement, and contact the Biopython developers if you still need the Bio.SubsMat module.
+      BiopythonDeprecationWarning,
     usage: box_residues [-h] [--config CONFIG] --input_pdb_path INPUT_PDB_PATH --output_pdb_path OUTPUT_PDB_PATH
     
     Sets the center and the size of a rectangular parallelepiped box around a selection of residues found in a given PDB.
@@ -469,6 +475,8 @@ Command:
 ```python
 bindingsite -h
 ```
+    /anaconda3/envs/biobb_dev_37/lib/python3.7/site-packages/Bio/SubsMat/__init__.py:131: BiopythonDeprecationWarning: Bio.SubsMat has been deprecated, and we intend to remove it in a future release of Biopython. As an alternative, please consider using Bio.Align.substitution_matrices as a replacement, and contact the Biopython developers if you still need the Bio.SubsMat module.
+      BiopythonDeprecationWarning,
     usage: bindingsite [-h] [--config CONFIG] --input_pdb_path INPUT_PDB_PATH --input_clusters_zip INPUT_CLUSTERS_ZIP --output_pdb_path OUTPUT_PDB_PATH
     
     Finds the binding site of the input_pdb file based on the ligands' location of similar structures (members of the sequence identity cluster)

@@ -50,7 +50,7 @@ def check_mgltools_path(mgltools_path, out_log, classname):
 		raise SystemExit(classname + ': Unexisting mgltools_path, exiting')
 	return mgltools_path
 
-def check_input_autodock(structure, out_log):
+'''def check_input_autodock(structure, out_log):
 	""" if structure ends with END, remove last line """
 	lines_new = []
 	with open(structure, 'r') as f:
@@ -64,4 +64,4 @@ def check_input_autodock(structure, out_log):
 	        
 	with open(structure, 'w') as f:
 	    for item in lines_new:
-	        f.write("%s\n" % item)
+	        f.write("%s\n" % item)'''

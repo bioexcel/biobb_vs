@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="biobb_vs",
-    version="3.7.1",
+    version="3.8.0",
     author="Biobb developers",
     author_email="genis.bayarri@irbbarcelona.org",
     description="Biobb_vs is the Biobb module collection to perform virtual screening studies.",
@@ -18,8 +18,8 @@ setuptools.setup(
         "Bioexcel": "https://bioexcel.eu/"
     },
     packages=setuptools.find_packages(exclude=['docs', 'test']),
-    install_requires=['biobb_common==3.7.0'],
-    python_requires='==3.7.*',
+    install_requires=['biobb_common==3.8.1'],
+    python_requires='>=3.7',
     entry_points={
         "console_scripts": [
             "fpocket_filter = biobb_vs.fpocket.fpocket_filter:main",

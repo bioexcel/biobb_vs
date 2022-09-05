@@ -13,6 +13,8 @@ bioinformatics tools.
 The latest documentation of this package can be found in our readthedocs site:
 [latest API documentation](http://biobb_vs.readthedocs.io/en/latest/).
 
+> At the time of publishing the current version, **autodock_vina has not been compiled for the new ARM mac M1/M2 chips**. So the vina.autodock_vina_run tool doesn't work in these computers.
+
 ### Version
 v3.8.0 2022.3
 

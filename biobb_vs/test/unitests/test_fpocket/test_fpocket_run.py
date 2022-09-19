@@ -2,10 +2,10 @@ from biobb_common.tools import test_fixtures as fx
 from biobb_vs.fpocket.fpocket_run import fpocket_run
 
 class TestFPocketRun():
-    def setUp(self):
+    def setup_class(self):
         fx.test_setup(self,'fpocket_run')
 
-    def tearDown(self):
+    def teardown_class(self):
         fx.test_teardown(self)
         pass
 

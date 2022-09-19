@@ -3,10 +3,10 @@ from biobb_vs.utils.box import box
 
 
 class TestBox():
-    def setUp(self):
+    def setup_class(self):
         fx.test_setup(self,'box')
 
-    def tearDown(self):
+    def teardown_class(self):
         fx.test_teardown(self)
         pass
 

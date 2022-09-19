@@ -24,7 +24,7 @@ class FPocketRun(BiobbObject):
             * **max_radius** (*float*) - (None) [2~1000|0.1] The maximum radius in Ångstroms of alpha spheres in a pocket.
             * **num_spheres** (*int*) - (None) [1~1000|1] Indicates how many alpha spheres a pocket must contain at least in order to figure in the results.
             * **sort_by** (*str*) - ('druggability_score') From which property the output will be sorted. Values: druggability_score (this score intends to assess the likeliness of the pocket to bind a small drug like molecule), score (fpocket score as defined in the `fpocket paper <https://doi.org/10.1186/1471-2105-10-168>`_), volume (volume of the pocket).
-            * **fpocket_path** (*string*) - ('fpocket') path to fpocket in your local computer.
+            * **binary_path** (*string*) - ('fpocket') path to fpocket in your local computer.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
 
@@ -68,7 +68,7 @@ class FPocketRun(BiobbObject):
         }
 
         # Properties specific for BB
-        self.fpocket_path = properties.get('fpocket_path', 'fpocket')
+        self.binary_path = properties.get('binary_path', 'fpocket')
         self.min_radius = properties.get('min_radius', None)
         self.max_radius = properties.get('max_radius', None)
         self.num_spheres = properties.get('num_spheres', None)
@@ -105,7 +105,7 @@ class FPocketRun(BiobbObject):
         shutil.copy(self.io_dict["in"]["input_pdb_path"], tmp_input)
 
         # create cmd
-        self.cmd = [self.fpocket_path,
+        self.cmd = [self.binary_path,
                '-f', tmp_input]
 
         # adding extra properties

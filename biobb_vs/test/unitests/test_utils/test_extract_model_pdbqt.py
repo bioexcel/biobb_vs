@@ -3,10 +3,10 @@ from biobb_vs.utils.extract_model_pdbqt import extract_model_pdbqt
 
 
 class TestExtractModelPDBQT():
-    def setUp(self):
+    def setup_class(self):
         fx.test_setup(self,'extract_model_pdbqt')
 
-    def tearDown(self):
+    def teardown_class(self):
         fx.test_teardown(self)
         pass
 

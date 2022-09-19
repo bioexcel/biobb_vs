@@ -1,7 +1,7 @@
 """ Common functions for package biobb_vs.utils """
 from pathlib import Path, PurePath
 import re
-import shutil
+#import shutil
 import numpy as np
 import Bio.PDB
 import Bio.pairwise2

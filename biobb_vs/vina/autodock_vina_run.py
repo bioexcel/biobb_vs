@@ -24,7 +24,7 @@ class AutoDockVinaRun(BiobbObject):
         output_pdbqt_path (str): Path to the output PDBQT file. File type: output. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/vina/ref_output_vina.pdbqt>`_. Accepted formats: pdbqt (edam:format_1476).
         output_log_path (str) (Optional): Path to the log file. File type: output. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/vina/ref_output_vina.log>`_. Accepted formats: log (edam:format_2330).
         properties (dic - Python dictionary object containing the tool parameters, not input/output files):
-            * **vina_path** (*string*) - ('vina') path to vina in your local computer.
+            * **binary_path** (*string*) - ('vina') path to vina in your local computer.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
 
@@ -33,7 +33,7 @@ class AutoDockVinaRun(BiobbObject):
 
             from biobb_vs.vina.autodock_vina_run import autodock_vina_run
             prop = { 
-                'vina_path': 'vina'
+                'binary_path': 'vina'
             }
             autodock_vina_run(input_ligand_pdbqt_path='/path/to/myLigand.pdbqt', 
                             input_receptor_pdbqt_path='/path/to/myReceptor.pdbqt', 
@@ -67,7 +67,7 @@ class AutoDockVinaRun(BiobbObject):
         }
 
         # Properties specific for BB
-        self.vina_path = properties.get('vina_path', 'vina')
+        self.binary_path = properties.get('binary_path', 'vina')
         self.properties = properties
 
         # Check the properties
@@ -111,7 +111,7 @@ class AutoDockVinaRun(BiobbObject):
         #check_input_autodock(self.io_dict["in"]["input_receptor_pdbqt_path"], self.out_log)
 
         # create cmd
-        self.cmd = [self.vina_path,
+        self.cmd = [self.binary_path,
                '--ligand', self.io_dict["in"]["input_ligand_pdbqt_path"],
                '--receptor', self.io_dict["in"]["input_receptor_pdbqt_path"],
                '--center_x=' + x0, '--center_y=' + y0, '--center_z=' + z0,

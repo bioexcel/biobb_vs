@@ -3,10 +3,10 @@ from biobb_vs.utils.box_residues import box_residues
 
 
 class TestBoxResidues():
-    def setUp(self):
+    def setup_class(self):
         fx.test_setup(self,'box_residues')
 
-    def tearDown(self):
+    def teardown_class(self):
         fx.test_teardown(self)
         pass
 

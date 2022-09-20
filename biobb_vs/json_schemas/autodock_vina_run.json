@@ -106,7 +106,7 @@
         "properties": {
             "type": "object",
             "properties": {
-                "vina_path": {
+                "binary_path": {
                     "type": "string",
                     "default": "vina",
                     "wf_prop": false,

@@ -27,6 +27,12 @@ class AutoDockVinaRun(BiobbObject):
             * **binary_path** (*string*) - ('vina') path to vina in your local computer.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
+            * **container_path** (*str*) - (None) Container path definition.
+            * **container_image** (*str*) - ('biocontainers/autodock-vina:v1.1.2-5b1-deb_cv1') Container image definition.
+            * **container_volume_path** (*str*) - ('/tmp') Container volume path definition.
+            * **container_working_dir** (*str*) - (None) Container working directory definition.
+            * **container_user_id** (*str*) - (None) Container user_id definition.
+            * **container_shell_path** (*str*) - ('/bin/bash') Path to default shell inside the container.
 
     Examples:
         This is a use example of how to use the building block from Python::
@@ -112,20 +118,23 @@ class AutoDockVinaRun(BiobbObject):
 
         # create cmd
         self.cmd = [self.binary_path,
-               '--ligand', self.io_dict["in"]["input_ligand_pdbqt_path"],
-               '--receptor', self.io_dict["in"]["input_receptor_pdbqt_path"],
+               '--ligand', self.stage_io_dict["in"]["input_ligand_pdbqt_path"],
+               '--receptor', self.stage_io_dict["in"]["input_receptor_pdbqt_path"],
                '--center_x=' + x0, '--center_y=' + y0, '--center_z=' + z0,
                '--size_x=' + sidex, '--size_y=' + sidey, '--size_z=' + sidez,
-               '--out', self.io_dict["out"]["output_pdbqt_path"],
-               '--log', self.io_dict["out"]["output_log_path"]]
-
-        fu.log('Executing AutoDock Vina', self.out_log, self.global_log)
+               '--out', self.stage_io_dict["out"]["output_pdbqt_path"],
+               '--log', self.stage_io_dict["out"]["output_log_path"]]
 
         # Run Biobb block
         self.run_biobb()
 
         # Copy files to host
         self.copy_to_host()
+
+        # remove temporary folder(s)
+        if self.container_path and self.remove_tmp: 
+            self.tmp_files.append(self.stage_io_dict.get("unique_dir"))
+            self.remove_tmp_files()
 
         return self.return_code
 

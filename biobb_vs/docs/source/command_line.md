@@ -48,11 +48,26 @@ Config parameters for this building block:
 * **binary_path** (*string*): (vina) path to vina in your local computer..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
+* **container_path** (*string*): (None) Container path definition..
+* **container_image** (*string*): (biocontainers/autodock-vina:v1.1.2-5b1-deb_cv1) Container image definition..
+* **container_volume_path** (*string*): (/tmp) Container volume path definition..
+* **container_working_dir** (*string*): (None) Container working directory definition..
+* **container_user_id** (*string*): (None) Container user_id definition..
+* **container_shell_path** (*string*): (/bin/bash) Path to default shell inside the container..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_autodock_vina_run.yml)
 ```python
 properties:
   remove_tmp: true
+
+```
+#### [Docker config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_autodock_vina_run_docker.yml)
+```python
+properties:
+  container_image: biocontainers/autodock-vina:v1.1.2-5b1-deb_cv1
+  container_path: docker
+  container_user_id: '1001'
+  container_volume_path: /tmp
 
 ```
 #### Command line
@@ -68,6 +83,17 @@ autodock_vina_run --config config_autodock_vina_run.yml --input_ligand_pdbqt_pat
   }
 }
 ```
+#### [Docker config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_autodock_vina_run_docker.json)
+```python
+{
+  "properties": {
+    "container_path": "docker",
+    "container_image": "biocontainers/autodock-vina:v1.1.2-5b1-deb_cv1",
+    "container_volume_path": "/tmp",
+    "container_user_id": "1001"
+  }
+}
+```
 #### Command line
 ```python
 autodock_vina_run --config config_autodock_vina_run.json --input_ligand_pdbqt_path vina_ligand.pdbqt --input_receptor_pdbqt_path vina_receptor.pdbqt --input_box_path vina_box.pdb --output_pdbqt_path ref_output_vina.pdbqt --output_log_path ref_output_vina.log
@@ -80,8 +106,6 @@ Command:
 ```python
 bindingsite -h
 ```
-    /Users/gbayarri/opt/anaconda3/envs/biobb_370/lib/python3.7/site-packages/Bio/SubsMat/__init__.py:131: BiopythonDeprecationWarning: Bio.SubsMat has been deprecated, and we intend to remove it in a future release of Biopython. As an alternative, please consider using Bio.Align.substitution_matrices as a replacement, and contact the Biopython developers if you still need the Bio.SubsMat module.
-      BiopythonDeprecationWarning,
     usage: bindingsite [-h] [--config CONFIG] --input_pdb_path INPUT_PDB_PATH --input_clusters_zip INPUT_CLUSTERS_ZIP --output_pdb_path OUTPUT_PDB_PATH
     
     Finds the binding site of the input_pdb file based on the ligands' location of similar structures (members of the sequence identity cluster)
@@ -158,8 +182,6 @@ Command:
 ```python
 box -h
 ```
-    /Users/gbayarri/opt/anaconda3/envs/biobb_370/lib/python3.7/site-packages/Bio/SubsMat/__init__.py:131: BiopythonDeprecationWarning: Bio.SubsMat has been deprecated, and we intend to remove it in a future release of Biopython. As an alternative, please consider using Bio.Align.substitution_matrices as a replacement, and contact the Biopython developers if you still need the Bio.SubsMat module.
-      BiopythonDeprecationWarning,
     usage: box [-h] [--config CONFIG] --input_pdb_path INPUT_PDB_PATH --output_pdb_path OUTPUT_PDB_PATH
     
     Sets the center and the size of a rectangular parallelepiped box around a set of residues from a given PDB or a pocket from a given PQR.
@@ -303,8 +325,6 @@ Command:
 ```python
 box_residues -h
 ```
-    /Users/gbayarri/opt/anaconda3/envs/biobb_370/lib/python3.7/site-packages/Bio/SubsMat/__init__.py:131: BiopythonDeprecationWarning: Bio.SubsMat has been deprecated, and we intend to remove it in a future release of Biopython. As an alternative, please consider using Bio.Align.substitution_matrices as a replacement, and contact the Biopython developers if you still need the Bio.SubsMat module.
-      BiopythonDeprecationWarning,
     usage: box_residues [-h] [--config CONFIG] --input_pdb_path INPUT_PDB_PATH --output_pdb_path OUTPUT_PDB_PATH
     
     Sets the center and the size of a rectangular parallelepiped box around a selection of residues found in a given PDB.
@@ -426,10 +446,29 @@ Config parameters for this building block:
 * **binary_path** (*string*): (fpocket) path to fpocket in your local computer..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
+* **container_path** (*string*): (None) Container path definition..
+* **container_image** (*string*): (fpocket/fpocket:latest) Container image definition..
+* **container_volume_path** (*string*): (/tmp) Container volume path definition..
+* **container_working_dir** (*string*): (None) Container working directory definition..
+* **container_user_id** (*string*): (None) Container user_id definition..
+* **container_shell_path** (*string*): (/bin/bash) Path to default shell inside the container..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_fpocket_run.yml)
 ```python
 properties:
+  max_radius: 6
+  min_radius: 3
+  num_spheres: 35
+  sort_by: druggability_score
+
+```
+#### [Docker config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_fpocket_run_docker.yml)
+```python
+properties:
+  container_image: fpocket/fpocket:latest
+  container_path: docker
+  container_user_id: '1001'
+  container_volume_path: /tmp
   max_radius: 6
   min_radius: 3
   num_spheres: 35
@@ -449,6 +488,21 @@ fpocket_run --config config_fpocket_run.yml --input_pdb_path fpocket_input.pdb -
     "max_radius": 6,
     "num_spheres": 35,
     "sort_by": "druggability_score"
+  }
+}
+```
+#### [Docker config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_fpocket_run_docker.json)
+```python
+{
+  "properties": {
+    "min_radius": 3,
+    "max_radius": 6,
+    "num_spheres": 35,
+    "sort_by": "druggability_score",
+    "container_path": "docker",
+    "container_image": "fpocket/fpocket:latest",
+    "container_volume_path": "/tmp",
+    "container_user_id": "1001"
   }
 }
 ```
@@ -525,8 +579,6 @@ Command:
 ```python
 extract_model_pdbqt -h
 ```
-    /Users/gbayarri/opt/anaconda3/envs/biobb_370/lib/python3.7/site-packages/Bio/SubsMat/__init__.py:131: BiopythonDeprecationWarning: Bio.SubsMat has been deprecated, and we intend to remove it in a future release of Biopython. As an alternative, please consider using Bio.Align.substitution_matrices as a replacement, and contact the Biopython developers if you still need the Bio.SubsMat module.
-      BiopythonDeprecationWarning,
     usage: extract_model_pdbqt [-h] [--config CONFIG] --input_pdbqt_path INPUT_PDBQT_PATH --output_pdbqt_path OUTPUT_PDBQT_PATH
     
     Extracts a model from a PDBQT file with several models.

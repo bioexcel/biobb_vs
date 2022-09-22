@@ -3,12 +3,17 @@ from pathlib import Path, PurePath
 import re
 #import shutil
 import numpy as np
-import Bio.PDB
-import Bio.pairwise2
-import Bio.SubsMat.MatrixInfo
-#from Bio.Align import substitution_matrices
-from Bio.Data.SCOPData import protein_letters_3to1 as prot_one_letter
 from biobb_common.tools import file_utils as fu
+
+from Bio import BiopythonDeprecationWarning
+import warnings
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", BiopythonDeprecationWarning)
+    import Bio.PDB
+    import Bio.pairwise2
+    import Bio.SubsMat.MatrixInfo
+    #from Bio.Align import substitution_matrices
+    from Bio.Data.SCOPData import protein_letters_3to1 as prot_one_letter
 
 # CHECK PARAMETERS
 

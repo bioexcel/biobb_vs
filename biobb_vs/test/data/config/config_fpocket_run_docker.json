@@ -1,0 +1,12 @@
+{
+  "properties": {
+    "min_radius": 3,
+    "max_radius": 6,
+    "num_spheres": 35,
+    "sort_by": "druggability_score",
+    "container_path": "docker",
+    "container_image": "fpocket/fpocket:latest",
+    "container_volume_path": "/tmp",
+    "container_user_id": "1001"
+  }
+}

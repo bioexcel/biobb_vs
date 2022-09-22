@@ -27,6 +27,12 @@ class FPocketRun(BiobbObject):
             * **binary_path** (*string*) - ('fpocket') path to fpocket in your local computer.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
+            * **container_path** (*str*) - (None) Container path definition.
+            * **container_image** (*str*) - ('fpocket/fpocket:latest') Container image definition.
+            * **container_volume_path** (*str*) - ('/tmp') Container volume path definition.
+            * **container_working_dir** (*str*) - (None) Container working directory definition.
+            * **container_user_id** (*str*) - (None) Container user_id definition.
+            * **container_shell_path** (*str*) - ('/bin/bash') Path to default shell inside the container.
 
     Examples:
         This is a use example of how to use the building block from Python::
@@ -95,14 +101,16 @@ class FPocketRun(BiobbObject):
         if self.check_restart(): return 0
         self.stage_files()
 
-        # create tmp_folder
-        self.tmp_folder = fu.create_unique_dir()
-        fu.log('Creating %s temporary folder' % self.tmp_folder, self.out_log)
-
-        tmp_input = str(PurePath(self.tmp_folder).joinpath('input.pdb'))
-
-        # copy input_pdb_path to tmp_folder
-        shutil.copy(self.io_dict["in"]["input_pdb_path"], tmp_input)
+        if self.container_path:
+            tmp_input = str(PurePath(self.container_volume_path).joinpath(PurePath(self.io_dict["in"]["input_pdb_path"]).name))
+            self.tmp_folder = self.stage_io_dict['unique_dir']
+        else:
+            # create tmp_folder
+            self.tmp_folder = fu.create_unique_dir()
+            fu.log('Creating %s temporary folder' % self.tmp_folder, self.out_log)
+            tmp_input = str(PurePath(self.tmp_folder).joinpath('input.pdb'))
+            # copy input_pdb_path to tmp_folder
+            shutil.copy(self.io_dict["in"]["input_pdb_path"], tmp_input)        
 
         # create cmd
         self.cmd = [self.binary_path,
@@ -131,6 +139,7 @@ class FPocketRun(BiobbObject):
                                self.io_dict["out"]["output_summary"],
                                self.sort_by,
                                self.remove_tmp, 
+                               self.container_path,
                                self.out_log, 
                                self.__class__.__name__)
 

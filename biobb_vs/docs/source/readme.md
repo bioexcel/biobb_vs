@@ -1,6 +1,7 @@
 [![](https://readthedocs.org/projects/biobb-vs/badge/?version=latest)](https://biobb-vs.readthedocs.io/en/latest/?badge=latest)
 [![](https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg?style=flat)](https://anaconda.org/bioconda/biobb_vs)
 [![](https://img.shields.io/badge/docker-Quay.io-blue)](https://quay.io/repository/biocontainers/biobb_vs?tab=tags)
+[![](https://img.shields.io/badge/singularity-GalaxyProject-blue)](https://depot.galaxyproject.org/singularity/biobb_vs:3.8.1--pyhdfd78af_0)
 [![](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 # biobb_vs
@@ -54,6 +55,20 @@ Using DOCKER:
 
         docker run quay.io/biocontainers/biobb_vs:3.8.1--pyhdfd78af_0 <command>
 
+Using SINGULARITY:
+
+**MacOS users**: it's strongly recommended to avoid Singularity and use **Docker** as containerization system.
+
+* Installation:
+
+
+        singularity pull --name biobb_vs.sif https://depot.galaxyproject.org/singularity/biobb_vs:3.8.1--pyhdfd78af_0
+
+
+* Usage:
+
+
+        singularity exec biobb_vs.sif <command>
 
 The command list and specification can be found at the [Command Line documentation](https://biobb-vs.readthedocs.io/en/latest/command_line.html).
 

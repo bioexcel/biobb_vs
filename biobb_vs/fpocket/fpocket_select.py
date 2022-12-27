@@ -52,6 +52,7 @@ class FPocketSelect(BiobbObject):
 
         # Call parent class constructor
         super().__init__(properties)
+        self.locals_var_dict = locals().copy()
 
         # Input/Output files
         self.io_dict = { 
@@ -65,6 +66,7 @@ class FPocketSelect(BiobbObject):
 
         # Check the properties
         self.check_properties(properties)
+        self.check_arguments()
 
     def check_data_params(self, out_log, err_log):
         """ Checks all the input/output paths and parameters """
@@ -100,8 +102,16 @@ class FPocketSelect(BiobbObject):
                 fu.log('Saving %s file' % self.io_dict["out"]["output_pocket_pqr"], self.out_log)
                 shutil.copy(p, self.io_dict["out"]["output_pocket_pqr"])
 
-        self.tmp_files.append(self.tmp_folder)
+        # Copy files to host
+        self.copy_to_host()
+
+        self.tmp_files.extend([
+            self.stage_io_dict.get("unique_dir"),
+            self.tmp_folder
+        ])
         self.remove_tmp_files()
+
+        self.check_arguments(output_files_created=True, raise_exception=False)
 
         return 0
 

@@ -121,10 +121,10 @@ def process_output_fpocket(tmp_folder, output_pockets_zip, output_summary, sort_
 	with open(output_summary, 'w') as outfile:
 		json.dump(data, outfile, indent=4)
 
-	if remove_tmp:
+	'''if remove_tmp:
 		# remove temporary folder
 		fu.rm(tmp_folder)
-		fu.log('Removed temporary folder: %s' % tmp_folder, out_log)
+		fu.log('Removed temporary folder: %s' % tmp_folder, out_log)'''
 	
 def process_output_fpocket_filter(search_list, tmp_folder, input_pockets_zip, output_filter_pockets_zip, remove_tmp, out_log):
 	""" Creates the output_filter_pockets_zip """
@@ -143,8 +143,8 @@ def process_output_fpocket_filter(search_list, tmp_folder, input_pockets_zip, ou
 	# compress output to output_filter_pockets_zip
 	fu.zip_list(zip_file = output_filter_pockets_zip, file_list = sel_pockets_list, out_log = out_log)
 
-	if remove_tmp:
+	'''if remove_tmp:
 		# remove temporary folder
 		fu.rm(tmp_folder)
-		fu.log('Removed temporary folder: %s' % tmp_folder, out_log)
+		fu.log('Removed temporary folder: %s' % tmp_folder, out_log)'''
 

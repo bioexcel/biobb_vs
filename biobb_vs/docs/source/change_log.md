@@ -1,7 +1,15 @@
 # Biobb Virtual Screening changelog
 
+## What's new in version [3.9.0](https://github.com/bioexcel/biobb_vs/releases/tag/v3.9.0)?
+In version 3.9.0 the dependency biobb_common has been updated to 3.9.0 version.
+
+### New features
+
+* Update to biobb_common 3.9.0 (general)
+* All inputs/outputs are checked for correct file format, extension and type (general)
+
 ## What's new in version [3.8.1](https://github.com/bioexcel/biobb_vs/releases/tag/v3.8.1)?
-In version 3.8.1 the AutoDockVinaRun and autodock_vina_run tools have added the ability to be executed through docker. 
+In version 3.8.1 the AutoDockVinaRun and FPocketRun tools have added the ability to be executed through docker. 
 
 ### New features
 

@@ -66,6 +66,7 @@ class FPocketRun(BiobbObject):
 
         # Call parent class constructor
         super().__init__(properties)
+        self.locals_var_dict = locals().copy()
 
         # Input/Output files
         self.io_dict = { 
@@ -83,6 +84,7 @@ class FPocketRun(BiobbObject):
 
         # Check the properties
         self.check_properties(properties)
+        self.check_arguments()
 
     def check_data_params(self, out_log, err_log):
         """ Checks all the input/output paths and parameters """
@@ -142,6 +144,12 @@ class FPocketRun(BiobbObject):
                                self.container_path,
                                self.out_log, 
                                self.__class__.__name__)
+
+        self.tmp_files.extend([
+            self.stage_io_dict.get("unique_dir"),
+            self.tmp_folder
+        ])
+        self.remove_tmp_files()
 
         return self.return_code
 

@@ -45,6 +45,7 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
+* **cpu** (*integer*): (1) the number of CPUs to use..
 * **binary_path** (*string*): (vina) path to vina in your local computer..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..

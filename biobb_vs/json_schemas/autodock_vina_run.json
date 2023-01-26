@@ -106,6 +106,15 @@
         "properties": {
             "type": "object",
             "properties": {
+                "cpu": {
+                    "type": "integer",
+                    "default": 1,
+                    "wf_prop": false,
+                    "description": "the number of CPUs to use.",
+                    "min": 1,
+                    "max": 1000,
+                    "step": 1
+                },
                 "binary_path": {
                     "type": "string",
                     "default": "vina",

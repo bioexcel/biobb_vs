@@ -92,12 +92,12 @@ def process_output_fpocket(tmp_folder, output_pockets_zip, output_summary, sort_
 	for line in lines:
 		if not line.startswith('\t'):
 			# first level: pocket
-			num = re.findall('\d+', line)[0]
+			num = re.findall('\\d+', line)[0]
 			pocket = 'pocket' + num
 			data[pocket] = {}
 		else:
 			# second level: pocket properties
-			groups = re.findall('(.*)(?:\ *\:\ *)(.*)', line)[0]
+			groups = re.findall('(.*)(?:\\ *\\:\\ *)(.*)', line)[0]
 			key = groups[0].lower().strip()
 			key = re.sub(r'\-|\.', '', key)
 			key = re.sub(r'\s+', '_', key)

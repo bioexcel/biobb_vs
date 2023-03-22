@@ -4,7 +4,7 @@ from biobb_vs.vina.autodock_vina_run import autodock_vina_run
 
 class TestAutoDockVinaRun():
     def setup_class(self):
-        fx.test_setup(self,'autodock_vina_run')
+        fx.test_setup(self, 'autodock_vina_run')
 
     def teardown_class(self):
         fx.test_teardown(self)

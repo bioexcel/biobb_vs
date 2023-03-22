@@ -99,7 +99,7 @@ def align_sequences(seqA, seqB, matrix_name = 'blosum62', gap_open = -10.0, gap_
         # get matrix from matrix_name
         try:
             matrix = getattr(Bio.SubsMat.MatrixInfo, matrix_name)
-        except NameError:
+        except AttributeError:
             matrix = Bio.Align.substitution_matrices.load(matrix_name)
 
         #print(Bio.SubsMat.MatrixInfo)

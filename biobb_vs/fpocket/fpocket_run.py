@@ -61,7 +61,7 @@ class FPocketRun(BiobbObject):
     """
 
     def __init__(self, input_pdb_path, output_pockets_zip, output_summary, 
-                properties=None, **kwargs) -> None:
+                 properties=None, **kwargs) -> None:
         properties = properties or {}
 
         # Call parent class constructor

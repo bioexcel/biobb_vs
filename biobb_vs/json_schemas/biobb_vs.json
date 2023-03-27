@@ -81,7 +81,7 @@
     "dep_conda" : [
         "python >=3.7,<3.10", 
         "biobb_common ==3.9.0", 
-        "autodock-vina ==1.1.2",
+        "vina ==1.2.3",
         "fpocket ==3.1.4.2"
     ],
     "keywords" : [

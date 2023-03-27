@@ -52,7 +52,7 @@ class AutoDockVinaRun(BiobbObject):
     Info:
         * wrapped_software:
             * name: Autodock Vina
-            * version: >=1.1.2
+            * version: >=1.2.3
             * license: Apache-2.0
         * ontology:
             * name: EDAM
@@ -128,7 +128,8 @@ class AutoDockVinaRun(BiobbObject):
                '--size_x=' + sidex, '--size_y=' + sidey, '--size_z=' + sidez,
                '--cpu', str(self.cpu),
                '--out', self.stage_io_dict["out"]["output_pdbqt_path"],
-               '--log', self.stage_io_dict["out"]["output_log_path"]]
+               '--verbosity', '1',
+               '>', self.stage_io_dict["out"]["output_log_path"]]
 
         # Run Biobb block
         self.run_biobb()

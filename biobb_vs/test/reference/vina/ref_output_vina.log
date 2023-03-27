@@ -1,35 +1,47 @@
+AutoDock Vina v1.2.3
 #################################################################
 # If you used AutoDock Vina in your work, please cite:          #
+#                                                               #
+# J. Eberhardt, D. Santos-Martins, A. F. Tillack, and S. Forli  #
+# AutoDock Vina 1.2.0: New Docking Methods, Expanded Force      #
+# Field, and Python Bindings, J. Chem. Inf. Model. (2021)       #
+# DOI 10.1021/acs.jcim.1c00203                                  #
 #                                                               #
 # O. Trott, A. J. Olson,                                        #
 # AutoDock Vina: improving the speed and accuracy of docking    #
 # with a new scoring function, efficient optimization and       #
-# multithreading, Journal of Computational Chemistry 31 (2010)  #
-# 455-461                                                       #
-#                                                               #
+# multithreading, J. Comp. Chem. (2010)                         #
 # DOI 10.1002/jcc.21334                                         #
 #                                                               #
-# Please see http://vina.scripps.edu for more information.      #
+# Please see https://github.com/ccsb-scripps/AutoDock-Vina for  #
+# more information.                                             #
 #################################################################
 
-Detected 4 CPUs
-Reading input ... done.
-Setting up the scoring function ... done.
-Analyzing the binding site ... done.
-Using random seed: 1672155280
-Performing search ... done.
-Refining results ... done.
+Scoring function : vina
+Rigid receptor: /Users/gbayarri/324dbc2f-57cf-473a-937e-dbb8f6433123/vina_receptor.pdbqt
+Ligand: /Users/gbayarri/324dbc2f-57cf-473a-937e-dbb8f6433123/vina_ligand.pdbqt
+Grid center: X 7.293 Y 7.293 Z -2.136
+Grid size  : X 16.319 Y 11.521 Z 13.047
+Grid space : 0.375
+Exhaustiveness: 8
+CPU: 1
+Verbosity: 1
+
+Computing Vina grid ... done.
+Performing docking (random seed: -918773971) ... 
+0%   10   20   30   40   50   60   70   80   90   100%
+|----|----|----|----|----|----|----|----|----|----|
+***************************************************
 
 mode |   affinity | dist from best mode
      | (kcal/mol) | rmsd l.b.| rmsd u.b.
 -----+------------+----------+----------
-   1        -15.0      0.000      0.000
-   2        -14.5      1.396      3.055
-   3        -14.4      1.543      3.716
-   4        -14.4      2.682      4.350
-   5        -14.2      1.276      3.631
-   6        -14.0      3.035      5.050
-   7        -14.0      2.639      3.728
-   8        -13.9      2.320      3.852
-   9        -13.9      1.153      2.744
-Writing output ... done.
+   1       -15.02          0          0
+   2       -14.51      1.433      3.091
+   3       -14.44      2.513      3.352
+   4       -14.43      1.543      3.709
+   5        -14.4      2.675      4.342
+   6       -14.23      1.305      3.654
+   7       -14.01      2.561      3.683
+   8       -13.91      2.364      3.862
+   9       -13.75      2.394      3.946

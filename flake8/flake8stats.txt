@@ -32,6 +32,6 @@
 2     F841 local variable 'cluster_list' is assigned to but never used
 184   W191 indentation contains tabs
 100   W291 trailing whitespace
-9     W292 no newline at end of file
+11    W292 no newline at end of file
 3     W293 blank line contains whitespace
 2     W391 blank line at end of file

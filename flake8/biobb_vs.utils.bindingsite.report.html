@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>flake8 violations: biobb_vs/utils/bindingsite.py</title>
+      <meta http-equiv="Content-Type" value="text/html; charset=UTF-8">
+      <link rel="stylesheet" href="styles.css">
+<script>
+function bindHandler(link) {
+   var code = link.getAttribute('data-code');
+   var key = location.pathname + '#' + code;
+
+   var ul = link.parentNode.querySelector('.details');
+   if (sessionStorage[key] != 'open') {
+      ul.style.display = 'none';
+   }
+   link.addEventListener('click', function (event) {
+      if (!ul.style.display || ul.style.display == 'none') {
+         ul.style.display = 'block';
+         sessionStorage[key] = 'open';
+      } else {
+         ul.style.display = 'none';
+         sessionStorage[key] = 'closed';
+      }
+   });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+   var links = document.querySelectorAll('#index > li > a');
+   for (var i = 0; i < links.length; i++) {
+      bindHandler(links[i]);
+   }
+});
+</script>
+   </head>
+   <body>
+      <div id="masthead" class="sev-1"></div>
+      <div id="page">
+         <p id="srclink">
+            <a title="View full annotated source"
+               href="biobb_vs.utils.bindingsite.source.html">
+               <img src="file.svg" alt="&#x2261;">
+            </a></p>
+         <h1>
+            <a href="index.html">
+               <img src="back.svg" alt="&#x2B05;">
+               biobb_vs/utils/bindingsite.py
+            </a>
+         </h1>
+
+         <ul id="index">
+         
+         <li>
+            <a data-code="F405">
+               <span class="count sev-1">
+                  19
+               </span>
+               <strong>F405:</strong> 'check_input_path' may be undefined, or defined from star imports: biobb_vs.utils.common
+               
+                  (and 9 similar)
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <p>'check_input_path' may be undefined, or defined from star imports: biobb_vs.utils.common:</p>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l89">
+                  <tt><i>89</i>         <span class="bp">self</span><span class="o">.</span><span class="n">io_dict</span><span class="p">[</span><span class="s2">&quot;in&quot;</span><span class="p">][</span><span class="s2">&quot;input_pdb_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">check_input_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">io_dict</span><span class="p">[</span><span class="s2">&quot;in&quot;</span><span class="p">][</span><span class="s2">&quot;input_pdb_path&quot;</span><span class="p">],</span><span class="s2">&quot;input_pdb_path&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_log</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'check_input_path' may be undefined, or defined from star imports: biobb_vs.utils.common:</p>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l90">
+                  <tt><i>90</i>         <span class="bp">self</span><span class="o">.</span><span class="n">io_dict</span><span class="p">[</span><span class="s2">&quot;in&quot;</span><span class="p">][</span><span class="s2">&quot;input_clusters_zip&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">check_input_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">io_dict</span><span class="p">[</span><span class="s2">&quot;in&quot;</span><span class="p">][</span><span class="s2">&quot;input_clusters_zip&quot;</span><span class="p">],</span><span class="s2">&quot;input_clusters_zip&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_log</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'check_output_path' may be undefined, or defined from star imports: biobb_vs.utils.common:</p>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l91">
+                  <tt><i>91</i>         <span class="bp">self</span><span class="o">.</span><span class="n">io_dict</span><span class="p">[</span><span class="s2">&quot;out&quot;</span><span class="p">][</span><span class="s2">&quot;output_pdb_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">check_output_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">io_dict</span><span class="p">[</span><span class="s2">&quot;out&quot;</span><span class="p">][</span><span class="s2">&quot;output_pdb_path&quot;</span><span class="p">],</span><span class="s2">&quot;output_pdb_path&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_log</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'PurePath' may be undefined, or defined from star imports: biobb_vs.utils.common:</p>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l107">
+                  <tt><i>107</i>         <span class="n">structure_name</span> <span class="o">=</span> <span class="n">PurePath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">io_dict</span><span class="p">[</span><span class="s2">&quot;in&quot;</span><span class="p">][</span><span class="s2">&quot;input_pdb_path&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">name</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'Bio' may be undefined, or defined from star imports: biobb_vs.utils.common:</p>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l108">
+                  <tt><i>108</i>         <span class="n">parser</span>      <span class="o">=</span> <span class="n">Bio</span><span class="o">.</span><span class="n">PDB</span><span class="o">.</span><span class="n">PDBParser</span><span class="p">(</span><span class="n">QUIET</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'get_pdb_sequence' may be undefined, or defined from star imports: biobb_vs.utils.common:</p>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l123">
+                  <tt><i>123</i>         <span class="n">structPDB_seq</span>   <span class="o">=</span> <span class="n">get_pdb_sequence</span><span class="p">(</span><span class="n">structPDB</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'PurePath' may be undefined, or defined from star imports: biobb_vs.utils.common:</p>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l131">
+                  <tt><i>131</i>         <span class="n">unique_dir</span> <span class="o">=</span> <span class="n">PurePath</span><span class="p">(</span><span class="n">fu</span><span class="o">.</span><span class="n">create_unique_dir</span><span class="p">())</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'PurePath' may be undefined, or defined from star imports: biobb_vs.utils.common:</p>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l144">
+                  <tt><i>144</i>             <span class="n">cluster_name</span> <span class="o">=</span> <span class="n">PurePath</span><span class="p">(</span><span class="n">cluster_path</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'get_ligand_residues' may be undefined, or defined from star imports: biobb_vs.utils.common:</p>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l158">
+                  <tt><i>158</i>             <span class="n">clusterPDB_ligands</span> <span class="o">=</span> <span class="n">get_ligand_residues</span><span class="p">(</span><span class="n">clusterPDB</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'get_pdb_sequence' may be undefined, or defined from star imports: biobb_vs.utils.common:</p>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l193">
+                  <tt><i>193</i>             <span class="n">clusterPDB_seq</span> <span class="o">=</span> <span class="n">get_pdb_sequence</span><span class="p">(</span><span class="n">clusterPDB</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'align_sequences' may be undefined, or defined from star imports: biobb_vs.utils.common:</p>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l196">
+                  <tt><i>196</i>             <span class="n">aln</span><span class="p">,</span> <span class="n">residue_map</span> <span class="o">=</span> <span class="n">align_sequences</span><span class="p">(</span><span class="n">structPDB_seq</span><span class="p">,</span> <span class="n">clusterPDB_seq</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">matrix_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gap_open</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gap_extend</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'calculate_alignment_identity' may be undefined, or defined from star imports: biobb_vs.utils.common:</p>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l200">
+                  <tt><i>200</i>             <span class="n">seq_identity</span><span class="p">,</span> <span class="n">gap_seq_identity</span> <span class="o">=</span> <span class="n">calculate_alignment_identity</span><span class="p">(</span><span class="n">aln</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">aln</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'get_residue_by_id' may be undefined, or defined from star imports: biobb_vs.utils.common:</p>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l212">
+                  <tt><i>212</i>                     <span class="n">struct_atoms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">get_residue_by_id</span><span class="p">(</span><span class="n">structPDB</span><span class="p">,</span> <span class="n">struct_res</span><span class="p">)[</span><span class="s1">&#39;CA&#39;</span><span class="p">])</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'get_residue_by_id' may be undefined, or defined from star imports: biobb_vs.utils.common:</p>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l214">
+                  <tt><i>214</i>                     <span class="n">fu</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;Cannot find CA atom for residue </span><span class="si">%s</span><span class="s1">  (input PDB  </span><span class="si">%s</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">get_residue_by_id</span><span class="p">(</span><span class="n">structPDB</span><span class="p">,</span> <span class="n">struct_res</span><span class="p">)</span><span class="o">.</span><span class="n">get_resname</span><span class="p">(),</span><span class="n">struct_res</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_log</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'Bio' may be undefined, or defined from star imports: biobb_vs.utils.common:</p>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l225">
+                  <tt><i>225</i>             <span class="n">si</span> <span class="o">=</span> <span class="n">Bio</span><span class="o">.</span><span class="n">PDB</span><span class="o">.</span><span class="n">Superimposer</span><span class="p">()</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'Bio' may be undefined, or defined from star imports: biobb_vs.utils.common:</p>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l253">
+                  <tt><i>253</i>         <span class="n">clusterPDB_ligands_aligned_atoms</span> <span class="o">=</span> <span class="n">Bio</span><span class="o">.</span><span class="n">PDB</span><span class="o">.</span><span class="n">Selection</span><span class="o">.</span><span class="n">unfold_entities</span><span class="p">(</span><span class="n">clusterPDB_ligands_aligned2</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'Bio' may be undefined, or defined from star imports: biobb_vs.utils.common:</p>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l260">
+                  <tt><i>260</i>         <span class="n">structPDB_neighbors</span> <span class="o">=</span> <span class="n">Bio</span><span class="o">.</span><span class="n">PDB</span><span class="o">.</span><span class="n">NeighborSearch</span><span class="p">(</span><span class="n">structPDB_atoms</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'Bio' may be undefined, or defined from star imports: biobb_vs.utils.common:</p>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l269">
+                  <tt><i>269</i>         <span class="n">io</span> <span class="o">=</span> <span class="n">Bio</span><span class="o">.</span><span class="n">PDB</span><span class="o">.</span><span class="n">PDBIO</span><span class="p">()</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'re' may be undefined, or defined from star imports: biobb_vs.utils.common:</p>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l274">
+                  <tt><i>274</i>         <span class="n">p</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;H_|W_|W&#39;</span><span class="p">)</span>       </tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="F403">
+               <span class="count sev-1">
+                  1
+               </span>
+               <strong>F403:</strong> 'from biobb_vs.utils.common import *' used; unable to detect undefined names
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l9">
+                  <tt><i>9</i> <span class="kn">from</span> <span class="nn">biobb_vs.utils.common</span> <span class="kn">import</span> <span class="o">*</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="W291">
+               <span class="count sev-2">
+                  13
+               </span>
+               <strong>W291:</strong> trailing whitespace
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l16">
+                  <tt><i>16</i> <span class="sd">    | Finds the binding site of the input_pdb_path file based on the ligands&#39; location of similar structures (members of the sequence identity cluster)  </span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l36">
+                  <tt><i>36</i> <span class="sd">            prop = { </span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l44">
+                  <tt><i>44</i> <span class="sd">            bindingsite(input_pdb_path=&#39;/path/to/myStructure.pdb&#39;, </span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l45">
+                  <tt><i>45</i> <span class="sd">                        input_clusters_zip=&#39;/path/to/myCluster.zip&#39;, </span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l46">
+                  <tt><i>46</i> <span class="sd">                        output_pdb_path=&#39;/path/to/newStructure.pdb&#39;, </span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l60">
+                  <tt><i>60</i>     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_pdb_path</span><span class="p">,</span> <span class="n">input_clusters_zip</span><span class="p">,</span> <span class="n">output_pdb_path</span><span class="p">,</span> </tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l69">
+                  <tt><i>69</i>         <span class="bp">self</span><span class="o">.</span><span class="n">io_dict</span> <span class="o">=</span> <span class="p">{</span> </tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l71">
+                  <tt><i>71</i>             <span class="s2">&quot;out&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;output_pdb_path&quot;</span><span class="p">:</span> <span class="n">output_pdb_path</span> <span class="p">}</span> </tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l176">
+                  <tt><i>176</i>             <span class="k">else</span><span class="p">:</span>        </tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l274">
+                  <tt><i>274</i>         <span class="n">p</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;H_|W_|W&#39;</span><span class="p">)</span>       </tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l334">
+                  <tt><i>334</i>     <span class="n">bindingsite</span><span class="p">(</span><span class="n">input_pdb_path</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">input_pdb_path</span><span class="p">,</span> </tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l335">
+                  <tt><i>335</i>                 <span class="n">input_clusters_zip</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">input_clusters_zip</span><span class="p">,</span> </tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l336">
+                  <tt><i>336</i>                 <span class="n">output_pdb_path</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">output_pdb_path</span><span class="p">,</span> </tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E221">
+               <span class="count sev-2">
+                  8
+               </span>
+               <strong>E221:</strong> multiple spaces before operator
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l108">
+                  <tt><i>108</i>         <span class="n">parser</span>      <span class="o">=</span> <span class="n">Bio</span><span class="o">.</span><span class="n">PDB</span><span class="o">.</span><span class="n">PDBParser</span><span class="p">(</span><span class="n">QUIET</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l109">
+                  <tt><i>109</i>         <span class="n">structPDB</span>   <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">get_structure</span><span class="p">(</span><span class="n">structure_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">io_dict</span><span class="p">[</span><span class="s2">&quot;in&quot;</span><span class="p">][</span><span class="s2">&quot;input_pdb_path&quot;</span><span class="p">])</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l123">
+                  <tt><i>123</i>         <span class="n">structPDB_seq</span>   <span class="o">=</span> <span class="n">get_pdb_sequence</span><span class="p">(</span><span class="n">structPDB</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l138">
+                  <tt><i>138</i>         <span class="n">clusterPDB_ligands_num</span>     <span class="o">=</span> <span class="mi">0</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l164">
+                  <tt><i>164</i>             <span class="n">lig_atoms_num</span>     <span class="o">=</span> <span class="mi">0</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l183">
+                  <tt><i>183</i>                             <span class="n">lig_atoms_num</span>     <span class="o">=</span> <span class="n">lig_res_atoms_num</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l206">
+                  <tt><i>206</i>             <span class="n">struct_atoms</span>  <span class="o">=</span> <span class="p">[]</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l252">
+                  <tt><i>252</i>         <span class="n">clusterPDB_ligands_aligned2</span>      <span class="o">=</span> <span class="p">[</span><span class="n">res</span> <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">clusterPDB_ligands_aligned</span><span class="p">]</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E251">
+               <span class="count sev-2">
+                  8
+               </span>
+               <strong>E251:</strong> unexpected spaces around keyword / parameter equals
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <p>Unexpected spaces around keyword / parameter equals (in 2 places):</p>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l108">
+                  <tt><i>108</i>         <span class="n">parser</span>      <span class="o">=</span> <span class="n">Bio</span><span class="o">.</span><span class="n">PDB</span><span class="o">.</span><span class="n">PDBParser</span><span class="p">(</span><span class="n">QUIET</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Unexpected spaces around keyword / parameter equals (in 6 places):</p>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l135">
+                  <tt><i>135</i>         <span class="n">cluster_list</span> <span class="o">=</span> <span class="n">fu</span><span class="o">.</span><span class="n">unzip_list</span><span class="p">(</span><span class="n">zip_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">io_dict</span><span class="p">[</span><span class="s2">&quot;in&quot;</span><span class="p">][</span><span class="s2">&quot;input_clusters_zip&quot;</span><span class="p">],</span> <span class="n">dest_dir</span> <span class="o">=</span> <span class="n">unique_dir</span><span class="p">,</span> <span class="n">out_log</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_log</span><span class="p">)</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E266">
+               <span class="count sev-2">
+                  6
+               </span>
+               <strong>E266:</strong> too many leading '#' for block comment
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l190">
+                  <tt><i>190</i>             <span class="c1">## Mapping residues by sequence alignment to match structPDB-clusterPDB paired residues</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l204">
+                  <tt><i>204</i>             <span class="c1">## Selecting aligned CA atoms from first model, first chain</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l223">
+                  <tt><i>223</i>             <span class="c1">## Align against input structure</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l236">
+                  <tt><i>236</i>             <span class="c1">##  Stop after n accepted cluster members</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l247">
+                  <tt><i>247</i>         <span class="c1">## Select binding site atoms as those around cluster superimposed ligands</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l267">
+                  <tt><i>267</i>         <span class="c1">## Save binding site to PDB</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E231">
+               <span class="count sev-2">
+                  4
+               </span>
+               <strong>E231:</strong> missing whitespace after ','
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l89">
+                  <tt><i>89</i>         <span class="bp">self</span><span class="o">.</span><span class="n">io_dict</span><span class="p">[</span><span class="s2">&quot;in&quot;</span><span class="p">][</span><span class="s2">&quot;input_pdb_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">check_input_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">io_dict</span><span class="p">[</span><span class="s2">&quot;in&quot;</span><span class="p">][</span><span class="s2">&quot;input_pdb_path&quot;</span><span class="p">],</span><span class="s2">&quot;input_pdb_path&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_log</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l90">
+                  <tt><i>90</i>         <span class="bp">self</span><span class="o">.</span><span class="n">io_dict</span><span class="p">[</span><span class="s2">&quot;in&quot;</span><span class="p">][</span><span class="s2">&quot;input_clusters_zip&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">check_input_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">io_dict</span><span class="p">[</span><span class="s2">&quot;in&quot;</span><span class="p">][</span><span class="s2">&quot;input_clusters_zip&quot;</span><span class="p">],</span><span class="s2">&quot;input_clusters_zip&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_log</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l91">
+                  <tt><i>91</i>         <span class="bp">self</span><span class="o">.</span><span class="n">io_dict</span><span class="p">[</span><span class="s2">&quot;out&quot;</span><span class="p">][</span><span class="s2">&quot;output_pdb_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">check_output_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">io_dict</span><span class="p">[</span><span class="s2">&quot;out&quot;</span><span class="p">][</span><span class="s2">&quot;output_pdb_path&quot;</span><span class="p">],</span><span class="s2">&quot;output_pdb_path&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_log</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l214">
+                  <tt><i>214</i>                     <span class="n">fu</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;Cannot find CA atom for residue </span><span class="si">%s</span><span class="s1">  (input PDB  </span><span class="si">%s</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">get_residue_by_id</span><span class="p">(</span><span class="n">structPDB</span><span class="p">,</span> <span class="n">struct_res</span><span class="p">)</span><span class="o">.</span><span class="n">get_resname</span><span class="p">(),</span><span class="n">struct_res</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_log</span><span class="p">)</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E127">
+               <span class="count sev-2">
+                  3
+               </span>
+               <strong>E127:</strong> continuation line over-indented for visual indent
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l314">
+                  <tt><i>314</i>                         <span class="n">input_clusters_zip</span><span class="o">=</span><span class="n">input_clusters_zip</span><span class="p">,</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l315">
+                  <tt><i>315</i>                         <span class="n">output_pdb_path</span><span class="o">=</span><span class="n">output_pdb_path</span><span class="p">,</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l316">
+                  <tt><i>316</i>                         <span class="n">properties</span><span class="o">=</span><span class="n">properties</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">launch</span><span class="p">()</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E201">
+               <span class="count sev-2">
+                  3
+               </span>
+               <strong>E201:</strong> whitespace after '{'
+               
+                  (and 1 similar)
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <p>Whitespace after '{':</p>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l70">
+                  <tt><i>70</i>             <span class="s2">&quot;in&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;input_pdb_path&quot;</span><span class="p">:</span> <span class="n">input_pdb_path</span><span class="p">,</span> <span class="s2">&quot;input_clusters_zip&quot;</span><span class="p">:</span> <span class="n">input_clusters_zip</span> <span class="p">},</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Whitespace after '{':</p>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l71">
+                  <tt><i>71</i>             <span class="s2">&quot;out&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;output_pdb_path&quot;</span><span class="p">:</span> <span class="n">output_pdb_path</span> <span class="p">}</span> </tt>
+               </a>
+            </li><li>
+               
+               <p>Whitespace after '[':</p>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l256">
+                  <tt><i>256</i>         <span class="n">structPDB_atoms</span> <span class="o">=</span> <span class="p">[</span> <span class="n">atom</span> <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">structPDB</span><span class="o">.</span><span class="n">get_atoms</span><span class="p">()]</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E117">
+               <span class="count sev-2">
+                  2
+               </span>
+               <strong>E117:</strong> over-indented (comment)
+               
+                  (and 1 similar)
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <p>Over-indented (comment):</p>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l262">
+                  <tt><i>262</i>                 <span class="c1"># look for PDB atoms 5A around each ligand atom</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Over-indented:</p>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l263">
+                  <tt><i>263</i>                 <span class="n">k_l</span> <span class="o">=</span> <span class="n">structPDB_neighbors</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">ligand_atom</span><span class="o">.</span><span class="n">coord</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span> <span class="s1">&#39;R&#39;</span><span class="p">)</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E202">
+               <span class="count sev-2">
+                  2
+               </span>
+               <strong>E202:</strong> whitespace before '}'
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l70">
+                  <tt><i>70</i>             <span class="s2">&quot;in&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;input_pdb_path&quot;</span><span class="p">:</span> <span class="n">input_pdb_path</span><span class="p">,</span> <span class="s2">&quot;input_clusters_zip&quot;</span><span class="p">:</span> <span class="n">input_clusters_zip</span> <span class="p">},</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l71">
+                  <tt><i>71</i>             <span class="s2">&quot;out&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;output_pdb_path&quot;</span><span class="p">:</span> <span class="n">output_pdb_path</span> <span class="p">}</span> </tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E302">
+               <span class="count sev-2">
+                  2
+               </span>
+               <strong>E302:</strong> expected 2 blank lines, found 1
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l309">
+                  <tt><i>309</i> <span class="k">def</span> <span class="nf">bindingsite</span><span class="p">(</span><span class="n">input_pdb_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">input_clusters_zip</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output_pdb_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">properties</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l318">
+                  <tt><i>318</i> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E114">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>E114:</strong> indentation is not a multiple of 4 (comment)
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l149">
+                  <tt><i>149</i>              <span class="c1"># Load and Parse PDB</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E116">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>E116:</strong> unexpected indentation (comment)
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l149">
+                  <tt><i>149</i>              <span class="c1"># Load and Parse PDB</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E128">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>E128:</strong> continuation line under-indented for visual indent
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l61">
+                  <tt><i>61</i>                 <span class="n">properties</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E225">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>E225:</strong> missing whitespace around operator
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l217">
+                  <tt><i>217</i>             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cluster_atoms</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E271">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>E271:</strong> multiple spaces after keyword
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l6">
+                  <tt><i>6</i> <span class="kn">from</span> <span class="nn">biobb_common.configuration</span> <span class="kn">import</span>  <span class="n">settings</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E303">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>E303:</strong> too many blank lines (2)
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l94">
+                  <tt><i>94</i>     <span class="nd">@launchlogger</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E305">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>E305:</strong> expected 2 blank lines after class or function definition, found 1
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l339">
+                  <tt><i>339</i> <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E701">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>E701:</strong> multiple statements on one line (colon)
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="biobb_vs.utils.bindingsite.source.html#l102">
+                  <tt><i>102</i>         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_restart</span><span class="p">():</span> <span class="k">return</span> <span class="mi">0</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         </ul>
+      </div>
+   </body>
+</html>

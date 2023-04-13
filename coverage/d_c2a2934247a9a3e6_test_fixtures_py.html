@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="d_ed3f1400ce0c0bee___init___py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.2.3">coverage.py v7.2.3</a>,
-            created at 2023-04-11 16:04 +0000
+            created at 2023-04-13 10:23 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"/>
@@ -207,10 +207,10 @@
     <p class="mis show_mis"><span class="n"><a id="t125" href="#t125">125</a></span><span class="t">        <span class="key">return</span> <span class="nam">compare_ignore_first</span><span class="op">(</span><span class="nam">file_a</span><span class="op">,</span> <span class="nam">file_b</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t126" href="#t126">126</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t127" href="#t127">127</a></span><span class="t">    <span class="key">if</span> <span class="nam">file_a</span><span class="op">.</span><span class="nam">endswith</span><span class="op">(</span><span class="op">(</span><span class="str">".nc"</span><span class="op">,</span> <span class="str">".netcdf"</span><span class="op">,</span> <span class="str">".xtc"</span><span class="op">)</span><span class="op">)</span> <span class="key">and</span> <span class="nam">file_b</span><span class="op">.</span><span class="nam">endswith</span><span class="op">(</span><span class="op">(</span><span class="str">".nc"</span><span class="op">,</span> <span class="str">".netcdf"</span><span class="op">,</span> <span class="str">".xtc"</span><span class="op">)</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t128" href="#t128">128</a></span><span class="t">        <span class="key">return</span> <span class="nam">compare_size</span><span class="op">(</span><span class="nam">file_a</span><span class="op">,</span> <span class="nam">file_b</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t128" href="#t128">128</a></span><span class="t">        <span class="key">return</span> <span class="nam">compare_size</span><span class="op">(</span><span class="nam">file_a</span><span class="op">,</span> <span class="nam">file_b</span><span class="op">,</span> <span class="nam">kwargs</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="str">'percent_tolerance'</span><span class="op">,</span> <span class="num">1.0</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t129" href="#t129">129</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t130" href="#t130">130</a></span><span class="t">    <span class="key">if</span> <span class="nam">file_a</span><span class="op">.</span><span class="nam">endswith</span><span class="op">(</span><span class="str">".xvg"</span><span class="op">)</span> <span class="key">and</span> <span class="nam">file_b</span><span class="op">.</span><span class="nam">endswith</span><span class="op">(</span><span class="str">".xvg"</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t131" href="#t131">131</a></span><span class="t">        <span class="key">return</span> <span class="nam">compare_xvg</span><span class="op">(</span><span class="nam">file_a</span><span class="op">,</span> <span class="nam">file_b</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t131" href="#t131">131</a></span><span class="t">        <span class="key">return</span> <span class="nam">compare_xvg</span><span class="op">(</span><span class="nam">file_a</span><span class="op">,</span> <span class="nam">file_b</span><span class="op">,</span> <span class="nam">kwargs</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="str">'percent_tolerance'</span><span class="op">,</span> <span class="num">1.0</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t132" href="#t132">132</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t133" href="#t133">133</a></span><span class="t">    <span class="key">return</span> <span class="nam">compare_hash</span><span class="op">(</span><span class="nam">file_a</span><span class="op">,</span> <span class="nam">file_b</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t134" href="#t134">134</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -347,7 +347,7 @@
             <a id="nextFileLink" class="nav" href="d_ed3f1400ce0c0bee___init___py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.2.3">coverage.py v7.2.3</a>,
-            created at 2023-04-11 16:04 +0000
+            created at 2023-04-13 10:23 +0000
         </p>
     </div>
 </footer>

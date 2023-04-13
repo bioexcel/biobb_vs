@@ -2,11 +2,12 @@
 
 """Module containing the FPocketFilter class and the command line interface."""
 import argparse
+import json
 from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.configuration import  settings
+from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
-from biobb_vs.fpocket.common import *
+from biobb_vs.fpocket.common import check_input_path, check_output_path, check_range, process_output_fpocket_filter
 
 
 class FPocketFilter(BiobbObject):
@@ -30,14 +31,14 @@ class FPocketFilter(BiobbObject):
         This is a use example of how to use the building block from Python::
 
             from biobb_vs.fpocket.fpocket_filter import fpocket_filter
-            prop = { 
+            prop = {
                 'score': [0.2, 1],
                 'druggability_score': [0.2, 0.8],
                 'volume': [100, 600.2]
             }
-            fpocket_filter(input_pockets_zip='/path/to/myPockets.zip', 
-                    input_summary='/path/to/mySummary.json', 
-                    output_filter_pockets_zip='/path/to/newPockets.json', 
+            fpocket_filter(input_pockets_zip='/path/to/myPockets.zip',
+                    input_summary='/path/to/mySummary.json',
+                    output_filter_pockets_zip='/path/to/newPockets.json',
                     properties=prop)
 
     Info:
@@ -50,8 +51,8 @@ class FPocketFilter(BiobbObject):
 
     """
 
-    def __init__(self, input_pockets_zip, input_summary, output_filter_pockets_zip, 
-                properties=None, **kwargs) -> None:
+    def __init__(self, input_pockets_zip, input_summary, output_filter_pockets_zip,
+                 properties=None, **kwargs) -> None:
         properties = properties or {}
 
         # Call parent class constructor
@@ -59,9 +60,9 @@ class FPocketFilter(BiobbObject):
         self.locals_var_dict = locals().copy()
 
         # Input/Output files
-        self.io_dict = { 
-            "in": { "input_pockets_zip": input_pockets_zip, "input_summary": input_summary }, 
-            "out": { "output_filter_pockets_zip": output_filter_pockets_zip } 
+        self.io_dict = {
+            "in": {"input_pockets_zip": input_pockets_zip, "input_summary": input_summary},
+            "out": {"output_filter_pockets_zip": output_filter_pockets_zip}
         }
 
         # Properties specific for BB
@@ -77,8 +78,8 @@ class FPocketFilter(BiobbObject):
     def check_data_params(self, out_log, err_log):
         """ Checks all the input/output paths and parameters """
         self.io_dict["in"]["input_pockets_zip"] = check_input_path(self.io_dict["in"]["input_pockets_zip"], "input_pockets_zip", out_log, self.__class__.__name__)
-        self.io_dict["in"]["input_summary"] = check_output_path(self.io_dict["in"]["input_summary"],"input_summary", False, out_log, self.__class__.__name__)
-        self.io_dict["out"]["output_filter_pockets_zip"] = check_output_path(self.io_dict["out"]["output_filter_pockets_zip"],"output_filter_pockets_zip", True, out_log, self.__class__.__name__)
+        self.io_dict["in"]["input_summary"] = check_output_path(self.io_dict["in"]["input_summary"], "input_summary", False, out_log, self.__class__.__name__)
+        self.io_dict["out"]["output_filter_pockets_zip"] = check_output_path(self.io_dict["out"]["output_filter_pockets_zip"], "output_filter_pockets_zip", True, out_log, self.__class__.__name__)
 
     def score_matcher(self, score):
         return lambda d: d['score'] > score[0] and d['score'] <= score[1]
@@ -97,7 +98,8 @@ class FPocketFilter(BiobbObject):
         self.check_data_params(self.out_log, self.err_log)
 
         # Setup Biobb
-        if self.check_restart(): return 0
+        if self.check_restart():
+            return 0
         self.stage_files()
 
         # load input_summary into a dictionary
@@ -107,23 +109,23 @@ class FPocketFilter(BiobbObject):
         # build search_list
         search_list = []
         ranges = {}
-        if self.score: 
-            check_range('score', self.score, [0,1], self.out_log, self.__class__.__name__)
+        if self.score:
+            check_range('score', self.score, [0, 1], self.out_log, self.__class__.__name__)
             search_list.append(self.score_matcher(self.score))
             ranges['score'] = self.score
-        if self.druggability_score: 
-            check_range('druggability_score', self.druggability_score, [0,1], self.out_log, self.__class__.__name__)
+        if self.druggability_score:
+            check_range('druggability_score', self.druggability_score, [0, 1], self.out_log, self.__class__.__name__)
             search_list.append(self.druggability_score_matcher(self.druggability_score))
             ranges['druggability_score'] = self.druggability_score
-        if self.volume: 
-            check_range('volume', self.volume, [0,10000], self.out_log, self.__class__.__name__)
+        if self.volume:
+            check_range('volume', self.volume, [0, 10000], self.out_log, self.__class__.__name__)
             search_list.append(self.volume_matcher(self.volume))
             ranges['volume'] = self.volume
 
-        fu.log('Performing a search under the next parameters: %s' % (', '.join(['{0}: {1}'.format(k, v) for k,v in ranges.items()])), self.out_log)
+        fu.log('Performing a search under the next parameters: %s' % (', '.join(['{0}: {1}'.format(k, v) for k, v in ranges.items()])), self.out_log)
 
         # perform search
-        search = [ x for x in data if all([f(data[x]) for f in search_list]) ]
+        search = [x for x in data if all([f(data[x]) for f in search_list])]
 
         if len(search) == 0:
             fu.log('No matches found', self.out_log)
@@ -140,11 +142,11 @@ class FPocketFilter(BiobbObject):
         fu.log('Creating %s temporary folder' % self.tmp_folder, self.out_log)
 
         process_output_fpocket_filter(search,
-                                    self.tmp_folder,
-                                    self.io_dict["in"]["input_pockets_zip"],
-                                    self.io_dict["out"]["output_filter_pockets_zip"],
-                                    self.remove_tmp, 
-                                    self.out_log)
+                                      self.tmp_folder,
+                                      self.io_dict["in"]["input_pockets_zip"],
+                                      self.io_dict["out"]["output_filter_pockets_zip"],
+                                      self.remove_tmp,
+                                      self.out_log)
 
         # Copy files to host
         self.copy_to_host()
@@ -159,14 +161,16 @@ class FPocketFilter(BiobbObject):
 
         return 0
 
-def fpocket_filter(input_pockets_zip: str, input_summary: str, output_filter_pockets_zip:str, properties: dict = None, **kwargs) -> int:
+
+def fpocket_filter(input_pockets_zip: str, input_summary: str, output_filter_pockets_zip: str, properties: dict = None, **kwargs) -> int:
     """Execute the :class:`FPocketFilter <fpocket.fpocket_filter.FPocketFilter>` class and
     execute the :meth:`launch() <fpocket.fpocket_filter.FPocketFilter.launch>` method."""
 
     return FPocketFilter(input_pockets_zip=input_pockets_zip,
-                input_summary=input_summary,
-                output_filter_pockets_zip=output_filter_pockets_zip,
-                properties=properties, **kwargs).launch()
+                         input_summary=input_summary,
+                         output_filter_pockets_zip=output_filter_pockets_zip,
+                         properties=properties, **kwargs).launch()
+
 
 def main():
     """Command line execution of this building block. Please check the command line documentation."""
@@ -184,10 +188,11 @@ def main():
     properties = settings.ConfReader(config=args.config).get_prop_dic()
 
     # Specific call of each building block
-    fpocket_filter(input_pockets_zip=args.input_pockets_zip, 
-            input_summary=args.input_summary, 
-            output_filter_pockets_zip=args.output_filter_pockets_zip, 
-            properties=properties)
+    fpocket_filter(input_pockets_zip=args.input_pockets_zip,
+                   input_summary=args.input_summary,
+                   output_filter_pockets_zip=args.output_filter_pockets_zip,
+                   properties=properties)
+
 
 if __name__ == '__main__':
     main()

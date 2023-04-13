@@ -13,6 +13,6 @@ class TestFPocketRun():
     def test_fpocket_run(self):
         fpocket_run(properties=self.properties, **self.paths)
         assert fx.not_empty(self.paths['output_pockets_zip'])
-        #assert fx.equal(self.paths['output_pockets_zip'], self.paths['ref_output_pockets_zip'])
+        # assert fx.equal(self.paths['output_pockets_zip'], self.paths['ref_output_pockets_zip'])
         assert fx.not_empty(self.paths['output_summary'])
-        #assert fx.equal(self.paths['output_summary'], self.paths['ref_output_summary'])
+        # assert fx.equal(self.paths['output_summary'], self.paths['ref_output_summary'])

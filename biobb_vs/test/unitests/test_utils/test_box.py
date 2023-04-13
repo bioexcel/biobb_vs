@@ -4,7 +4,7 @@ from biobb_vs.utils.box import box
 
 class TestBox():
     def setup_class(self):
-        fx.test_setup(self,'box')
+        fx.test_setup(self, 'box')
 
     def teardown_class(self):
         fx.test_teardown(self)

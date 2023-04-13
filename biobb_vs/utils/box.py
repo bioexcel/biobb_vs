@@ -2,11 +2,13 @@
 
 """Module containing the Box class and the command line interface."""
 import argparse
+import numpy as np
+from pathlib import PurePath
 from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.configuration import  settings
+from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
-from biobb_vs.utils.common import *
+from biobb_vs.utils.common import check_input_path, check_output_path, get_box_coordinates
 
 
 class Box(BiobbObject):
@@ -28,12 +30,12 @@ class Box(BiobbObject):
         This is a use example of how to use the building block from Python::
 
             from biobb_vs.utils.box import box
-            prop = { 
+            prop = {
                 'offset': 2,
                 'box_coordinates': True
             }
-            box(input_pdb_path='/path/to/myPocket.pqr', 
-                output_pdb_path='/path/to/newBox.pdb', 
+            box(input_pdb_path='/path/to/myPocket.pqr',
+                output_pdb_path='/path/to/newBox.pdb',
                 properties=prop)
 
     Info:
@@ -46,8 +48,8 @@ class Box(BiobbObject):
 
     """
 
-    def __init__(self, input_pdb_path, output_pdb_path, 
-                properties=None, **kwargs) -> None:
+    def __init__(self, input_pdb_path, output_pdb_path,
+                 properties=None, **kwargs) -> None:
         properties = properties or {}
 
         # Call parent class constructor
@@ -55,9 +57,9 @@ class Box(BiobbObject):
         self.locals_var_dict = locals().copy()
 
         # Input/Output files
-        self.io_dict = { 
-            "in": { "input_pdb_path": input_pdb_path },
-            "out": { "output_pdb_path": output_pdb_path } 
+        self.io_dict = {
+            "in": {"input_pdb_path": input_pdb_path},
+            "out": {"output_pdb_path": output_pdb_path}
         }
 
         # Properties specific for BB
@@ -71,8 +73,8 @@ class Box(BiobbObject):
 
     def check_data_params(self, out_log, err_log):
         """ Checks all the input/output paths and parameters """
-        self.io_dict["in"]["input_pdb_path"] = check_input_path(self.io_dict["in"]["input_pdb_path"],"input_pdb_path", self.out_log, self.__class__.__name__)
-        self.io_dict["out"]["output_pdb_path"] = check_output_path(self.io_dict["out"]["output_pdb_path"],"output_pdb_path", False, self.out_log, self.__class__.__name__)
+        self.io_dict["in"]["input_pdb_path"] = check_input_path(self.io_dict["in"]["input_pdb_path"], "input_pdb_path", self.out_log, self.__class__.__name__)
+        self.io_dict["out"]["output_pdb_path"] = check_output_path(self.io_dict["out"]["output_pdb_path"], "output_pdb_path", False, self.out_log, self.__class__.__name__)
 
     @launchlogger
     def launch(self) -> int:
@@ -82,7 +84,8 @@ class Box(BiobbObject):
         self.check_data_params(self.out_log, self.err_log)
 
         # Setup Biobb
-        if self.check_restart(): return 0
+        if self.check_restart():
+            return 0
         self.stage_files()
 
         # check if cavity (pdb) or pocket (pqr)
@@ -92,46 +95,46 @@ class Box(BiobbObject):
         else:
             fu.log('Loading pocket PQR selection from %s' % (self.io_dict["in"]["input_pdb_path"]), self.out_log, self.global_log)
 
-        # get input_pdb_path atoms coordinates 
+        # get input_pdb_path atoms coordinates
         selection_atoms_num = 0
         x_coordslist = []
         y_coordslist = []
         z_coordslist = []
         with open(self.io_dict["in"]["input_pdb_path"]) as infile:
             for line in infile:
-                if line.startswith("HETATM") or line.startswith("ATOM"): 
+                if line.startswith("HETATM") or line.startswith("ATOM"):
                     x_coordslist.append(float(line[31:38].strip()))
                     y_coordslist.append(float(line[39:46].strip()))
                     z_coordslist.append(float(line[47:54].strip()))
                     selection_atoms_num = selection_atoms_num + 1
 
-        ## Compute binding site box size
+        # Compute binding site box size
 
         # compute box center
         selection_box_center = [np.average(x_coordslist), np.average(y_coordslist), np.average(z_coordslist)]
-        fu.log('Binding site center (Angstroms): %10.3f%10.3f%10.3f' % (selection_box_center[0],selection_box_center[1],selection_box_center[2]), self.out_log, self.global_log)
+        fu.log('Binding site center (Angstroms): %10.3f%10.3f%10.3f' % (selection_box_center[0], selection_box_center[1], selection_box_center[2]), self.out_log, self.global_log)
 
         # compute box size
-        selection_coords_max = np.amax([x_coordslist, y_coordslist, z_coordslist],axis=1)
-        selection_box_size   = selection_coords_max - selection_box_center
+        selection_coords_max = np.amax([x_coordslist, y_coordslist, z_coordslist], axis=1)
+        selection_box_size = selection_coords_max - selection_box_center
         if self.offset:
             fu.log('Adding %.1f Angstroms offset' % (self.offset), self.out_log, self.global_log)
             selection_box_size = [c + self.offset for c in selection_box_size]
-        fu.log('Binding site size (Angstroms):   %10.3f%10.3f%10.3f' % (selection_box_size[0],selection_box_size[1],selection_box_size[2]), self.out_log, self.global_log)
+        fu.log('Binding site size (Angstroms):   %10.3f%10.3f%10.3f' % (selection_box_size[0], selection_box_size[1], selection_box_size[2]), self.out_log, self.global_log)
 
         # compute volume
         vol = np.prod(selection_box_size) * 2**3
         fu.log('Volume (cubic Angstroms): %.0f' % (vol), self.out_log, self.global_log)
 
         # add box details as PDB remarks
-        remarks = "REMARK BOX CENTER:%10.3f%10.3f%10.3f" % (selection_box_center[0],selection_box_center[1],selection_box_center[2])
-        remarks += " SIZE:%10.3f%10.3f%10.3f" % (selection_box_size[0],selection_box_size[1],selection_box_size[2])
+        remarks = "REMARK BOX CENTER:%10.3f%10.3f%10.3f" % (selection_box_center[0], selection_box_center[1], selection_box_center[2])
+        remarks += " SIZE:%10.3f%10.3f%10.3f" % (selection_box_size[0], selection_box_size[1], selection_box_size[2])
 
-        selection_box_coords_txt   = ""
+        selection_box_coords_txt = ""
         # add (optional) box coordinates as 8 ATOM records
         if self.box_coordinates:
             fu.log('Adding box coordinates', self.out_log, self.global_log)
-            selection_box_coords_txt  = get_box_coordinates(selection_box_center,selection_box_size)
+            selection_box_coords_txt = get_box_coordinates(selection_box_center, selection_box_size)
 
         with open(self.io_dict["out"]["output_pdb_path"], 'w') as f:
             f.seek(0, 0)
@@ -151,13 +154,15 @@ class Box(BiobbObject):
 
         return 0
 
+
 def box(input_pdb_path: str, output_pdb_path: str, properties: dict = None, **kwargs) -> int:
     """Execute the :class:`Box <utils.box.Box>` class and
     execute the :meth:`launch() <utils.box.Box.launch>` method."""
 
     return Box(input_pdb_path=input_pdb_path,
-                output_pdb_path=output_pdb_path,
-                properties=properties, **kwargs).launch()
+               output_pdb_path=output_pdb_path,
+               properties=properties, **kwargs).launch()
+
 
 def main():
     """Command line execution of this building block. Please check the command line documentation."""
@@ -174,9 +179,10 @@ def main():
     properties = settings.ConfReader(config=args.config).get_prop_dic()
 
     # Specific call of each building block
-    box(input_pdb_path=args.input_pdb_path, 
-        output_pdb_path=args.output_pdb_path, 
+    box(input_pdb_path=args.input_pdb_path,
+        output_pdb_path=args.output_pdb_path,
         properties=properties)
+
 
 if __name__ == '__main__':
     main()

@@ -2,11 +2,24 @@
 
 """Module containing the BoxResidues class and the command line interface."""
 import argparse
+import numpy as np
+from pathlib import PurePath
 from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.configuration import  settings
+from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
-from biobb_vs.utils.common import *
+from biobb_vs.utils.common import check_input_path, check_output_path, get_box_coordinates
+
+from Bio import BiopythonDeprecationWarning
+import warnings
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", BiopythonDeprecationWarning)
+    import Bio.PDB
+    import Bio.pairwise2
+    try:
+        import Bio.SubsMat.MatrixInfo
+    except ImportError:
+        import Bio.Align.substitution_matrices
 
 
 class BoxResidues(BiobbObject):
@@ -30,13 +43,13 @@ class BoxResidues(BiobbObject):
         This is a use example of how to use the building block from Python::
 
             from biobb_vs.utils.box_residues import box_residues
-            prop = { 
+            prop = {
                 'resid_list': [718, 743, 745, 762, 766, 796, 790, 791, 793, 794, 788],
                 'offset': 2,
                 'box_coordinates': True
             }
-            box_residues(input_pdb_path='/path/to/myStructure.pdb', 
-                        output_pdb_path='/path/to/newBox.pdb', 
+            box_residues(input_pdb_path='/path/to/myStructure.pdb',
+                        output_pdb_path='/path/to/newBox.pdb',
                         properties=prop)
 
     Info:
@@ -50,8 +63,8 @@ class BoxResidues(BiobbObject):
 
     """
 
-    def __init__(self, input_pdb_path, output_pdb_path, 
-                properties=None, **kwargs) -> None:
+    def __init__(self, input_pdb_path, output_pdb_path,
+                 properties=None, **kwargs) -> None:
         properties = properties or {}
 
         # Call parent class constructor
@@ -59,9 +72,9 @@ class BoxResidues(BiobbObject):
         self.locals_var_dict = locals().copy()
 
         # Input/Output files
-        self.io_dict = { 
-            "in": { "input_pdb_path": input_pdb_path },
-            "out": { "output_pdb_path": output_pdb_path } 
+        self.io_dict = {
+            "in": {"input_pdb_path": input_pdb_path},
+            "out": {"output_pdb_path": output_pdb_path}
         }
 
         # Properties specific for BB
@@ -77,8 +90,8 @@ class BoxResidues(BiobbObject):
 
     def check_data_params(self, out_log, err_log):
         """ Checks all the input/output paths and parameters """
-        self.io_dict["in"]["input_pdb_path"] = check_input_path(self.io_dict["in"]["input_pdb_path"],"input_pdb_path", self.out_log, self.__class__.__name__)
-        self.io_dict["out"]["output_pdb_path"] = check_output_path(self.io_dict["out"]["output_pdb_path"],"output_pdb_path", False, self.out_log, self.__class__.__name__)
+        self.io_dict["in"]["input_pdb_path"] = check_input_path(self.io_dict["in"]["input_pdb_path"], "input_pdb_path", self.out_log, self.__class__.__name__)
+        self.io_dict["out"]["output_pdb_path"] = check_output_path(self.io_dict["out"]["output_pdb_path"], "output_pdb_path", False, self.out_log, self.__class__.__name__)
 
     @launchlogger
     def launch(self) -> int:
@@ -88,19 +101,20 @@ class BoxResidues(BiobbObject):
         self.check_data_params(self.out_log, self.err_log)
 
         # Setup Biobb
-        if self.check_restart(): return 0
+        if self.check_restart():
+            return 0
         self.stage_files()
 
         # Parse structure
         fu.log('Loading input PDB structure %s' % (self.io_dict["in"]["input_pdb_path"]), self.out_log, self.global_log)
         structure_name = PurePath(self.io_dict["in"]["input_pdb_path"]).name
-        parser      = Bio.PDB.PDBParser(QUIET = True)
-        structPDB   = parser.get_structure(structure_name, self.io_dict["in"]["input_pdb_path"])
+        parser = Bio.PDB.PDBParser(QUIET=True)
+        structPDB = parser.get_structure(structure_name, self.io_dict["in"]["input_pdb_path"])
 
         if len(structPDB):
             structPDB = structPDB[0]
 
-        ## Mapping residue structure into input structure
+        # Mapping residue structure into input structure
 
         fu.log('Mapping residue structure into input structure', self.out_log, self.global_log)
 
@@ -112,8 +126,8 @@ class BoxResidues(BiobbObject):
             else:
                 residPDB_res_list.append((' ', residPDB_res, ' '))
 
-        selection_res_list   = []
-        selection_atoms_num  = 0
+        selection_res_list = []
+        selection_atoms_num = 0
         for struct_chain in structPDB:
             for struct_res in struct_chain:
                 if struct_res.get_id() in residPDB_res_list:
@@ -123,37 +137,37 @@ class BoxResidues(BiobbObject):
         if len(selection_res_list) == 0:
             fu.log(self.__class__.__name__ + ': Cannot match any of the residues listed in [%s] into %s' % (', '.join(str(v) for v in self.resid_list), self.io_dict["in"]["input_pdb_path"]), self.out_log)
             raise SystemExit(self.__class__.__name__ + ': Cannot match any of the residues listed in [%s] into %s' % (', '.join(str(v) for v in self.resid_list), self.io_dict["in"]["input_pdb_path"]))
-        elif len(selection_res_list) !=  len(residPDB_res_list):
-            fu.log('Cannot match all the residues listed in %s into %s. Found %s out of %s' % (', '.join(str(v) for v in self.resid_list),self.io_dict["in"]["input_pdb_path"], len(selection_res_list),len(residPDB_res_list)), self.out_log)
+        elif len(selection_res_list) != len(residPDB_res_list):
+            fu.log('Cannot match all the residues listed in %s into %s. Found %s out of %s' % (', '.join(str(v) for v in self.resid_list), self.io_dict["in"]["input_pdb_path"], len(selection_res_list), len(residPDB_res_list)), self.out_log)
         else:
             fu.log('Selection of residues successfully matched', self.out_log, self.global_log)
 
-        ## Compute binding site box size
+        # Compute binding site box size
 
         # compute box center
         selection_box_center = sum(atom.coord for res in selection_res_list for atom in res.get_atoms()) / selection_atoms_num
-        fu.log('Binding site center (Angstroms): %10.3f%10.3f%10.3f' % (selection_box_center[0],selection_box_center[1],selection_box_center[2]), self.out_log, self.global_log)
+        fu.log('Binding site center (Angstroms): %10.3f%10.3f%10.3f' % (selection_box_center[0], selection_box_center[1], selection_box_center[2]), self.out_log, self.global_log)
 
         # compute box size
-        selection_coords_max = np.amax([atom.coord for res in selection_res_list for atom in res.get_atoms()],axis=0)
-        selection_box_size   = selection_coords_max - selection_box_center
+        selection_coords_max = np.amax([atom.coord for res in selection_res_list for atom in res.get_atoms()], axis=0)
+        selection_box_size = selection_coords_max - selection_box_center
         if self.offset:
             selection_box_size = [c + self.offset for c in selection_box_size]
-        fu.log('Binding site size (Angstroms):   %10.3f%10.3f%10.3f' % (selection_box_size[0],selection_box_size[1],selection_box_size[2]), self.out_log, self.global_log)
+        fu.log('Binding site size (Angstroms):   %10.3f%10.3f%10.3f' % (selection_box_size[0], selection_box_size[1], selection_box_size[2]), self.out_log, self.global_log)
 
         # compute volume
         vol = np.prod(selection_box_size) * 2**3
         fu.log('Volume (cubic Angstroms): %.0f' % (vol), self.out_log, self.global_log)
 
         # add box details as PDB remarks
-        remarks = "REMARK BOX CENTER:%10.3f%10.3f%10.3f" % (selection_box_center[0],selection_box_center[1],selection_box_center[2])
-        remarks += " SIZE:%10.3f%10.3f%10.3f" % (selection_box_size[0],selection_box_size[1],selection_box_size[2])
+        remarks = "REMARK BOX CENTER:%10.3f%10.3f%10.3f" % (selection_box_center[0], selection_box_center[1], selection_box_center[2])
+        remarks += " SIZE:%10.3f%10.3f%10.3f" % (selection_box_size[0], selection_box_size[1], selection_box_size[2])
 
-        selection_box_coords_txt   = ""
+        selection_box_coords_txt = ""
         # add (optional) box coordinates as 8 ATOM records
         if self.box_coordinates:
             fu.log('Adding box coordinates', self.out_log, self.global_log)
-            selection_box_coords_txt  = get_box_coordinates(selection_box_center,selection_box_size)
+            selection_box_coords_txt = get_box_coordinates(selection_box_center, selection_box_size)
 
         with open(self.io_dict["out"]["output_pdb_path"], 'w') as f:
             f.seek(0, 0)
@@ -171,13 +185,15 @@ class BoxResidues(BiobbObject):
 
         return 0
 
+
 def box_residues(input_pdb_path: str, output_pdb_path: str, properties: dict = None, **kwargs) -> int:
     """Execute the :class:`BoxResidues <utils.box_residues.BoxResidues>` class and
     execute the :meth:`launch() <utils.box_residues.BoxResidues.launch>` method."""
 
     return BoxResidues(input_pdb_path=input_pdb_path,
-                output_pdb_path=output_pdb_path,
-                properties=properties, **kwargs).launch()
+                       output_pdb_path=output_pdb_path,
+                       properties=properties, **kwargs).launch()
+
 
 def main():
     """Command line execution of this building block. Please check the command line documentation."""
@@ -194,9 +210,10 @@ def main():
     properties = settings.ConfReader(config=args.config).get_prop_dic()
 
     # Specific call of each building block
-    box_residues(input_pdb_path=args.input_pdb_path, 
-                output_pdb_path=args.output_pdb_path, 
-                properties=properties)
+    box_residues(input_pdb_path=args.input_pdb_path,
+                 output_pdb_path=args.output_pdb_path,
+                 properties=properties)
+
 
 if __name__ == '__main__':
     main()

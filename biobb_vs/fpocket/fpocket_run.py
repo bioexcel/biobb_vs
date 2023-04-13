@@ -2,11 +2,13 @@
 
 """Module containing the FPocketRun class and the command line interface."""
 import argparse
+import shutil
+from pathlib import PurePath
 from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.configuration import  settings
+from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
-from biobb_vs.fpocket.common import *
+from biobb_vs.fpocket.common import check_input_path, check_output_path, process_output_fpocket
 
 
 class FPocketRun(BiobbObject):
@@ -38,15 +40,15 @@ class FPocketRun(BiobbObject):
         This is a use example of how to use the building block from Python::
 
             from biobb_vs.fpocket.fpocket_run import fpocket_run
-            prop = { 
+            prop = {
                 'min_radius': 3,
                 'max_radius': 6,
                 'num_spheres': 35,
                 'sort_by': 'druggability_score'
             }
-            fpocket_run(input_pdb_path='/path/to/myStructure.pdb', 
-                    output_pockets_zip='/path/to/newPockets.zip', 
-                    output_summary='/path/to/newSummary.json', 
+            fpocket_run(input_pdb_path='/path/to/myStructure.pdb',
+                    output_pockets_zip='/path/to/newPockets.zip',
+                    output_summary='/path/to/newSummary.json',
                     properties=prop)
 
     Info:
@@ -60,7 +62,7 @@ class FPocketRun(BiobbObject):
 
     """
 
-    def __init__(self, input_pdb_path, output_pockets_zip, output_summary, 
+    def __init__(self, input_pdb_path, output_pockets_zip, output_summary,
                  properties=None, **kwargs) -> None:
         properties = properties or {}
 
@@ -69,9 +71,9 @@ class FPocketRun(BiobbObject):
         self.locals_var_dict = locals().copy()
 
         # Input/Output files
-        self.io_dict = { 
-            "in": { "input_pdb_path": input_pdb_path }, 
-            "out": { "output_pockets_zip": output_pockets_zip, "output_summary": output_summary } 
+        self.io_dict = {
+            "in": {"input_pdb_path": input_pdb_path},
+            "out": {"output_pockets_zip": output_pockets_zip, "output_summary": output_summary}
         }
 
         # Properties specific for BB
@@ -89,8 +91,8 @@ class FPocketRun(BiobbObject):
     def check_data_params(self, out_log, err_log):
         """ Checks all the input/output paths and parameters """
         self.io_dict["in"]["input_pdb_path"] = check_input_path(self.io_dict["in"]["input_pdb_path"], "input_pdb_path", out_log, self.__class__.__name__)
-        self.io_dict["out"]["output_pockets_zip"] = check_output_path(self.io_dict["out"]["output_pockets_zip"],"output_pockets_zip", False, out_log, self.__class__.__name__)
-        self.io_dict["out"]["output_summary"] = check_output_path(self.io_dict["out"]["output_summary"],"output_summary", True, out_log, self.__class__.__name__)
+        self.io_dict["out"]["output_pockets_zip"] = check_output_path(self.io_dict["out"]["output_pockets_zip"], "output_pockets_zip", False, out_log, self.__class__.__name__)
+        self.io_dict["out"]["output_summary"] = check_output_path(self.io_dict["out"]["output_summary"], "output_summary", True, out_log, self.__class__.__name__)
 
     @launchlogger
     def launch(self) -> int:
@@ -100,7 +102,8 @@ class FPocketRun(BiobbObject):
         self.check_data_params(self.out_log, self.err_log)
 
         # Setup Biobb
-        if self.check_restart(): return 0
+        if self.check_restart():
+            return 0
         self.stage_files()
 
         if self.container_path:
@@ -112,11 +115,11 @@ class FPocketRun(BiobbObject):
             fu.log('Creating %s temporary folder' % self.tmp_folder, self.out_log)
             tmp_input = str(PurePath(self.tmp_folder).joinpath('input.pdb'))
             # copy input_pdb_path to tmp_folder
-            shutil.copy(self.io_dict["in"]["input_pdb_path"], tmp_input)        
+            shutil.copy(self.io_dict["in"]["input_pdb_path"], tmp_input)
 
         # create cmd
         self.cmd = [self.binary_path,
-               '-f', tmp_input]
+                    '-f', tmp_input]
 
         # adding extra properties
         if self.min_radius:
@@ -137,12 +140,12 @@ class FPocketRun(BiobbObject):
         self.copy_to_host()
 
         process_output_fpocket(self.tmp_folder,
-                               self.io_dict["out"]["output_pockets_zip"], 
+                               self.io_dict["out"]["output_pockets_zip"],
                                self.io_dict["out"]["output_summary"],
                                self.sort_by,
-                               self.remove_tmp, 
+                               self.remove_tmp,
                                self.container_path,
-                               self.out_log, 
+                               self.out_log,
                                self.__class__.__name__)
 
         self.tmp_files.extend([
@@ -153,14 +156,16 @@ class FPocketRun(BiobbObject):
 
         return self.return_code
 
-def fpocket_run(input_pdb_path: str, output_pockets_zip: str, output_summary:str, properties: dict = None, **kwargs) -> int:
+
+def fpocket_run(input_pdb_path: str, output_pockets_zip: str, output_summary: str, properties: dict = None, **kwargs) -> int:
     """Execute the :class:`FPocketRun <fpocket.fpocket_run.FPocketRun>` class and
     execute the :meth:`launch() <fpocket.fpocket_run.FPocketRun.launch>` method."""
 
     return FPocketRun(input_pdb_path=input_pdb_path,
-                output_pockets_zip=output_pockets_zip,
-                output_summary=output_summary,
-                properties=properties, **kwargs).launch()
+                      output_pockets_zip=output_pockets_zip,
+                      output_summary=output_summary,
+                      properties=properties, **kwargs).launch()
+
 
 def main():
     """Command line execution of this building block. Please check the command line documentation."""
@@ -178,10 +183,11 @@ def main():
     properties = settings.ConfReader(config=args.config).get_prop_dic()
 
     # Specific call of each building block
-    fpocket_run(input_pdb_path=args.input_pdb_path, 
-            output_pockets_zip=args.output_pockets_zip, 
-            output_summary=args.output_summary, 
-            properties=properties)
+    fpocket_run(input_pdb_path=args.input_pdb_path,
+                output_pockets_zip=args.output_pockets_zip,
+                output_summary=args.output_summary,
+                properties=properties)
+
 
 if __name__ == '__main__':
     main()

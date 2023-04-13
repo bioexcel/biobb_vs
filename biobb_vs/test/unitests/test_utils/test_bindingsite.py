@@ -1,9 +1,10 @@
 from biobb_common.tools import test_fixtures as fx
 from biobb_vs.utils.bindingsite import bindingsite
 
+
 class TestBindingSite():
     def setup_class(self):
-        fx.test_setup(self,'bindingsite')
+        fx.test_setup(self, 'bindingsite')
 
     def teardown_class(self):
         fx.test_teardown(self)

@@ -1,10 +1,11 @@
+import pytest
 from biobb_common.tools import test_fixtures as fx
 from biobb_vs.vina.autodock_vina_run import autodock_vina_run
 
 
 class TestAutoDockVinaRunDocker():
     def setup_class(self):
-        fx.test_setup(self,'autodock_vina_run_docker')
+        fx.test_setup(self, 'autodock_vina_run_docker')
 
     def teardown_class(self):
         fx.test_teardown(self)
@@ -15,11 +16,11 @@ class TestAutoDockVinaRunDocker():
         assert fx.not_empty(self.paths['output_pdbqt_path'])
         assert fx.not_empty(self.paths['output_log_path'])
 
-import pytest
+
 @pytest.mark.skip(reason="singularity currently not available")
 class TestAutoDockVinaRunSingularity():
     def setup_class(self):
-        fx.test_setup(self,'autodock_vina_run_singularity')
+        fx.test_setup(self, 'autodock_vina_run_singularity')
 
     def teardown_class(self):
         fx.test_teardown(self)
@@ -29,4 +30,3 @@ class TestAutoDockVinaRunSingularity():
         autodock_vina_run(properties=self.properties, **self.paths)
         assert fx.not_empty(self.paths['output_pdbqt_path'])
         assert fx.not_empty(self.paths['output_log_path'])
-

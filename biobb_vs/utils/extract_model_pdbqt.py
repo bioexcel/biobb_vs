@@ -2,11 +2,23 @@
 
 """Module containing the ExtractModelPDBQT class and the command line interface."""
 import argparse
+from pathlib import PurePath
 from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.configuration import  settings
+from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
-from biobb_vs.utils.common import *
+from biobb_vs.utils.common import check_input_path, check_output_path
+
+from Bio import BiopythonDeprecationWarning
+import warnings
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", BiopythonDeprecationWarning)
+    import Bio.PDB
+    import Bio.pairwise2
+    try:
+        import Bio.SubsMat.MatrixInfo
+    except ImportError:
+        import Bio.Align.substitution_matrices
 
 
 class ExtractModelPDBQT(BiobbObject):
@@ -26,11 +38,11 @@ class ExtractModelPDBQT(BiobbObject):
         This is a use example of how to use the building block from Python::
 
             from biobb_vs.utils.extract_model_pdbqt import extract_model_pdbqt
-            prop = { 
+            prop = {
                 'model': 1
             }
-            extract_model_pdbqt(input_pdbqt_path='/path/to/myStructure.pdbqt', 
-                                output_pdbqt_path='/path/to/newStructure.pdbqt', 
+            extract_model_pdbqt(input_pdbqt_path='/path/to/myStructure.pdbqt',
+                                output_pdbqt_path='/path/to/newStructure.pdbqt',
                                 properties=prop)
 
     Info:
@@ -44,8 +56,8 @@ class ExtractModelPDBQT(BiobbObject):
 
     """
 
-    def __init__(self, input_pdbqt_path, output_pdbqt_path, 
-                properties=None, **kwargs) -> None:
+    def __init__(self, input_pdbqt_path, output_pdbqt_path,
+                 properties=None, **kwargs) -> None:
         properties = properties or {}
 
         # Call parent class constructor
@@ -53,9 +65,9 @@ class ExtractModelPDBQT(BiobbObject):
         self.locals_var_dict = locals().copy()
 
         # Input/Output files
-        self.io_dict = { 
-            "in": { "input_pdbqt_path": input_pdbqt_path },
-            "out": { "output_pdbqt_path": output_pdbqt_path } 
+        self.io_dict = {
+            "in": {"input_pdbqt_path": input_pdbqt_path},
+            "out": {"output_pdbqt_path": output_pdbqt_path}
         }
 
         # Properties specific for BB
@@ -68,8 +80,8 @@ class ExtractModelPDBQT(BiobbObject):
 
     def check_data_params(self, out_log, err_log):
         """ Checks all the input/output paths and parameters """
-        self.io_dict["in"]["input_pdbqt_path"] = check_input_path(self.io_dict["in"]["input_pdbqt_path"],"input_pdbqt_path", out_log, self.__class__.__name__)
-        self.io_dict["out"]["output_pdbqt_path"] = check_output_path(self.io_dict["out"]["output_pdbqt_path"],"output_pdbqt_path", False, out_log, self.__class__.__name__)
+        self.io_dict["in"]["input_pdbqt_path"] = check_input_path(self.io_dict["in"]["input_pdbqt_path"], "input_pdbqt_path", out_log, self.__class__.__name__)
+        self.io_dict["out"]["output_pdbqt_path"] = check_output_path(self.io_dict["out"]["output_pdbqt_path"], "output_pdbqt_path", False, out_log, self.__class__.__name__)
 
     @launchlogger
     def launch(self) -> int:
@@ -79,7 +91,8 @@ class ExtractModelPDBQT(BiobbObject):
         self.check_data_params(self.out_log, self.err_log)
 
         # Setup Biobb
-        if self.check_restart(): return 0
+        if self.check_restart():
+            return 0
         self.stage_files()
 
         if self.restart:
@@ -89,14 +102,14 @@ class ExtractModelPDBQT(BiobbObject):
                 return 0
 
         structure_name = PurePath(self.io_dict["in"]["input_pdbqt_path"]).name
-        parser      = Bio.PDB.PDBParser(QUIET = True)
-        structPDB   = parser.get_structure(structure_name, self.io_dict["in"]["input_pdbqt_path"])
+        parser = Bio.PDB.PDBParser(QUIET=True)
+        structPDB = parser.get_structure(structure_name, self.io_dict["in"]["input_pdbqt_path"])
 
         models = []
         for model in structPDB.get_models():
             models.append(model.id + 1)
 
-        if not self.model in models:
+        if self.model not in models:
             fu.log(self.__class__.__name__ + ': Selected model %d not found in %s structure.' % (self.model, self.io_dict["in"]["input_pdbqt_path"]), self.out_log)
             raise SystemExit(self.__class__.__name__ + ': Selected model %d not found in %s structure.' % (self.model, self.io_dict["in"]["input_pdbqt_path"]))
 
@@ -111,7 +124,7 @@ class ExtractModelPDBQT(BiobbObject):
                 if save and not line.startswith('MODEL'):
                     lines = lines + 1
                     output_pdb.write(line)
-                
+
         fu.log('Saving model %d to %s' % (self.model, self.io_dict["out"]["output_pdbqt_path"]), self.out_log)
 
         # Copy files to host
@@ -126,13 +139,15 @@ class ExtractModelPDBQT(BiobbObject):
 
         return 0
 
+
 def extract_model_pdbqt(input_pdbqt_path: str, output_pdbqt_path: str, properties: dict = None, **kwargs) -> int:
     """Execute the :class:`ExtractModelPDBQT <utils.extract_model_pdbqt.ExtractModelPDBQT>` class and
     execute the :meth:`launch() <utils.extract_model_pdbqt.ExtractModelPDBQT.launch>` method."""
 
     return ExtractModelPDBQT(input_pdbqt_path=input_pdbqt_path,
-                            output_pdbqt_path=output_pdbqt_path,
-                            properties=properties, **kwargs).launch()
+                             output_pdbqt_path=output_pdbqt_path,
+                             properties=properties, **kwargs).launch()
+
 
 def main():
     """Command line execution of this building block. Please check the command line documentation."""
@@ -149,9 +164,10 @@ def main():
     properties = settings.ConfReader(config=args.config).get_prop_dic()
 
     # Specific call of each building block
-    extract_model_pdbqt(input_pdbqt_path=args.input_pdbqt_path, 
-                        output_pdbqt_path=args.output_pdbqt_path, 
+    extract_model_pdbqt(input_pdbqt_path=args.input_pdbqt_path,
+                        output_pdbqt_path=args.output_pdbqt_path,
                         properties=properties)
+
 
 if __name__ == '__main__':
     main()

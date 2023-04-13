@@ -1,9 +1,10 @@
 from biobb_common.tools import test_fixtures as fx
 from biobb_vs.fpocket.fpocket_select import fpocket_select
 
+
 class TestFPocketSelect():
     def setup_class(self):
-        fx.test_setup(self,'fpocket_select')
+        fx.test_setup(self, 'fpocket_select')
 
     def teardown_class(self):
         fx.test_teardown(self)

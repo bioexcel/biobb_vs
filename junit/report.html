@@ -253,7 +253,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
 }
 </script>
     <h1>report.html</h1>
-    <p>Report generated on 14-Apr-2023 at 15:19:31 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.2.0</p>
+    <p>Report generated on 14-Apr-2023 at 15:20:45 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.2.0</p>
     <h2>Environment</h2>
     <table id="environment">
       <tr>
@@ -261,18 +261,18 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <td>true</td></tr>
       <tr>
         <td>Packages</td>
-        <td>{"pluggy": "1.0.0", "pytest": "7.2.0"}</td></tr>
+        <td>{"pluggy": "1.0.0", "pytest": "7.3.0"}</td></tr>
       <tr>
         <td>Platform</td>
-        <td>Linux-5.4.0-139-generic-x86_64-with-debian-bullseye-sid</td></tr>
+        <td>Linux-5.4.0-139-generic-x86_64-with-glibc2.31</td></tr>
       <tr>
         <td>Plugins</td>
         <td>{"cov": "4.0.0", "html": "3.2.0", "metadata": "2.0.4"}</td></tr>
       <tr>
         <td>Python</td>
-        <td>3.7.12</td></tr></table>
+        <td>3.9.16</td></tr></table>
     <h2>Summary</h2>
-    <p>8 tests ran in 21.97 seconds. </p>
+    <p>8 tests ran in 22.49 seconds. </p>
     <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">8 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">0 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
     <h2>Results</h2>
     <table id="results-table">
@@ -288,15 +288,15 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">biobb_vs/test/unitests/test_fpocket/test_fpocket_filter.py::TestFPocketFilter::test_fpocket_filter</td>
-          <td class="col-duration">0.89</td>
+          <td class="col-duration">0.05</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-14 15:19:11,145 [MainThread  ] [INFO ]  Executing biobb_vs.fpocket.fpocket_filter Version: 4.0.0
-2023-04-14 15:19:11,146 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_pockets.zip to /tmp/biobb/unitests_49/fpocket_filter/c59e80bf-07ac-4f8e-970f-caa23395e227
-2023-04-14 15:19:11,146 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_summary.json to /tmp/biobb/unitests_49/fpocket_filter/c59e80bf-07ac-4f8e-970f-caa23395e227
-2023-04-14 15:19:11,146 [MainThread  ] [INFO ]  Performing a search under the next parameters: score: [0.2, 1], druggability_score: [0.2, 0.9], volume: [100, 600]
-2023-04-14 15:19:11,146 [MainThread  ] [INFO ]  Found 4 matches:
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-14 15:20:23,666 [MainThread  ] [INFO ]  Executing biobb_vs.fpocket.fpocket_filter Version: 4.0.0
+2023-04-14 15:20:23,667 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_pockets.zip to /tmp/biobb/unitests_49/fpocket_filter/f86eac8c-ab7f-48b3-bb3c-8db74c81ffd3
+2023-04-14 15:20:23,667 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_summary.json to /tmp/biobb/unitests_49/fpocket_filter/f86eac8c-ab7f-48b3-bb3c-8db74c81ffd3
+2023-04-14 15:20:23,667 [MainThread  ] [INFO ]  Performing a search under the next parameters: score: [0.2, 1], druggability_score: [0.2, 0.9], volume: [100, 600]
+2023-04-14 15:20:23,667 [MainThread  ] [INFO ]  Found 4 matches:
 **********
 pocket1
 **********
@@ -325,23 +325,23 @@ score: 0.279
 druggability_score: 0.218
 volume: 327.622
 
-2023-04-14 15:19:11,147 [MainThread  ] [INFO ]  Creating da02b97d-d50e-449e-94ba-37147f0c7541 temporary folder
-2023-04-14 15:19:11,150 [MainThread  ] [INFO ]  Extracting: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_pockets.zip
-2023-04-14 15:19:11,150 [MainThread  ] [INFO ]  to:
-2023-04-14 15:19:11,151 [MainThread  ] [INFO ]  [&#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket10_atm.pdb&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket10_vert.pqr&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket11_atm.pdb&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket11_vert.pqr&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket12_atm.pdb&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket12_vert.pqr&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket1_atm.pdb&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket1_vert.pqr&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket2_atm.pdb&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket2_vert.pqr&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket3_atm.pdb&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket3_vert.pqr&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket4_atm.pdb&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket4_vert.pqr&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket5_atm.pdb&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket5_vert.pqr&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket6_atm.pdb&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket6_vert.pqr&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket7_atm.pdb&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket7_vert.pqr&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket8_atm.pdb&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket8_vert.pqr&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket9_atm.pdb&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket9_vert.pqr&#x27;]
-2023-04-14 15:19:11,151 [MainThread  ] [INFO ]  Creating /tmp/biobb/unitests_49/fpocket_filter/output_filter_pockets.zip output file
-2023-04-14 15:19:11,152 [MainThread  ] [INFO ]  Adding:
-2023-04-14 15:19:11,152 [MainThread  ] [INFO ]  [&#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket1_atm.pdb&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket1_vert.pqr&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket2_atm.pdb&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket2_vert.pqr&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket4_atm.pdb&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket4_vert.pqr&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket7_atm.pdb&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket7_vert.pqr&#x27;]
-2023-04-14 15:19:11,152 [MainThread  ] [INFO ]  to: /tmp/biobb/unitests_49/fpocket_filter/output_filter_pockets.zip
-2023-04-14 15:19:11,153 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_49/fpocket_filter/c59e80bf-07ac-4f8e-970f-caa23395e227&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541&#x27;]
+2023-04-14 15:20:23,667 [MainThread  ] [INFO ]  Creating 1db06031-9b17-499c-a2bd-2dd788495267 temporary folder
+2023-04-14 15:20:23,671 [MainThread  ] [INFO ]  Extracting: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_pockets.zip
+2023-04-14 15:20:23,671 [MainThread  ] [INFO ]  to:
+2023-04-14 15:20:23,671 [MainThread  ] [INFO ]  [&#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket10_atm.pdb&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket10_vert.pqr&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket11_atm.pdb&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket11_vert.pqr&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket12_atm.pdb&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket12_vert.pqr&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket1_atm.pdb&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket1_vert.pqr&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket2_atm.pdb&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket2_vert.pqr&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket3_atm.pdb&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket3_vert.pqr&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket4_atm.pdb&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket4_vert.pqr&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket5_atm.pdb&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket5_vert.pqr&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket6_atm.pdb&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket6_vert.pqr&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket7_atm.pdb&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket7_vert.pqr&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket8_atm.pdb&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket8_vert.pqr&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket9_atm.pdb&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket9_vert.pqr&#x27;]
+2023-04-14 15:20:23,672 [MainThread  ] [INFO ]  Creating /tmp/biobb/unitests_49/fpocket_filter/output_filter_pockets.zip output file
+2023-04-14 15:20:23,672 [MainThread  ] [INFO ]  Adding:
+2023-04-14 15:20:23,673 [MainThread  ] [INFO ]  [&#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket1_atm.pdb&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket1_vert.pqr&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket2_atm.pdb&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket2_vert.pqr&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket4_atm.pdb&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket4_vert.pqr&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket7_atm.pdb&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket7_vert.pqr&#x27;]
+2023-04-14 15:20:23,673 [MainThread  ] [INFO ]  to: /tmp/biobb/unitests_49/fpocket_filter/output_filter_pockets.zip
+2023-04-14 15:20:23,673 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_49/fpocket_filter/f86eac8c-ab7f-48b3-bb3c-8db74c81ffd3&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267&#x27;]
 Checking if empty file: /tmp/biobb/unitests_49/fpocket_filter/output_filter_pockets.zip
 This is a ZIP comparison!
 Unzipping:
 Creating a unique_dir for: /tmp/biobb/unitests_49/fpocket_filter/output_filter_pockets.zip
 Creating a unique_dir for: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/reference/fpocket/ref_output_filter_pockets.zip
 Checking RMSD between:
-     PDB_A: 4ed8f14c-acf4-4072-a74f-01a109cb8db2/pocket1_atm.pdb
-     PDB_B: 6f84836a-09db-48fc-9792-d6abd052f55f/pocket1_atm.pdb
+     PDB_A: 8afbcd5f-f482-4882-9cb4-a38266d2fd00/pocket1_atm.pdb
+     PDB_B: 14bd8e6b-d40e-431f-a59c-e6851ac88718/pocket1_atm.pdb
      Ignoring HETAMT in RMSD
      Ignoring Hydrogen atoms in RMSD
      Atoms ALIGNED in PDB_A: 54
@@ -349,13 +349,13 @@ Checking RMSD between:
      RMS: 5.430670212477102e-15
      RMS_CUTOFF: 1
 Comparing: 
-        File_A: 4ed8f14c-acf4-4072-a74f-01a109cb8db2/pocket1_vert.pqr
-        File_B: 6f84836a-09db-48fc-9792-d6abd052f55f/pocket1_vert.pqr
+        File_A: 8afbcd5f-f482-4882-9cb4-a38266d2fd00/pocket1_vert.pqr
+        File_B: 14bd8e6b-d40e-431f-a59c-e6851ac88718/pocket1_vert.pqr
         File_A hash: b&#x27;~\xd7\xaf\xe7\xb4\xbd9$]\xa9\xe8\xc1\xa7\x01\xcdk43OJR\x1e\x8cf\x19\xbc`\xdc\x908\x9af&#x27;
         File_B hash: b&#x27;~\xd7\xaf\xe7\xb4\xbd9$]\xa9\xe8\xc1\xa7\x01\xcdk43OJR\x1e\x8cf\x19\xbc`\xdc\x908\x9af&#x27;
 Checking RMSD between:
-     PDB_A: 4ed8f14c-acf4-4072-a74f-01a109cb8db2/pocket2_atm.pdb
-     PDB_B: 6f84836a-09db-48fc-9792-d6abd052f55f/pocket2_atm.pdb
+     PDB_A: 8afbcd5f-f482-4882-9cb4-a38266d2fd00/pocket2_atm.pdb
+     PDB_B: 14bd8e6b-d40e-431f-a59c-e6851ac88718/pocket2_atm.pdb
      Ignoring HETAMT in RMSD
      Ignoring Hydrogen atoms in RMSD
      Atoms ALIGNED in PDB_A: 47
@@ -363,13 +363,13 @@ Checking RMSD between:
      RMS: 4.257583416153358e-15
      RMS_CUTOFF: 1
 Comparing: 
-        File_A: 4ed8f14c-acf4-4072-a74f-01a109cb8db2/pocket2_vert.pqr
-        File_B: 6f84836a-09db-48fc-9792-d6abd052f55f/pocket2_vert.pqr
+        File_A: 8afbcd5f-f482-4882-9cb4-a38266d2fd00/pocket2_vert.pqr
+        File_B: 14bd8e6b-d40e-431f-a59c-e6851ac88718/pocket2_vert.pqr
         File_A hash: b&#x27;\xc0\xd1\x86\xe2\xe9p\xcc\x92a\x80$\xa6/\xc2O\x8e\x96d)\xc5QZ\x9bx\xa1\xc6r4H\xdc\xe1Q&#x27;
         File_B hash: b&#x27;\xc0\xd1\x86\xe2\xe9p\xcc\x92a\x80$\xa6/\xc2O\x8e\x96d)\xc5QZ\x9bx\xa1\xc6r4H\xdc\xe1Q&#x27;
 Checking RMSD between:
-     PDB_A: 4ed8f14c-acf4-4072-a74f-01a109cb8db2/pocket4_atm.pdb
-     PDB_B: 6f84836a-09db-48fc-9792-d6abd052f55f/pocket4_atm.pdb
+     PDB_A: 8afbcd5f-f482-4882-9cb4-a38266d2fd00/pocket4_atm.pdb
+     PDB_B: 14bd8e6b-d40e-431f-a59c-e6851ac88718/pocket4_atm.pdb
      Ignoring HETAMT in RMSD
      Ignoring Hydrogen atoms in RMSD
      Atoms ALIGNED in PDB_A: 25
@@ -377,13 +377,13 @@ Checking RMSD between:
      RMS: 1.368774871883577e-15
      RMS_CUTOFF: 1
 Comparing: 
-        File_A: 4ed8f14c-acf4-4072-a74f-01a109cb8db2/pocket4_vert.pqr
-        File_B: 6f84836a-09db-48fc-9792-d6abd052f55f/pocket4_vert.pqr
+        File_A: 8afbcd5f-f482-4882-9cb4-a38266d2fd00/pocket4_vert.pqr
+        File_B: 14bd8e6b-d40e-431f-a59c-e6851ac88718/pocket4_vert.pqr
         File_A hash: b&#x27;\xaa1-aO#\x87?\x1a\x18tH)\x93\x10\x82\x814\xc7\xca\x8bL\xae\xd9\xfa\xe0l\xcd-\xf4\xc26&#x27;
         File_B hash: b&#x27;\xaa1-aO#\x87?\x1a\x18tH)\x93\x10\x82\x814\xc7\xca\x8bL\xae\xd9\xfa\xe0l\xcd-\xf4\xc26&#x27;
 Checking RMSD between:
-     PDB_A: 4ed8f14c-acf4-4072-a74f-01a109cb8db2/pocket7_atm.pdb
-     PDB_B: 6f84836a-09db-48fc-9792-d6abd052f55f/pocket7_atm.pdb
+     PDB_A: 8afbcd5f-f482-4882-9cb4-a38266d2fd00/pocket7_atm.pdb
+     PDB_B: 14bd8e6b-d40e-431f-a59c-e6851ac88718/pocket7_atm.pdb
      Ignoring HETAMT in RMSD
      Ignoring Hydrogen atoms in RMSD
      Atoms ALIGNED in PDB_A: 31
@@ -391,13 +391,13 @@ Checking RMSD between:
      RMS: 4.99504864442653e-15
      RMS_CUTOFF: 1
 Comparing: 
-        File_A: 4ed8f14c-acf4-4072-a74f-01a109cb8db2/pocket7_vert.pqr
-        File_B: 6f84836a-09db-48fc-9792-d6abd052f55f/pocket7_vert.pqr
+        File_A: 8afbcd5f-f482-4882-9cb4-a38266d2fd00/pocket7_vert.pqr
+        File_B: 14bd8e6b-d40e-431f-a59c-e6851ac88718/pocket7_vert.pqr
         File_A hash: b&#x27;\xcd\r\xc1\xcf\x02\xcb\x05\xaa\x97\xcfWmr\x88m\xa0\xe4\x97\x0c\xd1\xc4\xe3\xca\xed\x99\xbf\xf0\xbf\xf3\x88\x1eO&#x27;
         File_B hash: b&#x27;\xcd\r\xc1\xcf\x02\xcb\x05\xaa\x97\xcfWmr\x88m\xa0\xe4\x97\x0c\xd1\xc4\xe3\xca\xed\x99\xbf\xf0\xbf\xf3\x88\x1eO&#x27;
 <br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_49/fpocket_filter/fpocket_filter_log.out:file_utils.py:346 Executing biobb_vs.fpocket.fpocket_filter Version: 4.0.0
-INFO     /tmp/biobb/unitests_49/fpocket_filter/fpocket_filter_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_pockets.zip to /tmp/biobb/unitests_49/fpocket_filter/c59e80bf-07ac-4f8e-970f-caa23395e227
-INFO     /tmp/biobb/unitests_49/fpocket_filter/fpocket_filter_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_summary.json to /tmp/biobb/unitests_49/fpocket_filter/c59e80bf-07ac-4f8e-970f-caa23395e227
+INFO     /tmp/biobb/unitests_49/fpocket_filter/fpocket_filter_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_pockets.zip to /tmp/biobb/unitests_49/fpocket_filter/f86eac8c-ab7f-48b3-bb3c-8db74c81ffd3
+INFO     /tmp/biobb/unitests_49/fpocket_filter/fpocket_filter_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_summary.json to /tmp/biobb/unitests_49/fpocket_filter/f86eac8c-ab7f-48b3-bb3c-8db74c81ffd3
 INFO     /tmp/biobb/unitests_49/fpocket_filter/fpocket_filter_log.out:file_utils.py:346 Performing a search under the next parameters: score: [0.2, 1], druggability_score: [0.2, 0.9], volume: [100, 600]
 INFO     /tmp/biobb/unitests_49/fpocket_filter/fpocket_filter_log.out:file_utils.py:346 Found 4 matches:
 **********
@@ -428,50 +428,50 @@ score: 0.279
 druggability_score: 0.218
 volume: 327.622
 
-INFO     /tmp/biobb/unitests_49/fpocket_filter/fpocket_filter_log.out:file_utils.py:346 Creating da02b97d-d50e-449e-94ba-37147f0c7541 temporary folder
+INFO     /tmp/biobb/unitests_49/fpocket_filter/fpocket_filter_log.out:file_utils.py:346 Creating 1db06031-9b17-499c-a2bd-2dd788495267 temporary folder
 INFO     /tmp/biobb/unitests_49/fpocket_filter/fpocket_filter_log.out:file_utils.py:159 Extracting: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_pockets.zip
 INFO     /tmp/biobb/unitests_49/fpocket_filter/fpocket_filter_log.out:file_utils.py:160 to:
-INFO     /tmp/biobb/unitests_49/fpocket_filter/fpocket_filter_log.out:file_utils.py:161 [&#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket10_atm.pdb&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket10_vert.pqr&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket11_atm.pdb&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket11_vert.pqr&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket12_atm.pdb&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket12_vert.pqr&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket1_atm.pdb&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket1_vert.pqr&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket2_atm.pdb&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket2_vert.pqr&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket3_atm.pdb&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket3_vert.pqr&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket4_atm.pdb&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket4_vert.pqr&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket5_atm.pdb&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket5_vert.pqr&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket6_atm.pdb&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket6_vert.pqr&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket7_atm.pdb&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket7_vert.pqr&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket8_atm.pdb&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket8_vert.pqr&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket9_atm.pdb&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket9_vert.pqr&#x27;]
+INFO     /tmp/biobb/unitests_49/fpocket_filter/fpocket_filter_log.out:file_utils.py:161 [&#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket10_atm.pdb&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket10_vert.pqr&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket11_atm.pdb&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket11_vert.pqr&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket12_atm.pdb&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket12_vert.pqr&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket1_atm.pdb&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket1_vert.pqr&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket2_atm.pdb&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket2_vert.pqr&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket3_atm.pdb&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket3_vert.pqr&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket4_atm.pdb&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket4_vert.pqr&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket5_atm.pdb&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket5_vert.pqr&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket6_atm.pdb&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket6_vert.pqr&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket7_atm.pdb&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket7_vert.pqr&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket8_atm.pdb&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket8_vert.pqr&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket9_atm.pdb&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket9_vert.pqr&#x27;]
 INFO     /tmp/biobb/unitests_49/fpocket_filter/fpocket_filter_log.out:file_utils.py:346 Creating /tmp/biobb/unitests_49/fpocket_filter/output_filter_pockets.zip output file
 INFO     /tmp/biobb/unitests_49/fpocket_filter/fpocket_filter_log.out:file_utils.py:137 Adding:
-INFO     /tmp/biobb/unitests_49/fpocket_filter/fpocket_filter_log.out:file_utils.py:138 [&#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket1_atm.pdb&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket1_vert.pqr&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket2_atm.pdb&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket2_vert.pqr&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket4_atm.pdb&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket4_vert.pqr&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket7_atm.pdb&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541/pocket7_vert.pqr&#x27;]
+INFO     /tmp/biobb/unitests_49/fpocket_filter/fpocket_filter_log.out:file_utils.py:138 [&#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket1_atm.pdb&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket1_vert.pqr&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket2_atm.pdb&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket2_vert.pqr&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket4_atm.pdb&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket4_vert.pqr&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket7_atm.pdb&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267/pocket7_vert.pqr&#x27;]
 INFO     /tmp/biobb/unitests_49/fpocket_filter/fpocket_filter_log.out:file_utils.py:139 to: /tmp/biobb/unitests_49/fpocket_filter/output_filter_pockets.zip
-INFO     /tmp/biobb/unitests_49/fpocket_filter/fpocket_filter_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_49/fpocket_filter/c59e80bf-07ac-4f8e-970f-caa23395e227&#x27;, &#x27;da02b97d-d50e-449e-94ba-37147f0c7541&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
+INFO     /tmp/biobb/unitests_49/fpocket_filter/fpocket_filter_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_49/fpocket_filter/f86eac8c-ab7f-48b3-bb3c-8db74c81ffd3&#x27;, &#x27;1db06031-9b17-499c-a2bd-2dd788495267&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
 Removing: /tmp/biobb/unitests_49
 <br/></div></td></tr></tbody>
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">biobb_vs/test/unitests/test_fpocket/test_fpocket_run.py::TestFPocketRun::test_fpocket_run</td>
-          <td class="col-duration">0.98</td>
+          <td class="col-duration">0.96</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-14 15:19:11,212 [MainThread  ] [INFO ]  Executing biobb_vs.fpocket.fpocket_run Version: 4.0.0
-2023-04-14 15:19:11,213 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/fpocket_input.pdb to /tmp/biobb/unitests_49/fpocket_run/019e2011-cc85-40e0-b97f-c894390eb01d
-2023-04-14 15:19:11,213 [MainThread  ] [INFO ]  Creating 04d54bea-a38e-4152-b2c8-252ff3a36b8b temporary folder
-2023-04-14 15:19:11,213 [MainThread  ] [INFO ]  Executing fpocket
-2023-04-14 15:19:11,213 [MainThread  ] [INFO ]  fpocket -f 04d54bea-a38e-4152-b2c8-252ff3a36b8b/input.pdb -m 3 -M 6 -i 35
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-14 15:20:23,742 [MainThread  ] [INFO ]  Executing biobb_vs.fpocket.fpocket_run Version: 4.0.0
+2023-04-14 15:20:23,742 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/fpocket_input.pdb to /tmp/biobb/unitests_49/fpocket_run/6889bf88-0c1b-4356-8de9-8701fee90c04
+2023-04-14 15:20:23,742 [MainThread  ] [INFO ]  Creating 016311e5-9dce-4fd7-b709-925d14050033 temporary folder
+2023-04-14 15:20:23,743 [MainThread  ] [INFO ]  Executing fpocket
+2023-04-14 15:20:23,743 [MainThread  ] [INFO ]  fpocket -f 016311e5-9dce-4fd7-b709-925d14050033/input.pdb -m 3 -M 6 -i 35
 
-2023-04-14 15:19:12,166 [MainThread  ] [INFO ]  Exit code 0
+2023-04-14 15:20:24,675 [MainThread  ] [INFO ]  Exit code 0
 
-2023-04-14 15:19:12,166 [MainThread  ] [INFO ]  ***** POCKET HUNTING BEGINS ***** 
+2023-04-14 15:20:24,675 [MainThread  ] [INFO ]  ***** POCKET HUNTING BEGINS ***** 
 ***** POCKET HUNTING ENDS ***** 
 
-2023-04-14 15:19:12,169 [MainThread  ] [INFO ]  12 pockets found
-2023-04-14 15:19:12,169 [MainThread  ] [INFO ]  Sorting output data by druggability_score
-2023-04-14 15:19:12,172 [MainThread  ] [INFO ]  Adding:
-2023-04-14 15:19:12,172 [MainThread  ] [INFO ]  [&#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket10_atm.pdb&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket10_vert.pqr&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket11_atm.pdb&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket11_vert.pqr&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket12_atm.pdb&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket12_vert.pqr&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket1_atm.pdb&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket1_vert.pqr&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket2_atm.pdb&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket2_vert.pqr&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket3_atm.pdb&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket3_vert.pqr&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket4_atm.pdb&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket4_vert.pqr&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket5_atm.pdb&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket5_vert.pqr&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket6_atm.pdb&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket6_vert.pqr&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket7_atm.pdb&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket7_vert.pqr&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket8_atm.pdb&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket8_vert.pqr&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket9_atm.pdb&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket9_vert.pqr&#x27;]
-2023-04-14 15:19:12,172 [MainThread  ] [INFO ]  to: /tmp/biobb/unitests_49/fpocket_run/output_pockets.zip
-2023-04-14 15:19:12,172 [MainThread  ] [INFO ]  Saving summary to /tmp/biobb/unitests_49/fpocket_run/output_summary.json file
-2023-04-14 15:19:12,174 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_49/fpocket_run/019e2011-cc85-40e0-b97f-c894390eb01d&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b&#x27;]
+2023-04-14 15:20:24,678 [MainThread  ] [INFO ]  12 pockets found
+2023-04-14 15:20:24,678 [MainThread  ] [INFO ]  Sorting output data by druggability_score
+2023-04-14 15:20:24,681 [MainThread  ] [INFO ]  Adding:
+2023-04-14 15:20:24,681 [MainThread  ] [INFO ]  [&#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket10_atm.pdb&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket10_vert.pqr&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket11_atm.pdb&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket11_vert.pqr&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket12_atm.pdb&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket12_vert.pqr&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket1_atm.pdb&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket1_vert.pqr&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket2_atm.pdb&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket2_vert.pqr&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket3_atm.pdb&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket3_vert.pqr&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket4_atm.pdb&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket4_vert.pqr&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket5_atm.pdb&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket5_vert.pqr&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket6_atm.pdb&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket6_vert.pqr&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket7_atm.pdb&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket7_vert.pqr&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket8_atm.pdb&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket8_vert.pqr&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket9_atm.pdb&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket9_vert.pqr&#x27;]
+2023-04-14 15:20:24,682 [MainThread  ] [INFO ]  to: /tmp/biobb/unitests_49/fpocket_run/output_pockets.zip
+2023-04-14 15:20:24,682 [MainThread  ] [INFO ]  Saving summary to /tmp/biobb/unitests_49/fpocket_run/output_summary.json file
+2023-04-14 15:20:24,684 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_49/fpocket_run/6889bf88-0c1b-4356-8de9-8701fee90c04&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033&#x27;]
 Checking if empty file: /tmp/biobb/unitests_49/fpocket_run/output_pockets.zip
 Checking if empty file: /tmp/biobb/unitests_49/fpocket_run/output_summary.json
 <br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_49/fpocket_run/fpocket_run_log.out:file_utils.py:346 Executing biobb_vs.fpocket.fpocket_run Version: 4.0.0
-INFO     /tmp/biobb/unitests_49/fpocket_run/fpocket_run_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/fpocket_input.pdb to /tmp/biobb/unitests_49/fpocket_run/019e2011-cc85-40e0-b97f-c894390eb01d
-INFO     /tmp/biobb/unitests_49/fpocket_run/fpocket_run_log.out:file_utils.py:346 Creating 04d54bea-a38e-4152-b2c8-252ff3a36b8b temporary folder
+INFO     /tmp/biobb/unitests_49/fpocket_run/fpocket_run_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/fpocket_input.pdb to /tmp/biobb/unitests_49/fpocket_run/6889bf88-0c1b-4356-8de9-8701fee90c04
+INFO     /tmp/biobb/unitests_49/fpocket_run/fpocket_run_log.out:file_utils.py:346 Creating 016311e5-9dce-4fd7-b709-925d14050033 temporary folder
 INFO     /tmp/biobb/unitests_49/fpocket_run/fpocket_run_log.out:file_utils.py:346 Executing fpocket
-INFO     /tmp/biobb/unitests_49/fpocket_run/fpocket_run_log.out:cmd_wrapper.py:32 fpocket -f 04d54bea-a38e-4152-b2c8-252ff3a36b8b/input.pdb -m 3 -M 6 -i 35
+INFO     /tmp/biobb/unitests_49/fpocket_run/fpocket_run_log.out:cmd_wrapper.py:32 fpocket -f 016311e5-9dce-4fd7-b709-925d14050033/input.pdb -m 3 -M 6 -i 35
 
 INFO     /tmp/biobb/unitests_49/fpocket_run/fpocket_run_log.out:cmd_wrapper.py:49 Exit code 0
 
@@ -481,29 +481,29 @@ INFO     /tmp/biobb/unitests_49/fpocket_run/fpocket_run_log.out:cmd_wrapper.py:5
 INFO     /tmp/biobb/unitests_49/fpocket_run/fpocket_run_log.out:file_utils.py:346 12 pockets found
 INFO     /tmp/biobb/unitests_49/fpocket_run/fpocket_run_log.out:file_utils.py:346 Sorting output data by druggability_score
 INFO     /tmp/biobb/unitests_49/fpocket_run/fpocket_run_log.out:file_utils.py:137 Adding:
-INFO     /tmp/biobb/unitests_49/fpocket_run/fpocket_run_log.out:file_utils.py:138 [&#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket10_atm.pdb&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket10_vert.pqr&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket11_atm.pdb&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket11_vert.pqr&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket12_atm.pdb&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket12_vert.pqr&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket1_atm.pdb&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket1_vert.pqr&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket2_atm.pdb&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket2_vert.pqr&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket3_atm.pdb&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket3_vert.pqr&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket4_atm.pdb&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket4_vert.pqr&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket5_atm.pdb&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket5_vert.pqr&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket6_atm.pdb&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket6_vert.pqr&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket7_atm.pdb&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket7_vert.pqr&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket8_atm.pdb&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket8_vert.pqr&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket9_atm.pdb&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b/input_out/pockets/pocket9_vert.pqr&#x27;]
+INFO     /tmp/biobb/unitests_49/fpocket_run/fpocket_run_log.out:file_utils.py:138 [&#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket10_atm.pdb&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket10_vert.pqr&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket11_atm.pdb&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket11_vert.pqr&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket12_atm.pdb&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket12_vert.pqr&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket1_atm.pdb&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket1_vert.pqr&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket2_atm.pdb&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket2_vert.pqr&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket3_atm.pdb&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket3_vert.pqr&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket4_atm.pdb&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket4_vert.pqr&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket5_atm.pdb&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket5_vert.pqr&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket6_atm.pdb&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket6_vert.pqr&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket7_atm.pdb&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket7_vert.pqr&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket8_atm.pdb&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket8_vert.pqr&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket9_atm.pdb&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033/input_out/pockets/pocket9_vert.pqr&#x27;]
 INFO     /tmp/biobb/unitests_49/fpocket_run/fpocket_run_log.out:file_utils.py:139 to: /tmp/biobb/unitests_49/fpocket_run/output_pockets.zip
 INFO     /tmp/biobb/unitests_49/fpocket_run/fpocket_run_log.out:file_utils.py:346 Saving summary to /tmp/biobb/unitests_49/fpocket_run/output_summary.json file
-INFO     /tmp/biobb/unitests_49/fpocket_run/fpocket_run_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_49/fpocket_run/019e2011-cc85-40e0-b97f-c894390eb01d&#x27;, &#x27;04d54bea-a38e-4152-b2c8-252ff3a36b8b&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
+INFO     /tmp/biobb/unitests_49/fpocket_run/fpocket_run_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_49/fpocket_run/6889bf88-0c1b-4356-8de9-8701fee90c04&#x27;, &#x27;016311e5-9dce-4fd7-b709-925d14050033&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
 Removing: /tmp/biobb/unitests_49
 <br/></div></td></tr></tbody>
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">biobb_vs/test/unitests/test_fpocket/test_fpocket_select.py::TestFPocketSelect::test_fpocket_select</td>
-          <td class="col-duration">0.02</td>
+          <td class="col-duration">0.03</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-14 15:19:12,198 [MainThread  ] [INFO ]  Executing biobb_vs.fpocket.fpocket_select Version: 4.0.0
-2023-04-14 15:19:12,198 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_pockets.zip to /tmp/biobb/unitests_49/fpocket_select/591021b1-9617-4546-93b1-f950ac512db4
-2023-04-14 15:19:12,199 [MainThread  ] [INFO ]  Creating 832f36a1-24d5-45a0-8b26-ecc056766dc6 temporary folder
-2023-04-14 15:19:12,201 [MainThread  ] [INFO ]  Extracting: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_pockets.zip
-2023-04-14 15:19:12,201 [MainThread  ] [INFO ]  to:
-2023-04-14 15:19:12,201 [MainThread  ] [INFO ]  [&#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket10_atm.pdb&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket10_vert.pqr&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket11_atm.pdb&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket11_vert.pqr&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket12_atm.pdb&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket12_vert.pqr&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket1_atm.pdb&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket1_vert.pqr&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket2_atm.pdb&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket2_vert.pqr&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket3_atm.pdb&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket3_vert.pqr&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket4_atm.pdb&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket4_vert.pqr&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket5_atm.pdb&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket5_vert.pqr&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket6_atm.pdb&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket6_vert.pqr&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket7_atm.pdb&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket7_vert.pqr&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket8_atm.pdb&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket8_vert.pqr&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket9_atm.pdb&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket9_vert.pqr&#x27;]
-2023-04-14 15:19:12,201 [MainThread  ] [INFO ]  Saving /tmp/biobb/unitests_49/fpocket_select/output_pocket.pdb file
-2023-04-14 15:19:12,202 [MainThread  ] [INFO ]  Saving /tmp/biobb/unitests_49/fpocket_select/output_pocket.pqr file
-2023-04-14 15:19:12,202 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_49/fpocket_select/591021b1-9617-4546-93b1-f950ac512db4&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6&#x27;]
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-14 15:20:24,712 [MainThread  ] [INFO ]  Executing biobb_vs.fpocket.fpocket_select Version: 4.0.0
+2023-04-14 15:20:24,713 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_pockets.zip to /tmp/biobb/unitests_49/fpocket_select/de7117a7-b78f-48b4-827e-8133db6d54b1
+2023-04-14 15:20:24,713 [MainThread  ] [INFO ]  Creating 227ba38d-fbb3-489e-b850-f48f0b92a3e3 temporary folder
+2023-04-14 15:20:24,716 [MainThread  ] [INFO ]  Extracting: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_pockets.zip
+2023-04-14 15:20:24,716 [MainThread  ] [INFO ]  to:
+2023-04-14 15:20:24,716 [MainThread  ] [INFO ]  [&#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket10_atm.pdb&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket10_vert.pqr&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket11_atm.pdb&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket11_vert.pqr&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket12_atm.pdb&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket12_vert.pqr&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket1_atm.pdb&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket1_vert.pqr&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket2_atm.pdb&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket2_vert.pqr&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket3_atm.pdb&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket3_vert.pqr&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket4_atm.pdb&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket4_vert.pqr&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket5_atm.pdb&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket5_vert.pqr&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket6_atm.pdb&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket6_vert.pqr&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket7_atm.pdb&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket7_vert.pqr&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket8_atm.pdb&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket8_vert.pqr&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket9_atm.pdb&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket9_vert.pqr&#x27;]
+2023-04-14 15:20:24,716 [MainThread  ] [INFO ]  Saving /tmp/biobb/unitests_49/fpocket_select/output_pocket.pdb file
+2023-04-14 15:20:24,716 [MainThread  ] [INFO ]  Saving /tmp/biobb/unitests_49/fpocket_select/output_pocket.pqr file
+2023-04-14 15:20:24,717 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_49/fpocket_select/de7117a7-b78f-48b4-827e-8133db6d54b1&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3&#x27;]
 Checking if empty file: /tmp/biobb/unitests_49/fpocket_select/output_pocket.pdb
 Checking RMSD between:
      PDB_A: /tmp/biobb/unitests_49/fpocket_select/output_pocket.pdb
@@ -521,96 +521,96 @@ Comparing:
         File_A hash: b&#x27;\xaa1-aO#\x87?\x1a\x18tH)\x93\x10\x82\x814\xc7\xca\x8bL\xae\xd9\xfa\xe0l\xcd-\xf4\xc26&#x27;
         File_B hash: b&#x27;\xaa1-aO#\x87?\x1a\x18tH)\x93\x10\x82\x814\xc7\xca\x8bL\xae\xd9\xfa\xe0l\xcd-\xf4\xc26&#x27;
 <br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_49/fpocket_select/fpocket_select_log.out:file_utils.py:346 Executing biobb_vs.fpocket.fpocket_select Version: 4.0.0
-INFO     /tmp/biobb/unitests_49/fpocket_select/fpocket_select_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_pockets.zip to /tmp/biobb/unitests_49/fpocket_select/591021b1-9617-4546-93b1-f950ac512db4
-INFO     /tmp/biobb/unitests_49/fpocket_select/fpocket_select_log.out:file_utils.py:346 Creating 832f36a1-24d5-45a0-8b26-ecc056766dc6 temporary folder
+INFO     /tmp/biobb/unitests_49/fpocket_select/fpocket_select_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_pockets.zip to /tmp/biobb/unitests_49/fpocket_select/de7117a7-b78f-48b4-827e-8133db6d54b1
+INFO     /tmp/biobb/unitests_49/fpocket_select/fpocket_select_log.out:file_utils.py:346 Creating 227ba38d-fbb3-489e-b850-f48f0b92a3e3 temporary folder
 INFO     /tmp/biobb/unitests_49/fpocket_select/fpocket_select_log.out:file_utils.py:159 Extracting: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_pockets.zip
 INFO     /tmp/biobb/unitests_49/fpocket_select/fpocket_select_log.out:file_utils.py:160 to:
-INFO     /tmp/biobb/unitests_49/fpocket_select/fpocket_select_log.out:file_utils.py:161 [&#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket10_atm.pdb&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket10_vert.pqr&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket11_atm.pdb&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket11_vert.pqr&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket12_atm.pdb&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket12_vert.pqr&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket1_atm.pdb&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket1_vert.pqr&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket2_atm.pdb&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket2_vert.pqr&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket3_atm.pdb&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket3_vert.pqr&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket4_atm.pdb&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket4_vert.pqr&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket5_atm.pdb&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket5_vert.pqr&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket6_atm.pdb&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket6_vert.pqr&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket7_atm.pdb&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket7_vert.pqr&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket8_atm.pdb&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket8_vert.pqr&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket9_atm.pdb&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6/pocket9_vert.pqr&#x27;]
+INFO     /tmp/biobb/unitests_49/fpocket_select/fpocket_select_log.out:file_utils.py:161 [&#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket10_atm.pdb&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket10_vert.pqr&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket11_atm.pdb&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket11_vert.pqr&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket12_atm.pdb&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket12_vert.pqr&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket1_atm.pdb&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket1_vert.pqr&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket2_atm.pdb&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket2_vert.pqr&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket3_atm.pdb&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket3_vert.pqr&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket4_atm.pdb&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket4_vert.pqr&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket5_atm.pdb&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket5_vert.pqr&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket6_atm.pdb&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket6_vert.pqr&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket7_atm.pdb&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket7_vert.pqr&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket8_atm.pdb&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket8_vert.pqr&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket9_atm.pdb&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3/pocket9_vert.pqr&#x27;]
 INFO     /tmp/biobb/unitests_49/fpocket_select/fpocket_select_log.out:file_utils.py:346 Saving /tmp/biobb/unitests_49/fpocket_select/output_pocket.pdb file
 INFO     /tmp/biobb/unitests_49/fpocket_select/fpocket_select_log.out:file_utils.py:346 Saving /tmp/biobb/unitests_49/fpocket_select/output_pocket.pqr file
-INFO     /tmp/biobb/unitests_49/fpocket_select/fpocket_select_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_49/fpocket_select/591021b1-9617-4546-93b1-f950ac512db4&#x27;, &#x27;832f36a1-24d5-45a0-8b26-ecc056766dc6&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
+INFO     /tmp/biobb/unitests_49/fpocket_select/fpocket_select_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_49/fpocket_select/de7117a7-b78f-48b4-827e-8133db6d54b1&#x27;, &#x27;227ba38d-fbb3-489e-b850-f48f0b92a3e3&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
 Removing: /tmp/biobb/unitests_49
 <br/></div></td></tr></tbody>
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">biobb_vs/test/unitests/test_utils/test_bindingsite.py::TestBindingSite::test_bindingsite</td>
-          <td class="col-duration">3.34</td>
+          <td class="col-duration">3.74</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-14 15:19:12,226 [MainThread  ] [INFO ]  Executing biobb_vs.utils.bindingsite Version: 4.0.0
-2023-04-14 15:19:12,227 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/bindingsite.pdb to /tmp/biobb/unitests_49/bindingsite/eb833b32-77a2-4ab8-a7d6-d76a86014526
-2023-04-14 15:19:12,234 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/bindingsite.zip to /tmp/biobb/unitests_49/bindingsite/eb833b32-77a2-4ab8-a7d6-d76a86014526
-2023-04-14 15:19:12,234 [MainThread  ] [INFO ]  Loading input PDB structure /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/bindingsite.pdb
-2023-04-14 15:19:12,304 [MainThread  ] [INFO ]  Found 517 residues in /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/bindingsite.pdb
-2023-04-14 15:19:12,305 [MainThread  ] [INFO ]  Creating 55e518bd-c4d0-499b-af85-e6b7fd4c1882 temporary folder
-2023-04-14 15:19:12,321 [MainThread  ] [INFO ]  Extracting: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/bindingsite.zip
-2023-04-14 15:19:12,321 [MainThread  ] [INFO ]  to:
-2023-04-14 15:19:12,321 [MainThread  ] [INFO ]  [&#x27;55e518bd-c4d0-499b-af85-e6b7fd4c1882/2vgb.pdb&#x27;, &#x27;55e518bd-c4d0-499b-af85-e6b7fd4c1882/2vgf.pdb&#x27;, &#x27;55e518bd-c4d0-499b-af85-e6b7fd4c1882/2vgg.pdb&#x27;, &#x27;55e518bd-c4d0-499b-af85-e6b7fd4c1882/2vgi.pdb&#x27;, &#x27;55e518bd-c4d0-499b-af85-e6b7fd4c1882/4ima.pdb&#x27;, &#x27;55e518bd-c4d0-499b-af85-e6b7fd4c1882/4ip7.pdb&#x27;]
-2023-04-14 15:19:12,321 [MainThread  ] [INFO ]  Iterating on all clusters:
-2023-04-14 15:19:12,321 [MainThread  ] [INFO ]   
-2023-04-14 15:19:12,322 [MainThread  ] [INFO ]  ------------ Iteration #1 --------------
-2023-04-14 15:19:12,322 [MainThread  ] [INFO ]  Cluster member: 2vgb
-2023-04-14 15:19:12,619 [MainThread  ] [INFO ]  Ligand found: PGA  (9 atoms)
-2023-04-14 15:19:12,619 [MainThread  ] [INFO ]  Member accepted. Valid ligand found: PGA (9 atoms)
-2023-04-14 15:19:12,754 [MainThread  ] [INFO ]  Matching residues to input PDB structure. Alignment is:
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-14 15:20:24,746 [MainThread  ] [INFO ]  Executing biobb_vs.utils.bindingsite Version: 4.0.0
+2023-04-14 15:20:24,747 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/bindingsite.pdb to /tmp/biobb/unitests_49/bindingsite/bb04398c-0389-405a-abd9-436e1087e2db
+2023-04-14 15:20:24,753 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/bindingsite.zip to /tmp/biobb/unitests_49/bindingsite/bb04398c-0389-405a-abd9-436e1087e2db
+2023-04-14 15:20:24,753 [MainThread  ] [INFO ]  Loading input PDB structure /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/bindingsite.pdb
+2023-04-14 15:20:24,840 [MainThread  ] [INFO ]  Found 517 residues in /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/bindingsite.pdb
+2023-04-14 15:20:24,840 [MainThread  ] [INFO ]  Creating e09acfc0-85d1-4ca3-80f4-adb9510e9e12 temporary folder
+2023-04-14 15:20:24,853 [MainThread  ] [INFO ]  Extracting: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/bindingsite.zip
+2023-04-14 15:20:24,853 [MainThread  ] [INFO ]  to:
+2023-04-14 15:20:24,853 [MainThread  ] [INFO ]  [&#x27;e09acfc0-85d1-4ca3-80f4-adb9510e9e12/2vgb.pdb&#x27;, &#x27;e09acfc0-85d1-4ca3-80f4-adb9510e9e12/2vgf.pdb&#x27;, &#x27;e09acfc0-85d1-4ca3-80f4-adb9510e9e12/2vgg.pdb&#x27;, &#x27;e09acfc0-85d1-4ca3-80f4-adb9510e9e12/2vgi.pdb&#x27;, &#x27;e09acfc0-85d1-4ca3-80f4-adb9510e9e12/4ima.pdb&#x27;, &#x27;e09acfc0-85d1-4ca3-80f4-adb9510e9e12/4ip7.pdb&#x27;]
+2023-04-14 15:20:24,854 [MainThread  ] [INFO ]  Iterating on all clusters:
+2023-04-14 15:20:24,854 [MainThread  ] [INFO ]   
+2023-04-14 15:20:24,854 [MainThread  ] [INFO ]  ------------ Iteration #1 --------------
+2023-04-14 15:20:24,854 [MainThread  ] [INFO ]  Cluster member: 2vgb
+2023-04-14 15:20:25,222 [MainThread  ] [INFO ]  Ligand found: PGA  (9 atoms)
+2023-04-14 15:20:25,333 [MainThread  ] [INFO ]  Member accepted. Valid ligand found: PGA (9 atoms)
+2023-04-14 15:20:25,488 [MainThread  ] [INFO ]  Matching residues to input PDB structure. Alignment is:
 QQQQLPAAMADTFLEHLCLLDIDSEPVAARSTSIIATIGPASRSVERLKEMIKAGMNIARLNFSHGSHEYHAESIANVREAVESFAGSPLSYRPVAIALDTKGPEIRTGI-----ESEVELVKGSQVLVTVDPAFRTRGNANTVWVDYPNIVRVVPVGGRIYIDDGLISLVVQKIGPEGLVTQVENGGVLGSRKGVNLPGAQVDLPGLSEQDVRDLRFGVEHGVDIVFASFVRKASDVAAVRAALGPEGHGIKIISKIENHEGVKRFDEILEVSDGIMVARGDLGIEIPAEKVFLAQKMMIGRCNLAGKPVVCATQMLESMITKPRPTRAETSDVANAVLDGADCIMLSGETAKGNFPVEAVKMQHAIAREAEAAVYHRQLFEELRRAAPLSRDPTEVTAIGAVEAAFKCCAAAIIVLTTTGRSAQLLSRYRPRAAVIAVTRSAQAARQVHLCRGVFPLLYREPPEAIWADDVDRRVQFGIESGKLRGFLRVGDLVIVVTGWRPGSGYTNIMRVLSI
-2023-04-14 15:19:12,755 [MainThread  ] [INFO ]  Sequence identity (%): 99.03288201160541
-2023-04-14 15:19:12,755 [MainThread  ] [INFO ]  Gap less identity (%): 100.0
-2023-04-14 15:19:12,821 [MainThread  ] [INFO ]  Superimposing 512 aligned protein residues
-2023-04-14 15:19:12,832 [MainThread  ] [INFO ]  RMSD: 0.9250969853133928
-2023-04-14 15:19:12,832 [MainThread  ] [INFO ]  Saving transformed ligand coordinates
-2023-04-14 15:19:12,832 [MainThread  ] [INFO ]   
-2023-04-14 15:19:12,832 [MainThread  ] [INFO ]  ------------ Iteration #2 --------------
-2023-04-14 15:19:12,832 [MainThread  ] [INFO ]  Cluster member: 2vgf
-2023-04-14 15:19:13,189 [MainThread  ] [INFO ]  Ligand found: PGA  (9 atoms)
-2023-04-14 15:19:13,189 [MainThread  ] [INFO ]  Member accepted. Valid ligand found: PGA (9 atoms)
-2023-04-14 15:19:13,323 [MainThread  ] [INFO ]  Matching residues to input PDB structure. Alignment is:
+2023-04-14 15:20:25,489 [MainThread  ] [INFO ]  Sequence identity (%): 99.03288201160541
+2023-04-14 15:20:25,489 [MainThread  ] [INFO ]  Gap less identity (%): 100.0
+2023-04-14 15:20:25,564 [MainThread  ] [INFO ]  Superimposing 512 aligned protein residues
+2023-04-14 15:20:25,576 [MainThread  ] [INFO ]  RMSD: 0.9250969853133928
+2023-04-14 15:20:25,576 [MainThread  ] [INFO ]  Saving transformed ligand coordinates
+2023-04-14 15:20:25,576 [MainThread  ] [INFO ]   
+2023-04-14 15:20:25,576 [MainThread  ] [INFO ]  ------------ Iteration #2 --------------
+2023-04-14 15:20:25,577 [MainThread  ] [INFO ]  Cluster member: 2vgf
+2023-04-14 15:20:26,010 [MainThread  ] [INFO ]  Ligand found: PGA  (9 atoms)
+2023-04-14 15:20:26,010 [MainThread  ] [INFO ]  Member accepted. Valid ligand found: PGA (9 atoms)
+2023-04-14 15:20:26,163 [MainThread  ] [INFO ]  Matching residues to input PDB structure. Alignment is:
 QQQQLPAAMADTFLEHLCLLDIDSEPVAARSTSIIATIGPASRSVERLKEMIKAGMNIARLNFSHGSHEYHAESIANVREAVESFAGSPLSYRPVAIALDTKGPEIRT-----GPESEVELVKGSQVLVTVDPAFRTRGNANTVWVDYPNIVRVVPVGGRIYIDDGLISLVVQKIGPEGLVTQVENGGVLGSRKGVNLPGAQVDLPGLSEQDVRDLRFGVEHGVDIVFASFVRKASDVAAVRAALGPEGHGIKIISKIENHEGVKRFDEILEVSDGIMVARGDLGIEIPAEKVFLAQKMMIGRCNLAGKPVVCATQMLESMITKPRPMRAETSDVANAVLDGADCIMLSGETAKGNFPVEAVKMQHAIAREAEAAVYHRQLFEELRRAAPLSRDPTEVTAIGAVEAAFKCCAAAIIVLTTTGRSAQLLSRYRPRAAVIAVTRSAQAARQVHLCRGVFPLLYREPPEAIWADDVDRRVQFGIESGKLRGFLRVGDLVIVVTGWRPGSGYTNIMRVLSI
-2023-04-14 15:19:13,324 [MainThread  ] [INFO ]  Sequence identity (%): 98.8394584139265
-2023-04-14 15:19:13,324 [MainThread  ] [INFO ]  Gap less identity (%): 99.8046875
-2023-04-14 15:19:13,390 [MainThread  ] [INFO ]  Superimposing 512 aligned protein residues
-2023-04-14 15:19:13,401 [MainThread  ] [INFO ]  RMSD: 0.969648985929871
-2023-04-14 15:19:13,401 [MainThread  ] [INFO ]  Saving transformed ligand coordinates
-2023-04-14 15:19:13,401 [MainThread  ] [INFO ]   
-2023-04-14 15:19:13,401 [MainThread  ] [INFO ]  ------------ Iteration #3 --------------
-2023-04-14 15:19:13,401 [MainThread  ] [INFO ]  Cluster member: 2vgg
-2023-04-14 15:19:13,739 [MainThread  ] [INFO ]  Ligand found: PGA  (9 atoms)
-2023-04-14 15:19:13,936 [MainThread  ] [INFO ]  Member accepted. Valid ligand found: PGA (9 atoms)
-2023-04-14 15:19:14,071 [MainThread  ] [INFO ]  Matching residues to input PDB structure. Alignment is:
+2023-04-14 15:20:26,164 [MainThread  ] [INFO ]  Sequence identity (%): 98.8394584139265
+2023-04-14 15:20:26,164 [MainThread  ] [INFO ]  Gap less identity (%): 99.8046875
+2023-04-14 15:20:26,238 [MainThread  ] [INFO ]  Superimposing 512 aligned protein residues
+2023-04-14 15:20:26,250 [MainThread  ] [INFO ]  RMSD: 0.969648985929871
+2023-04-14 15:20:26,251 [MainThread  ] [INFO ]  Saving transformed ligand coordinates
+2023-04-14 15:20:26,251 [MainThread  ] [INFO ]   
+2023-04-14 15:20:26,251 [MainThread  ] [INFO ]  ------------ Iteration #3 --------------
+2023-04-14 15:20:26,251 [MainThread  ] [INFO ]  Cluster member: 2vgg
+2023-04-14 15:20:26,652 [MainThread  ] [INFO ]  Ligand found: PGA  (9 atoms)
+2023-04-14 15:20:26,652 [MainThread  ] [INFO ]  Member accepted. Valid ligand found: PGA (9 atoms)
+2023-04-14 15:20:26,801 [MainThread  ] [INFO ]  Matching residues to input PDB structure. Alignment is:
 -----PAA---TFLEHLCLL-IDSEPVAARSTSIIATIGPASRSVERLKEMIKAGMNIARLNFSHGSHEYHAESIANVREAVESFAGSPLSYRPVAIALDTKGPEIRTGIL----ESEVELVKGSQ-LVTVDPAFRTRGNANTVWVDYPNIVRVVPVGGRIYIDDGLISLVVQKI-PE-LVTQVENGGVLGSRKGVNLPGAQVDLPGLSEQDVRDLRFGVEHGVDIVFASFVRKASDVAAVRAALGPEGHGIKIISKIENHEGVKRFDEILEVSDGIMVARGDLGIEIPAEKVFLAQKMMIGRCNLAGKPVVCATQMLESMITKPRPTRAETSDVANAVLDGADCIMLSGETAKGNFPVEAVKMQHAIAREAEAAVYHRQLFEELRRAAPLSRDPTEVTAIGAVEAAFKCCAAAIIVLTTTGHSAQLLSRYRPRAAVIAVTRSAQAARQVHLCRGVFPLLYREPPEAIWADDVDRRVQFGIESGKLRGFLRVGDLVIVVTGWRPGSGYTNIMRVLSI
-2023-04-14 15:19:14,071 [MainThread  ] [INFO ]  Sequence identity (%): 96.71179883945841
-2023-04-14 15:19:14,071 [MainThread  ] [INFO ]  Gap less identity (%): 99.8003992015968
-2023-04-14 15:19:14,138 [MainThread  ] [INFO ]  Superimposing 501 aligned protein residues
-2023-04-14 15:19:14,150 [MainThread  ] [INFO ]  RMSD: 0.9420938087554699
-2023-04-14 15:19:14,150 [MainThread  ] [INFO ]  Saving transformed ligand coordinates
-2023-04-14 15:19:14,150 [MainThread  ] [INFO ]   
-2023-04-14 15:19:14,150 [MainThread  ] [INFO ]  ------------ Iteration #4 --------------
-2023-04-14 15:19:14,150 [MainThread  ] [INFO ]  Cluster member: 2vgi
-2023-04-14 15:19:14,535 [MainThread  ] [INFO ]  Ligand found: PGA  (9 atoms)
-2023-04-14 15:19:14,535 [MainThread  ] [INFO ]  Member accepted. Valid ligand found: PGA (9 atoms)
-2023-04-14 15:19:14,674 [MainThread  ] [INFO ]  Matching residues to input PDB structure. Alignment is:
+2023-04-14 15:20:26,801 [MainThread  ] [INFO ]  Sequence identity (%): 96.71179883945841
+2023-04-14 15:20:26,801 [MainThread  ] [INFO ]  Gap less identity (%): 99.8003992015968
+2023-04-14 15:20:26,876 [MainThread  ] [INFO ]  Superimposing 501 aligned protein residues
+2023-04-14 15:20:26,888 [MainThread  ] [INFO ]  RMSD: 0.9420938087554699
+2023-04-14 15:20:26,888 [MainThread  ] [INFO ]  Saving transformed ligand coordinates
+2023-04-14 15:20:26,888 [MainThread  ] [INFO ]   
+2023-04-14 15:20:26,888 [MainThread  ] [INFO ]  ------------ Iteration #4 --------------
+2023-04-14 15:20:26,888 [MainThread  ] [INFO ]  Cluster member: 2vgi
+2023-04-14 15:20:27,317 [MainThread  ] [INFO ]  Ligand found: PGA  (9 atoms)
+2023-04-14 15:20:27,317 [MainThread  ] [INFO ]  Member accepted. Valid ligand found: PGA (9 atoms)
+2023-04-14 15:20:27,471 [MainThread  ] [INFO ]  Matching residues to input PDB structure. Alignment is:
 QQQQLPAAMADTFLEHLCLLDIDSEPVAARSTSIIATIGPASRSVERLKEMIKAGMNIARLNFSHGSHEYHAESIANVREAVESFAGSPLSYRPVAIALDTKGPEIRTGIL----ESEVELVKGSQVLVTVDPAFRTRGNANTVWVDYPNIVRVVPVGGRIYIDDGLISLVVQKIGPEGLVTQVENGGVLGSRKGVNLPGAQVDLPGLSEQDVRDLRFGVEHGVDIVFASFVRKASDVAAVRAALGPEGHGIKIISKIENHEGVKRFDEILEVSDGIMVARGDLGIEIPAEKVFLAQKMMIGRCNLAGKPVVCATQMLESMITKPRPTRAETSDVANAVLDGADCIMLSGETAKGNFPVEAVKMQHAIAREAEAAVYHRQLFEELRRAAPLSRDPTEVTAIGAVEAAFKCCAAAIIVLTTTGRSAQLLSWYRPRAAVIAVTRSAQAARQVHLCRGVFPLLYREPPEAIWADDVDRRVQFGIESGKLRGFLRVGDLVIVVTGWRPGSGYTNIMRVLSI
-2023-04-14 15:19:14,674 [MainThread  ] [INFO ]  Sequence identity (%): 99.03288201160541
-2023-04-14 15:19:14,674 [MainThread  ] [INFO ]  Gap less identity (%): 99.80506822612085
-2023-04-14 15:19:14,741 [MainThread  ] [INFO ]  Superimposing 513 aligned protein residues
-2023-04-14 15:19:14,753 [MainThread  ] [INFO ]  RMSD: 0.8869688489106163
-2023-04-14 15:19:14,753 [MainThread  ] [INFO ]  Saving transformed ligand coordinates
-2023-04-14 15:19:14,753 [MainThread  ] [INFO ]   
-2023-04-14 15:19:14,753 [MainThread  ] [INFO ]  ------------ Iteration #5 --------------
-2023-04-14 15:19:14,753 [MainThread  ] [INFO ]  Cluster member: 4ima
-2023-04-14 15:19:15,044 [MainThread  ] [INFO ]  Ligand PGA not found in 4ima cluster member, skipping this cluster
-2023-04-14 15:19:15,044 [MainThread  ] [INFO ]   
-2023-04-14 15:19:15,044 [MainThread  ] [INFO ]  ------------ Iteration #6 --------------
-2023-04-14 15:19:15,044 [MainThread  ] [INFO ]  Cluster member: 4ip7
-2023-04-14 15:19:15,524 [MainThread  ] [INFO ]  Ligand PGA not found in 4ip7 cluster member, skipping this cluster
-2023-04-14 15:19:15,524 [MainThread  ] [INFO ]   
-2023-04-14 15:19:15,524 [MainThread  ] [INFO ]  ----------------------------------------
-2023-04-14 15:19:15,524 [MainThread  ] [INFO ]  All transformed ligand coordinates saved, getting binding site residues
-2023-04-14 15:19:15,524 [MainThread  ] [INFO ]  Defining binding site residues as those 5.0Å around the 4 cluster superimposed ligands
-2023-04-14 15:19:15,534 [MainThread  ] [INFO ]  Writing binding site residues into /tmp/biobb/unitests_49/bindingsite/output_bindingsite.pdb
-2023-04-14 15:19:15,546 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_49/bindingsite/eb833b32-77a2-4ab8-a7d6-d76a86014526&#x27;, &#x27;55e518bd-c4d0-499b-af85-e6b7fd4c1882&#x27;]
+2023-04-14 15:20:27,472 [MainThread  ] [INFO ]  Sequence identity (%): 99.03288201160541
+2023-04-14 15:20:27,472 [MainThread  ] [INFO ]  Gap less identity (%): 99.80506822612085
+2023-04-14 15:20:27,547 [MainThread  ] [INFO ]  Superimposing 513 aligned protein residues
+2023-04-14 15:20:27,560 [MainThread  ] [INFO ]  RMSD: 0.8869688489106163
+2023-04-14 15:20:27,560 [MainThread  ] [INFO ]  Saving transformed ligand coordinates
+2023-04-14 15:20:27,560 [MainThread  ] [INFO ]   
+2023-04-14 15:20:27,560 [MainThread  ] [INFO ]  ------------ Iteration #5 --------------
+2023-04-14 15:20:27,560 [MainThread  ] [INFO ]  Cluster member: 4ima
+2023-04-14 15:20:27,915 [MainThread  ] [INFO ]  Ligand PGA not found in 4ima cluster member, skipping this cluster
+2023-04-14 15:20:27,915 [MainThread  ] [INFO ]   
+2023-04-14 15:20:27,915 [MainThread  ] [INFO ]  ------------ Iteration #6 --------------
+2023-04-14 15:20:27,915 [MainThread  ] [INFO ]  Cluster member: 4ip7
+2023-04-14 15:20:28,438 [MainThread  ] [INFO ]  Ligand PGA not found in 4ip7 cluster member, skipping this cluster
+2023-04-14 15:20:28,438 [MainThread  ] [INFO ]   
+2023-04-14 15:20:28,438 [MainThread  ] [INFO ]  ----------------------------------------
+2023-04-14 15:20:28,438 [MainThread  ] [INFO ]  All transformed ligand coordinates saved, getting binding site residues
+2023-04-14 15:20:28,438 [MainThread  ] [INFO ]  Defining binding site residues as those 5.0Å around the 4 cluster superimposed ligands
+2023-04-14 15:20:28,449 [MainThread  ] [INFO ]  Writing binding site residues into /tmp/biobb/unitests_49/bindingsite/output_bindingsite.pdb
+2023-04-14 15:20:28,460 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_49/bindingsite/bb04398c-0389-405a-abd9-436e1087e2db&#x27;, &#x27;e09acfc0-85d1-4ca3-80f4-adb9510e9e12&#x27;]
 Checking if empty file: /tmp/biobb/unitests_49/bindingsite/output_bindingsite.pdb
 Checking RMSD between:
      PDB_A: /tmp/biobb/unitests_49/bindingsite/output_bindingsite.pdb
@@ -622,14 +622,14 @@ Checking RMSD between:
      RMS: 1.7136026829200588e-15
      RMS_CUTOFF: 1
 <br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_49/bindingsite/bindingsite_log.out:file_utils.py:346 Executing biobb_vs.utils.bindingsite Version: 4.0.0
-INFO     /tmp/biobb/unitests_49/bindingsite/bindingsite_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/bindingsite.pdb to /tmp/biobb/unitests_49/bindingsite/eb833b32-77a2-4ab8-a7d6-d76a86014526
-INFO     /tmp/biobb/unitests_49/bindingsite/bindingsite_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/bindingsite.zip to /tmp/biobb/unitests_49/bindingsite/eb833b32-77a2-4ab8-a7d6-d76a86014526
+INFO     /tmp/biobb/unitests_49/bindingsite/bindingsite_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/bindingsite.pdb to /tmp/biobb/unitests_49/bindingsite/bb04398c-0389-405a-abd9-436e1087e2db
+INFO     /tmp/biobb/unitests_49/bindingsite/bindingsite_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/bindingsite.zip to /tmp/biobb/unitests_49/bindingsite/bb04398c-0389-405a-abd9-436e1087e2db
 INFO     /tmp/biobb/unitests_49/bindingsite/bindingsite_log.out:file_utils.py:346 Loading input PDB structure /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/bindingsite.pdb
 INFO     /tmp/biobb/unitests_49/bindingsite/bindingsite_log.out:file_utils.py:346 Found 517 residues in /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/bindingsite.pdb
-INFO     /tmp/biobb/unitests_49/bindingsite/bindingsite_log.out:file_utils.py:346 Creating 55e518bd-c4d0-499b-af85-e6b7fd4c1882 temporary folder
+INFO     /tmp/biobb/unitests_49/bindingsite/bindingsite_log.out:file_utils.py:346 Creating e09acfc0-85d1-4ca3-80f4-adb9510e9e12 temporary folder
 INFO     /tmp/biobb/unitests_49/bindingsite/bindingsite_log.out:file_utils.py:159 Extracting: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/bindingsite.zip
 INFO     /tmp/biobb/unitests_49/bindingsite/bindingsite_log.out:file_utils.py:160 to:
-INFO     /tmp/biobb/unitests_49/bindingsite/bindingsite_log.out:file_utils.py:161 [&#x27;55e518bd-c4d0-499b-af85-e6b7fd4c1882/2vgb.pdb&#x27;, &#x27;55e518bd-c4d0-499b-af85-e6b7fd4c1882/2vgf.pdb&#x27;, &#x27;55e518bd-c4d0-499b-af85-e6b7fd4c1882/2vgg.pdb&#x27;, &#x27;55e518bd-c4d0-499b-af85-e6b7fd4c1882/2vgi.pdb&#x27;, &#x27;55e518bd-c4d0-499b-af85-e6b7fd4c1882/4ima.pdb&#x27;, &#x27;55e518bd-c4d0-499b-af85-e6b7fd4c1882/4ip7.pdb&#x27;]
+INFO     /tmp/biobb/unitests_49/bindingsite/bindingsite_log.out:file_utils.py:161 [&#x27;e09acfc0-85d1-4ca3-80f4-adb9510e9e12/2vgb.pdb&#x27;, &#x27;e09acfc0-85d1-4ca3-80f4-adb9510e9e12/2vgf.pdb&#x27;, &#x27;e09acfc0-85d1-4ca3-80f4-adb9510e9e12/2vgg.pdb&#x27;, &#x27;e09acfc0-85d1-4ca3-80f4-adb9510e9e12/2vgi.pdb&#x27;, &#x27;e09acfc0-85d1-4ca3-80f4-adb9510e9e12/4ima.pdb&#x27;, &#x27;e09acfc0-85d1-4ca3-80f4-adb9510e9e12/4ip7.pdb&#x27;]
 INFO     /tmp/biobb/unitests_49/bindingsite/bindingsite_log.out:file_utils.py:346 Iterating on all clusters:
 INFO     /tmp/biobb/unitests_49/bindingsite/bindingsite_log.out:file_utils.py:346  
 INFO     /tmp/biobb/unitests_49/bindingsite/bindingsite_log.out:file_utils.py:346 ------------ Iteration #1 --------------
@@ -692,7 +692,7 @@ INFO     /tmp/biobb/unitests_49/bindingsite/bindingsite_log.out:file_utils.py:34
 INFO     /tmp/biobb/unitests_49/bindingsite/bindingsite_log.out:file_utils.py:346 All transformed ligand coordinates saved, getting binding site residues
 INFO     /tmp/biobb/unitests_49/bindingsite/bindingsite_log.out:file_utils.py:346 Defining binding site residues as those 5.0Å around the 4 cluster superimposed ligands
 INFO     /tmp/biobb/unitests_49/bindingsite/bindingsite_log.out:file_utils.py:346 Writing binding site residues into /tmp/biobb/unitests_49/bindingsite/output_bindingsite.pdb
-INFO     /tmp/biobb/unitests_49/bindingsite/bindingsite_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_49/bindingsite/eb833b32-77a2-4ab8-a7d6-d76a86014526&#x27;, &#x27;55e518bd-c4d0-499b-af85-e6b7fd4c1882&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
+INFO     /tmp/biobb/unitests_49/bindingsite/bindingsite_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_49/bindingsite/bb04398c-0389-405a-abd9-436e1087e2db&#x27;, &#x27;e09acfc0-85d1-4ca3-80f4-adb9510e9e12&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
 Removing: /tmp/biobb/unitests_49
 <br/></div></td></tr></tbody>
       <tbody class="passed results-table-row">
@@ -703,16 +703,16 @@ Removing: /tmp/biobb/unitests_49
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-14 15:19:15,575 [MainThread  ] [INFO ]  Executing biobb_vs.utils.box Version: 4.0.0
-2023-04-14 15:19:15,575 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/input_box.pqr to /tmp/biobb/unitests_49/box/67c17d68-b6f1-4259-952b-087df26a99f8
-2023-04-14 15:19:15,576 [MainThread  ] [INFO ]  Loading pocket PQR selection from /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/input_box.pqr
-2023-04-14 15:19:15,576 [MainThread  ] [INFO ]  Binding site center (Angstroms):      4.853   -62.298   -38.437
-2023-04-14 15:19:15,576 [MainThread  ] [INFO ]  Adding 2.0 Angstroms offset
-2023-04-14 15:19:15,576 [MainThread  ] [INFO ]  Binding site size (Angstroms):        4.070     4.801     5.508
-2023-04-14 15:19:15,576 [MainThread  ] [INFO ]  Volume (cubic Angstroms): 861
-2023-04-14 15:19:15,576 [MainThread  ] [INFO ]  Adding box coordinates
-2023-04-14 15:19:15,576 [MainThread  ] [INFO ]  Saving output PDB file (with box setting annotations): /tmp/biobb/unitests_49/box/output_box.pdb
-2023-04-14 15:19:15,577 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_49/box/67c17d68-b6f1-4259-952b-087df26a99f8&#x27;]
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-14 15:20:28,496 [MainThread  ] [INFO ]  Executing biobb_vs.utils.box Version: 4.0.0
+2023-04-14 15:20:28,496 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/input_box.pqr to /tmp/biobb/unitests_49/box/9165a7c4-3849-4ab2-8908-29aab526c6bc
+2023-04-14 15:20:28,497 [MainThread  ] [INFO ]  Loading pocket PQR selection from /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/input_box.pqr
+2023-04-14 15:20:28,497 [MainThread  ] [INFO ]  Binding site center (Angstroms):      4.853   -62.298   -38.437
+2023-04-14 15:20:28,497 [MainThread  ] [INFO ]  Adding 2.0 Angstroms offset
+2023-04-14 15:20:28,497 [MainThread  ] [INFO ]  Binding site size (Angstroms):        4.070     4.801     5.508
+2023-04-14 15:20:28,497 [MainThread  ] [INFO ]  Volume (cubic Angstroms): 861
+2023-04-14 15:20:28,497 [MainThread  ] [INFO ]  Adding box coordinates
+2023-04-14 15:20:28,497 [MainThread  ] [INFO ]  Saving output PDB file (with box setting annotations): /tmp/biobb/unitests_49/box/output_box.pdb
+2023-04-14 15:20:28,498 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_49/box/9165a7c4-3849-4ab2-8908-29aab526c6bc&#x27;]
 Checking if empty file: /tmp/biobb/unitests_49/box/output_box.pdb
 Comparing: 
         File_A: /tmp/biobb/unitests_49/box/output_box.pdb
@@ -720,7 +720,7 @@ Comparing:
         File_A hash: b&#x27;\x07w\x8d \xde\x1cwc(\xf3\x14&amp;\x90\xa8JiC\xd5\x8f&amp;\xf6\xf2a\x17z\x7fw\xd1@Ds/&#x27;
         File_B hash: b&#x27;\x07w\x8d \xde\x1cwc(\xf3\x14&amp;\x90\xa8JiC\xd5\x8f&amp;\xf6\xf2a\x17z\x7fw\xd1@Ds/&#x27;
 <br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_49/box/box_log.out:file_utils.py:346 Executing biobb_vs.utils.box Version: 4.0.0
-INFO     /tmp/biobb/unitests_49/box/box_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/input_box.pqr to /tmp/biobb/unitests_49/box/67c17d68-b6f1-4259-952b-087df26a99f8
+INFO     /tmp/biobb/unitests_49/box/box_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/input_box.pqr to /tmp/biobb/unitests_49/box/9165a7c4-3849-4ab2-8908-29aab526c6bc
 INFO     /tmp/biobb/unitests_49/box/box_log.out:file_utils.py:346 Loading pocket PQR selection from /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/input_box.pqr
 INFO     /tmp/biobb/unitests_49/box/box_log.out:file_utils.py:346 Binding site center (Angstroms):      4.853   -62.298   -38.437
 INFO     /tmp/biobb/unitests_49/box/box_log.out:file_utils.py:346 Adding 2.0 Angstroms offset
@@ -728,28 +728,28 @@ INFO     /tmp/biobb/unitests_49/box/box_log.out:file_utils.py:346 Binding site s
 INFO     /tmp/biobb/unitests_49/box/box_log.out:file_utils.py:346 Volume (cubic Angstroms): 861
 INFO     /tmp/biobb/unitests_49/box/box_log.out:file_utils.py:346 Adding box coordinates
 INFO     /tmp/biobb/unitests_49/box/box_log.out:file_utils.py:346 Saving output PDB file (with box setting annotations): /tmp/biobb/unitests_49/box/output_box.pdb
-INFO     /tmp/biobb/unitests_49/box/box_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_49/box/67c17d68-b6f1-4259-952b-087df26a99f8&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
+INFO     /tmp/biobb/unitests_49/box/box_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_49/box/9165a7c4-3849-4ab2-8908-29aab526c6bc&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
 Removing: /tmp/biobb/unitests_49
 <br/></div></td></tr></tbody>
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">biobb_vs/test/unitests/test_utils/test_box_residues.py::TestBoxResidues::test_box_residues</td>
-          <td class="col-duration">0.07</td>
+          <td class="col-duration">0.08</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-14 15:19:15,598 [MainThread  ] [INFO ]  Executing biobb_vs.utils.box_residues Version: 4.0.0
-2023-04-14 15:19:15,599 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/input_box_residues.pdb to /tmp/biobb/unitests_49/box_residues/986a3f56-818a-42a9-954b-2c4f472fe231
-2023-04-14 15:19:15,599 [MainThread  ] [INFO ]  Loading input PDB structure /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/input_box_residues.pdb
-2023-04-14 15:19:15,648 [MainThread  ] [INFO ]  Mapping residue structure into input structure
-2023-04-14 15:19:15,648 [MainThread  ] [INFO ]  Selection of residues successfully matched
-2023-04-14 15:19:15,648 [MainThread  ] [INFO ]  Binding site center (Angstroms):     -2.028   -54.362   -25.714
-2023-04-14 15:19:15,649 [MainThread  ] [INFO ]  Binding site size (Angstroms):        7.465    10.330    13.002
-2023-04-14 15:19:15,649 [MainThread  ] [INFO ]  Volume (cubic Angstroms): 8021
-2023-04-14 15:19:15,649 [MainThread  ] [INFO ]  Adding box coordinates
-2023-04-14 15:19:15,649 [MainThread  ] [INFO ]  Saving output PDB file (with box setting annotations): /tmp/biobb/unitests_49/box_residues/output_box_residues.pdb
-2023-04-14 15:19:15,649 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_49/box_residues/986a3f56-818a-42a9-954b-2c4f472fe231&#x27;]
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-14 15:20:28,523 [MainThread  ] [INFO ]  Executing biobb_vs.utils.box_residues Version: 4.0.0
+2023-04-14 15:20:28,524 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/input_box_residues.pdb to /tmp/biobb/unitests_49/box_residues/d10591c4-7be5-45c0-89c2-9ea4be7e20b0
+2023-04-14 15:20:28,524 [MainThread  ] [INFO ]  Loading input PDB structure /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/input_box_residues.pdb
+2023-04-14 15:20:28,583 [MainThread  ] [INFO ]  Mapping residue structure into input structure
+2023-04-14 15:20:28,583 [MainThread  ] [INFO ]  Selection of residues successfully matched
+2023-04-14 15:20:28,583 [MainThread  ] [INFO ]  Binding site center (Angstroms):     -2.028   -54.362   -25.714
+2023-04-14 15:20:28,584 [MainThread  ] [INFO ]  Binding site size (Angstroms):        7.465    10.330    13.002
+2023-04-14 15:20:28,584 [MainThread  ] [INFO ]  Volume (cubic Angstroms): 8021
+2023-04-14 15:20:28,584 [MainThread  ] [INFO ]  Adding box coordinates
+2023-04-14 15:20:28,584 [MainThread  ] [INFO ]  Saving output PDB file (with box setting annotations): /tmp/biobb/unitests_49/box_residues/output_box_residues.pdb
+2023-04-14 15:20:28,584 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_49/box_residues/d10591c4-7be5-45c0-89c2-9ea4be7e20b0&#x27;]
 Checking if empty file: /tmp/biobb/unitests_49/box_residues/output_box_residues.pdb
 Comparing: 
         File_A: /tmp/biobb/unitests_49/box_residues/output_box_residues.pdb
@@ -757,7 +757,7 @@ Comparing:
         File_A hash: b&#x27;\xef\x8a\xceu\x81\xfe\x9f\xbb\x92\xabZA\x96[\x8d\xa3\xc6c\x02\xe4\x90\x07qg\xc7\x94\x85,&amp;f*g&#x27;
         File_B hash: b&#x27;\xef\x8a\xceu\x81\xfe\x9f\xbb\x92\xabZA\x96[\x8d\xa3\xc6c\x02\xe4\x90\x07qg\xc7\x94\x85,&amp;f*g&#x27;
 <br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_49/box_residues/box_residues_log.out:file_utils.py:346 Executing biobb_vs.utils.box_residues Version: 4.0.0
-INFO     /tmp/biobb/unitests_49/box_residues/box_residues_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/input_box_residues.pdb to /tmp/biobb/unitests_49/box_residues/986a3f56-818a-42a9-954b-2c4f472fe231
+INFO     /tmp/biobb/unitests_49/box_residues/box_residues_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/input_box_residues.pdb to /tmp/biobb/unitests_49/box_residues/d10591c4-7be5-45c0-89c2-9ea4be7e20b0
 INFO     /tmp/biobb/unitests_49/box_residues/box_residues_log.out:file_utils.py:346 Loading input PDB structure /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/input_box_residues.pdb
 INFO     /tmp/biobb/unitests_49/box_residues/box_residues_log.out:file_utils.py:346 Mapping residue structure into input structure
 INFO     /tmp/biobb/unitests_49/box_residues/box_residues_log.out:file_utils.py:346 Selection of residues successfully matched
@@ -766,7 +766,7 @@ INFO     /tmp/biobb/unitests_49/box_residues/box_residues_log.out:file_utils.py:
 INFO     /tmp/biobb/unitests_49/box_residues/box_residues_log.out:file_utils.py:346 Volume (cubic Angstroms): 8021
 INFO     /tmp/biobb/unitests_49/box_residues/box_residues_log.out:file_utils.py:346 Adding box coordinates
 INFO     /tmp/biobb/unitests_49/box_residues/box_residues_log.out:file_utils.py:346 Saving output PDB file (with box setting annotations): /tmp/biobb/unitests_49/box_residues/output_box_residues.pdb
-INFO     /tmp/biobb/unitests_49/box_residues/box_residues_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_49/box_residues/986a3f56-818a-42a9-954b-2c4f472fe231&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
+INFO     /tmp/biobb/unitests_49/box_residues/box_residues_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_49/box_residues/d10591c4-7be5-45c0-89c2-9ea4be7e20b0&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
 Removing: /tmp/biobb/unitests_49
 <br/></div></td></tr></tbody>
       <tbody class="passed results-table-row">
@@ -777,10 +777,10 @@ Removing: /tmp/biobb/unitests_49
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-14 15:19:15,670 [MainThread  ] [INFO ]  Executing biobb_vs.utils.extract_model_pdbqt Version: 4.0.0
-2023-04-14 15:19:15,671 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/models.pdbqt to /tmp/biobb/unitests_49/extract_model_pdbqt/4feec8a8-2981-49ba-8ba2-b00c5f805fb4
-2023-04-14 15:19:15,674 [MainThread  ] [INFO ]  Saving model 1 to /tmp/biobb/unitests_49/extract_model_pdbqt/output_extract.pdbqt
-2023-04-14 15:19:15,674 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_49/extract_model_pdbqt/4feec8a8-2981-49ba-8ba2-b00c5f805fb4&#x27;]
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-14 15:20:28,609 [MainThread  ] [INFO ]  Executing biobb_vs.utils.extract_model_pdbqt Version: 4.0.0
+2023-04-14 15:20:28,610 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/models.pdbqt to /tmp/biobb/unitests_49/extract_model_pdbqt/06066aec-d6b9-4676-aa66-bcfdff902918
+2023-04-14 15:20:28,613 [MainThread  ] [INFO ]  Saving model 1 to /tmp/biobb/unitests_49/extract_model_pdbqt/output_extract.pdbqt
+2023-04-14 15:20:28,613 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_49/extract_model_pdbqt/06066aec-d6b9-4676-aa66-bcfdff902918&#x27;]
 Checking if empty file: /tmp/biobb/unitests_49/extract_model_pdbqt/output_extract.pdbqt
 Comparing: 
         File_A: /tmp/biobb/unitests_49/extract_model_pdbqt/output_extract.pdbqt
@@ -788,38 +788,38 @@ Comparing:
         File_A hash: b&#x27;\xbf\x80\xf8\xd1\xcbo\xde D%\nQ\xd7\x02\x93\xf7y\x82\x97S\xe6\x96\x84\xd1u\x89,\xdc\xfe\xa4\xe8]&#x27;
         File_B hash: b&#x27;\xbf\x80\xf8\xd1\xcbo\xde D%\nQ\xd7\x02\x93\xf7y\x82\x97S\xe6\x96\x84\xd1u\x89,\xdc\xfe\xa4\xe8]&#x27;
 <br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_49/extract_model_pdbqt/extract_model_pdbqt_log.out:file_utils.py:346 Executing biobb_vs.utils.extract_model_pdbqt Version: 4.0.0
-INFO     /tmp/biobb/unitests_49/extract_model_pdbqt/extract_model_pdbqt_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/models.pdbqt to /tmp/biobb/unitests_49/extract_model_pdbqt/4feec8a8-2981-49ba-8ba2-b00c5f805fb4
+INFO     /tmp/biobb/unitests_49/extract_model_pdbqt/extract_model_pdbqt_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/models.pdbqt to /tmp/biobb/unitests_49/extract_model_pdbqt/06066aec-d6b9-4676-aa66-bcfdff902918
 INFO     /tmp/biobb/unitests_49/extract_model_pdbqt/extract_model_pdbqt_log.out:file_utils.py:346 Saving model 1 to /tmp/biobb/unitests_49/extract_model_pdbqt/output_extract.pdbqt
-INFO     /tmp/biobb/unitests_49/extract_model_pdbqt/extract_model_pdbqt_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_49/extract_model_pdbqt/4feec8a8-2981-49ba-8ba2-b00c5f805fb4&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
+INFO     /tmp/biobb/unitests_49/extract_model_pdbqt/extract_model_pdbqt_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_49/extract_model_pdbqt/06066aec-d6b9-4676-aa66-bcfdff902918&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
 Removing: /tmp/biobb/unitests_49
 <br/></div></td></tr></tbody>
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">biobb_vs/test/unitests/test_vina/test_autodock_vina_run.py::TestAutoDockVinaRun::test_autodock_vina_run</td>
-          <td class="col-duration">15.73</td>
+          <td class="col-duration">16.79</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-14 15:19:15,695 [MainThread  ] [INFO ]  Executing biobb_vs.vina.autodock_vina_run Version: 4.0.0
-2023-04-14 15:19:15,695 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/vina/vina_ligand.pdbqt to /tmp/biobb/unitests_49/autodock_vina_run/4d6b6341-fee9-4ea3-b1b6-c4f0d950fc74
-2023-04-14 15:19:15,696 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/vina/vina_receptor.pdbqt to /tmp/biobb/unitests_49/autodock_vina_run/4d6b6341-fee9-4ea3-b1b6-c4f0d950fc74
-2023-04-14 15:19:15,699 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/vina/vina_box.pdb to /tmp/biobb/unitests_49/autodock_vina_run/4d6b6341-fee9-4ea3-b1b6-c4f0d950fc74
-2023-04-14 15:19:15,699 [MainThread  ] [INFO ]  vina --ligand /tmp/biobb/unitests_49/autodock_vina_run/4d6b6341-fee9-4ea3-b1b6-c4f0d950fc74/vina_ligand.pdbqt --receptor /tmp/biobb/unitests_49/autodock_vina_run/4d6b6341-fee9-4ea3-b1b6-c4f0d950fc74/vina_receptor.pdbqt --center_x=7.293 --center_y=7.293 --center_z=-2.136 --size_x=16.319 --size_y=11.521 --size_z=13.047 --cpu 1 --out /tmp/biobb/unitests_49/autodock_vina_run/4d6b6341-fee9-4ea3-b1b6-c4f0d950fc74/output_pdbqt_path.pdbqt --verbosity 1 &gt; /tmp/biobb/unitests_49/autodock_vina_run/4d6b6341-fee9-4ea3-b1b6-c4f0d950fc74/output_log_path.log
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-14 15:20:28,639 [MainThread  ] [INFO ]  Executing biobb_vs.vina.autodock_vina_run Version: 4.0.0
+2023-04-14 15:20:28,639 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/vina/vina_ligand.pdbqt to /tmp/biobb/unitests_49/autodock_vina_run/ebb5ad43-b1ce-4ff4-8b5c-7cfd8bfeb048
+2023-04-14 15:20:28,640 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/vina/vina_receptor.pdbqt to /tmp/biobb/unitests_49/autodock_vina_run/ebb5ad43-b1ce-4ff4-8b5c-7cfd8bfeb048
+2023-04-14 15:20:28,642 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/vina/vina_box.pdb to /tmp/biobb/unitests_49/autodock_vina_run/ebb5ad43-b1ce-4ff4-8b5c-7cfd8bfeb048
+2023-04-14 15:20:28,642 [MainThread  ] [INFO ]  vina --ligand /tmp/biobb/unitests_49/autodock_vina_run/ebb5ad43-b1ce-4ff4-8b5c-7cfd8bfeb048/vina_ligand.pdbqt --receptor /tmp/biobb/unitests_49/autodock_vina_run/ebb5ad43-b1ce-4ff4-8b5c-7cfd8bfeb048/vina_receptor.pdbqt --center_x=7.293 --center_y=7.293 --center_z=-2.136 --size_x=16.319 --size_y=11.521 --size_z=13.047 --cpu 1 --out /tmp/biobb/unitests_49/autodock_vina_run/ebb5ad43-b1ce-4ff4-8b5c-7cfd8bfeb048/output_pdbqt_path.pdbqt --verbosity 1 &gt; /tmp/biobb/unitests_49/autodock_vina_run/ebb5ad43-b1ce-4ff4-8b5c-7cfd8bfeb048/output_log_path.log
 
-2023-04-14 15:19:31,405 [MainThread  ] [INFO ]  Exit code 0
+2023-04-14 15:20:45,405 [MainThread  ] [INFO ]  Exit code 0
 
-2023-04-14 15:19:31,406 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_49/autodock_vina_run/4d6b6341-fee9-4ea3-b1b6-c4f0d950fc74&#x27;]
+2023-04-14 15:20:45,407 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_49/autodock_vina_run/ebb5ad43-b1ce-4ff4-8b5c-7cfd8bfeb048&#x27;]
 Checking if empty file: /tmp/biobb/unitests_49/autodock_vina_run/output_pdbqt_path.pdbqt
 Checking if empty file: /tmp/biobb/unitests_49/autodock_vina_run/output_log_path.log
 <br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_49/autodock_vina_run/autodock_vina_run_log.out:file_utils.py:346 Executing biobb_vs.vina.autodock_vina_run Version: 4.0.0
-INFO     /tmp/biobb/unitests_49/autodock_vina_run/autodock_vina_run_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/vina/vina_ligand.pdbqt to /tmp/biobb/unitests_49/autodock_vina_run/4d6b6341-fee9-4ea3-b1b6-c4f0d950fc74
-INFO     /tmp/biobb/unitests_49/autodock_vina_run/autodock_vina_run_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/vina/vina_receptor.pdbqt to /tmp/biobb/unitests_49/autodock_vina_run/4d6b6341-fee9-4ea3-b1b6-c4f0d950fc74
-INFO     /tmp/biobb/unitests_49/autodock_vina_run/autodock_vina_run_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/vina/vina_box.pdb to /tmp/biobb/unitests_49/autodock_vina_run/4d6b6341-fee9-4ea3-b1b6-c4f0d950fc74
-INFO     /tmp/biobb/unitests_49/autodock_vina_run/autodock_vina_run_log.out:cmd_wrapper.py:32 vina --ligand /tmp/biobb/unitests_49/autodock_vina_run/4d6b6341-fee9-4ea3-b1b6-c4f0d950fc74/vina_ligand.pdbqt --receptor /tmp/biobb/unitests_49/autodock_vina_run/4d6b6341-fee9-4ea3-b1b6-c4f0d950fc74/vina_receptor.pdbqt --center_x=7.293 --center_y=7.293 --center_z=-2.136 --size_x=16.319 --size_y=11.521 --size_z=13.047 --cpu 1 --out /tmp/biobb/unitests_49/autodock_vina_run/4d6b6341-fee9-4ea3-b1b6-c4f0d950fc74/output_pdbqt_path.pdbqt --verbosity 1 &gt; /tmp/biobb/unitests_49/autodock_vina_run/4d6b6341-fee9-4ea3-b1b6-c4f0d950fc74/output_log_path.log
+INFO     /tmp/biobb/unitests_49/autodock_vina_run/autodock_vina_run_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/vina/vina_ligand.pdbqt to /tmp/biobb/unitests_49/autodock_vina_run/ebb5ad43-b1ce-4ff4-8b5c-7cfd8bfeb048
+INFO     /tmp/biobb/unitests_49/autodock_vina_run/autodock_vina_run_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/vina/vina_receptor.pdbqt to /tmp/biobb/unitests_49/autodock_vina_run/ebb5ad43-b1ce-4ff4-8b5c-7cfd8bfeb048
+INFO     /tmp/biobb/unitests_49/autodock_vina_run/autodock_vina_run_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/vina/vina_box.pdb to /tmp/biobb/unitests_49/autodock_vina_run/ebb5ad43-b1ce-4ff4-8b5c-7cfd8bfeb048
+INFO     /tmp/biobb/unitests_49/autodock_vina_run/autodock_vina_run_log.out:cmd_wrapper.py:32 vina --ligand /tmp/biobb/unitests_49/autodock_vina_run/ebb5ad43-b1ce-4ff4-8b5c-7cfd8bfeb048/vina_ligand.pdbqt --receptor /tmp/biobb/unitests_49/autodock_vina_run/ebb5ad43-b1ce-4ff4-8b5c-7cfd8bfeb048/vina_receptor.pdbqt --center_x=7.293 --center_y=7.293 --center_z=-2.136 --size_x=16.319 --size_y=11.521 --size_z=13.047 --cpu 1 --out /tmp/biobb/unitests_49/autodock_vina_run/ebb5ad43-b1ce-4ff4-8b5c-7cfd8bfeb048/output_pdbqt_path.pdbqt --verbosity 1 &gt; /tmp/biobb/unitests_49/autodock_vina_run/ebb5ad43-b1ce-4ff4-8b5c-7cfd8bfeb048/output_log_path.log
 
 INFO     /tmp/biobb/unitests_49/autodock_vina_run/autodock_vina_run_log.out:cmd_wrapper.py:49 Exit code 0
 
-INFO     /tmp/biobb/unitests_49/autodock_vina_run/autodock_vina_run_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_49/autodock_vina_run/4d6b6341-fee9-4ea3-b1b6-c4f0d950fc74&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
+INFO     /tmp/biobb/unitests_49/autodock_vina_run/autodock_vina_run_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_49/autodock_vina_run/ebb5ad43-b1ce-4ff4-8b5c-7cfd8bfeb048&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
 Removing: /tmp/biobb/unitests_49
 <br/></div></td></tr></tbody></table></body></html>

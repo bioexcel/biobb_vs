@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="biobb_vs",
-    version="4.1.0",
+    version="4.1.1",
     author="Biobb developers",
     author_email="genis.bayarri@irbbarcelona.org",
     description="Biobb_vs is the Biobb module collection to perform virtual screening studies.",

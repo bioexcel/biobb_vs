@@ -1,5 +1,12 @@
 # Biobb Virtual Screening changelog
 
+## What's new in version [4.1.1](https://github.com/bioexcel/biobb_vs/releases/tag/v4.1.1)?
+In version 4.1.1 some minor bugs have been fixed. 
+
+### New features
+
+* Minor bug fixes in Utils
+
 ## What's new in version [4.1.0](https://github.com/bioexcel/biobb_vs/releases/tag/v4.1.0)?
 In version 4.1.0 the dependency biobb_common has been updated to 4.1.0 version.
 

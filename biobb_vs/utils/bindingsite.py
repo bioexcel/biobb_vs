@@ -16,10 +16,11 @@ with warnings.catch_warnings():
     warnings.simplefilter("ignore", BiopythonDeprecationWarning)
     import Bio.PDB
     import Bio.pairwise2
-    try:
-        import Bio.SubsMat.MatrixInfo
-    except ImportError:
-        import Bio.Align.substitution_matrices
+    # try:
+    #    import Bio.SubsMat.MatrixInfo
+    # except ImportError:
+
+    import Bio.Align.substitution_matrices
 
 
 class BindingSite(BiobbObject):

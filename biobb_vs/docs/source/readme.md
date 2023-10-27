@@ -30,7 +30,7 @@ Biobb (BioExcel building blocks) packages are Python building blocks that
 create new layer of compatibility and interoperability over popular
 bioinformatics tools.
 The latest documentation of this package can be found in our readthedocs site:
-[latest API documentation](http://biobb_vs.readthedocs.io/en/latest/).
+[latest API documentation](http://biobb-vs.readthedocs.io/en/latest/).
 
 > At the time of publishing the current version, **autodock_vina has not been compiled for the new ARM mac M1/M2 chips**. So the vina.autodock_vina_run only work in these computers through docker containers.
 

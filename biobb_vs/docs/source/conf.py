@@ -36,6 +36,7 @@ extensions = [
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
     'sphinx.ext.napoleon',
+    'sphinx_rtd_theme',
     'recommonmark'
 ]
 
@@ -126,7 +127,7 @@ todo_include_todos = False
 
 # -- Options for HTML output ----------------------------------------------
 def setup(app):
-    app.add_stylesheet('theme_overrides.css')
+    app.add_css_file('theme_overrides.css')
     app.add_js_file('theme_overrides.js')
 
 

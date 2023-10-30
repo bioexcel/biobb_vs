@@ -16,6 +16,6 @@ sphinx:
 
 python:
   install:
-    - requirements: biobb_analysis/docs/requirements.txt
+    - requirements: biobb_vs/docs/requirements.txt
     - method: pip
       path: .

@@ -2,643 +2,769 @@
 <html>
   <head>
     <meta charset="utf-8"/>
-    <title>report.html</title>
-    <link href="assets/style.css" rel="stylesheet" type="text/css"/></head>
-  <body onLoad="init()">
-    <script>/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this file,
- * You can obtain one at http://mozilla.org/MPL/2.0/. */
-
-
-function toArray(iter) {
-    if (iter === null) {
-        return null;
-    }
-    return Array.prototype.slice.call(iter);
-}
-
-function find(selector, elem) { // eslint-disable-line no-redeclare
-    if (!elem) {
-        elem = document;
-    }
-    return elem.querySelector(selector);
-}
-
-function findAll(selector, elem) {
-    if (!elem) {
-        elem = document;
-    }
-    return toArray(elem.querySelectorAll(selector));
-}
-
-function sortColumn(elem) {
-    toggleSortStates(elem);
-    const colIndex = toArray(elem.parentNode.childNodes).indexOf(elem);
-    let key;
-    if (elem.classList.contains('result')) {
-        key = keyResult;
-    } else if (elem.classList.contains('links')) {
-        key = keyLink;
-    } else {
-        key = keyAlpha;
-    }
-    sortTable(elem, key(colIndex));
-}
-
-function showAllExtras() { // eslint-disable-line no-unused-vars
-    findAll('.col-result').forEach(showExtras);
-}
-
-function hideAllExtras() { // eslint-disable-line no-unused-vars
-    findAll('.col-result').forEach(hideExtras);
-}
-
-function showExtras(colresultElem) {
-    const extras = colresultElem.parentNode.nextElementSibling;
-    const expandcollapse = colresultElem.firstElementChild;
-    extras.classList.remove('collapsed');
-    expandcollapse.classList.remove('expander');
-    expandcollapse.classList.add('collapser');
-}
-
-function hideExtras(colresultElem) {
-    const extras = colresultElem.parentNode.nextElementSibling;
-    const expandcollapse = colresultElem.firstElementChild;
-    extras.classList.add('collapsed');
-    expandcollapse.classList.remove('collapser');
-    expandcollapse.classList.add('expander');
-}
-
-function showFilters() {
-    let visibleString = getQueryParameter('visible') || 'all';
-    visibleString = visibleString.toLowerCase();
-    const checkedItems = visibleString.split(',');
-
-    const filterItems = document.getElementsByClassName('filter');
-    for (let i = 0; i < filterItems.length; i++) {
-        filterItems[i].hidden = false;
-
-        if (visibleString != 'all') {
-            filterItems[i].checked = checkedItems.includes(filterItems[i].getAttribute('data-test-result'));
-            filterTable(filterItems[i]);
-        }
-    }
-}
-
-function addCollapse() {
-    // Add links for show/hide all
-    const resulttable = find('table#results-table');
-    const showhideall = document.createElement('p');
-    showhideall.innerHTML = '<a href="javascript:showAllExtras()">Show all details</a> / ' +
-                            '<a href="javascript:hideAllExtras()">Hide all details</a>';
-    resulttable.parentElement.insertBefore(showhideall, resulttable);
-
-    // Add show/hide link to each result
-    findAll('.col-result').forEach(function(elem) {
-        const collapsed = getQueryParameter('collapsed') || 'Passed';
-        const extras = elem.parentNode.nextElementSibling;
-        const expandcollapse = document.createElement('span');
-        if (extras.classList.contains('collapsed')) {
-            expandcollapse.classList.add('expander');
-        } else if (collapsed.includes(elem.innerHTML)) {
-            extras.classList.add('collapsed');
-            expandcollapse.classList.add('expander');
-        } else {
-            expandcollapse.classList.add('collapser');
-        }
-        elem.appendChild(expandcollapse);
-
-        elem.addEventListener('click', function(event) {
-            if (event.currentTarget.parentNode.nextElementSibling.classList.contains('collapsed')) {
-                showExtras(event.currentTarget);
-            } else {
-                hideExtras(event.currentTarget);
-            }
-        });
-    });
-}
-
-function getQueryParameter(name) {
-    const match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
-    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
-}
-
-function init () { // eslint-disable-line no-unused-vars
-    resetSortHeaders();
-
-    addCollapse();
-
-    showFilters();
-
-    sortColumn(find('.initial-sort'));
-
-    findAll('.sortable').forEach(function(elem) {
-        elem.addEventListener('click',
-            function() {
-                sortColumn(elem);
-            }, false);
-    });
-}
-
-function sortTable(clicked, keyFunc) {
-    const rows = findAll('.results-table-row');
-    const reversed = !clicked.classList.contains('asc');
-    const sortedRows = sort(rows, keyFunc, reversed);
-    /* Whole table is removed here because browsers acts much slower
-     * when appending existing elements.
-     */
-    const thead = document.getElementById('results-table-head');
-    document.getElementById('results-table').remove();
-    const parent = document.createElement('table');
-    parent.id = 'results-table';
-    parent.appendChild(thead);
-    sortedRows.forEach(function(elem) {
-        parent.appendChild(elem);
-    });
-    document.getElementsByTagName('BODY')[0].appendChild(parent);
-}
-
-function sort(items, keyFunc, reversed) {
-    const sortArray = items.map(function(item, i) {
-        return [keyFunc(item), i];
-    });
-
-    sortArray.sort(function(a, b) {
-        const keyA = a[0];
-        const keyB = b[0];
-
-        if (keyA == keyB) return 0;
-
-        if (reversed) {
-            return keyA < keyB ? 1 : -1;
-        } else {
-            return keyA > keyB ? 1 : -1;
-        }
-    });
-
-    return sortArray.map(function(item) {
-        const index = item[1];
-        return items[index];
-    });
-}
-
-function keyAlpha(colIndex) {
-    return function(elem) {
-        return elem.childNodes[1].childNodes[colIndex].firstChild.data.toLowerCase();
-    };
-}
-
-function keyLink(colIndex) {
-    return function(elem) {
-        const dataCell = elem.childNodes[1].childNodes[colIndex].firstChild;
-        return dataCell == null ? '' : dataCell.innerText.toLowerCase();
-    };
-}
-
-function keyResult(colIndex) {
-    return function(elem) {
-        const strings = ['Error', 'Failed', 'Rerun', 'XFailed', 'XPassed',
-            'Skipped', 'Passed'];
-        return strings.indexOf(elem.childNodes[1].childNodes[colIndex].firstChild.data);
-    };
-}
-
-function resetSortHeaders() {
-    findAll('.sort-icon').forEach(function(elem) {
-        elem.parentNode.removeChild(elem);
-    });
-    findAll('.sortable').forEach(function(elem) {
-        const icon = document.createElement('div');
-        icon.className = 'sort-icon';
-        icon.textContent = 'vvv';
-        elem.insertBefore(icon, elem.firstChild);
-        elem.classList.remove('desc', 'active');
-        elem.classList.add('asc', 'inactive');
-    });
-}
-
-function toggleSortStates(elem) {
-    //if active, toggle between asc and desc
-    if (elem.classList.contains('active')) {
-        elem.classList.toggle('asc');
-        elem.classList.toggle('desc');
-    }
-
-    //if inactive, reset all other functions and add ascending active
-    if (elem.classList.contains('inactive')) {
-        resetSortHeaders();
-        elem.classList.remove('inactive');
-        elem.classList.add('active');
-    }
-}
-
-function isAllRowsHidden(value) {
-    return value.hidden == false;
-}
-
-function filterTable(elem) { // eslint-disable-line no-unused-vars
-    const outcomeAtt = 'data-test-result';
-    const outcome = elem.getAttribute(outcomeAtt);
-    const classOutcome = outcome + ' results-table-row';
-    const outcomeRows = document.getElementsByClassName(classOutcome);
-
-    for(let i = 0; i < outcomeRows.length; i++){
-        outcomeRows[i].hidden = !elem.checked;
-    }
-
-    const rows = findAll('.results-table-row').filter(isAllRowsHidden);
-    const allRowsHidden = rows.length == 0 ? true : false;
-    const notFoundMessage = document.getElementById('not-found-message');
-    notFoundMessage.hidden = !allRowsHidden;
-}
-</script>
-    <h1>report.html</h1>
-    <p>Report generated on 14-Sep-2023 at 10:17:59 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.2.0</p>
-    <h2>Summary</h2>
-    <p>7 tests ran in 18.94 seconds. </p>
-    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">7 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">0 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
-    <h2>Results</h2>
+    <title id="head-title">report.html</title>
+      <link href="assets/style.css" rel="stylesheet" type="text/css"/>
+  </head>
+  <body>
+    <h1 id="title">report.html</h1>
+    <p>Report generated on 05-Mar-2024 at 11:24:50 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a>
+        v4.1.1</p>
+    <div id="environment-header">
+      <h2>Environment</h2>
+    </div>
+    <table id="environment"></table>
+    <!-- TEMPLATES -->
+      <template id="template_environment_row">
+      <tr>
+        <td></td>
+        <td></td>
+      </tr>
+    </template>
+    <template id="template_results-table__body--empty">
+      <tbody class="results-table-row">
+        <tr id="not-found-message">
+          <td colspan="4">No results found. Check the filters.</th>
+        </tr>
+    </template>
+    <template id="template_results-table__tbody">
+      <tbody class="results-table-row">
+        <tr class="collapsible">
+        </tr>
+        <tr class="extras-row">
+          <td class="extra" colspan="4">
+            <div class="extraHTML"></div>
+            <div class="media">
+              <div class="media-container">
+                  <div class="media-container__nav--left"><</div>
+                  <div class="media-container__viewport">
+                    <img src="" />
+                    <video controls>
+                      <source src="" type="video/mp4">
+                    </video>
+                  </div>
+                  <div class="media-container__nav--right">></div>
+                </div>
+                <div class="media__name"></div>
+                <div class="media__counter"></div>
+            </div>
+            <div class="logwrapper">
+              <div class="logexpander"></div>
+              <div class="log"></div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </template>
+    <!-- END TEMPLATES -->
+    <div class="summary">
+      <div class="summary__data">
+        <h2>Summary</h2>
+        <div class="additional-summary prefix">
+        </div>
+        <p class="run-count">7 tests took 00:00:19.</p>
+        <p class="filter">(Un)check the boxes to filter the results.</p>
+        <div class="summary__reload">
+          <div class="summary__reload__button hidden" onclick="location.reload()">
+            <div>There are still tests running. <br />Reload this page to get the latest results!</div>
+          </div>
+        </div>
+        <div class="summary__spacer"></div>
+        <div class="controls">
+          <div class="filters">
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="failed" disabled/>
+            <span class="failed">0 Failed,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="passed" />
+            <span class="passed">7 Passed,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="skipped" disabled/>
+            <span class="skipped">0 Skipped,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="xfailed" disabled/>
+            <span class="xfailed">0 Expected failures,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="xpassed" disabled/>
+            <span class="xpassed">0 Unexpected passes,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="error" disabled/>
+            <span class="error">0 Errors,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="rerun" disabled/>
+            <span class="rerun">0 Reruns</span>
+          </div>
+          <div class="collapse">
+            <button id="show_all_details">Show all details</button>&nbsp;/&nbsp;<button id="hide_all_details">Hide all details</button>
+          </div>
+        </div>
+      </div>
+      <div class="additional-summary summary">
+      </div>
+      <div class="additional-summary postfix">
+      </div>
+    </div>
     <table id="results-table">
       <thead id="results-table-head">
         <tr>
-          <th class="sortable result initial-sort" col="result">Result</th>
-          <th class="sortable" col="name">Test</th>
-          <th class="sortable" col="duration">Duration</th>
-          <th class="sortable links" col="links">Links</th></tr>
-        <tr hidden="true" id="not-found-message">
-          <th colspan="4">No results found. Try to check the filters</th></tr></thead>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">biobb_vs/test/unitests/test_fpocket/test_fpocket_filter.py::TestFPocketFilter::test_fpocket_filter</td>
-          <td class="col-duration">0.05</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-09-14 10:17:41,168 [MainThread  ] [INFO ]  Executing biobb_vs.fpocket.fpocket_filter Version: 4.1.1
-2023-09-14 10:17:41,168 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_pockets.zip to /tmp/biobb/unitests_11/fpocket_filter/3f768e87-39df-40d9-9ec0-e97240f93622
-2023-09-14 10:17:41,169 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_summary.json to /tmp/biobb/unitests_11/fpocket_filter/3f768e87-39df-40d9-9ec0-e97240f93622
-2023-09-14 10:17:41,169 [MainThread  ] [INFO ]  Performing a search under the next parameters: score: [0.2, 1], druggability_score: [0.2, 0.9], volume: [100, 600]
-2023-09-14 10:17:41,169 [MainThread  ] [INFO ]  Found 4 matches:
-**********
-pocket1
-**********
-score: 0.896
-druggability_score: 0.82
-volume: 576.216
+          <th class="sortable" data-column-type="result">Result</th>
+          <th class="sortable" data-column-type="testId">Test</th>
+          <th class="sortable" data-column-type="duration">Duration</th>
+          <th>Links</th>
+        </tr>
+      </thead>
+    </table>
+  </body>
+  <footer>
+    <div id="data-container" data-jsonblob="{&#34;environment&#34;: {&#34;Python&#34;: &#34;3.9.18&#34;, &#34;Platform&#34;: &#34;Linux-5.4.0-159-generic-x86_64-with-glibc2.31&#34;, &#34;Packages&#34;: {&#34;pytest&#34;: &#34;8.0.2&#34;, &#34;pluggy&#34;: &#34;1.4.0&#34;}, &#34;Plugins&#34;: {&#34;cov&#34;: &#34;4.1.0&#34;, &#34;metadata&#34;: &#34;3.1.1&#34;, &#34;html&#34;: &#34;4.1.1&#34;}, &#34;CI&#34;: &#34;true&#34;}, &#34;tests&#34;: {&#34;biobb_vs/test/unitests/test_fpocket/test_fpocket_filter.py::TestFPocketFilter::test_fpocket_filter&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;biobb_vs/test/unitests/test_fpocket/test_fpocket_filter.py::TestFPocketFilter::test_fpocket_filter&#34;, &#34;duration&#34;: &#34;55 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;biobb_vs/test/unitests/test_fpocket/test_fpocket_filter.py::TestFPocketFilter::test_fpocket_filter&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;55 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\n2024-03-05 11:24:31,553 [MainThread  ] [INFO ]  Executing biobb_vs.fpocket.fpocket_filter Version: 4.1.1\n2024-03-05 11:24:31,553 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_pockets.zip to /tmp/biobb/unitests_11/fpocket_filter/2df98afd-18aa-4084-a00f-e790476417ea\n2024-03-05 11:24:31,554 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_summary.json to /tmp/biobb/unitests_11/fpocket_filter/2df98afd-18aa-4084-a00f-e790476417ea\n2024-03-05 11:24:31,554 [MainThread  ] [INFO ]  Performing a search under the next parameters: score: [0.2, 1], druggability_score: [0.2, 0.9], volume: [100, 600]\n2024-03-05 11:24:31,554 [MainThread  ] [INFO ]  Found 4 matches:\n**********\npocket1\n**********\nscore: 0.896\ndruggability_score: 0.82\nvolume: 576.216\n\n**********\npocket2\n**********\nscore: 0.606\ndruggability_score: 0.56\nvolume: 368.749\n\n**********\npocket4\n**********\nscore: 0.359\ndruggability_score: 0.396\nvolume: 142.215\n\n**********\npocket7\n**********\nscore: 0.279\ndruggability_score: 0.218\nvolume: 327.622\n\n2024-03-05 11:24:31,554 [MainThread  ] [INFO ]  Creating a3252c79-995a-43a1-b888-22d17670c213 temporary folder\n2024-03-05 11:24:31,558 [MainThread  ] [INFO ]  Extracting: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_pockets.zip\n2024-03-05 11:24:31,558 [MainThread  ] [INFO ]  to:\n2024-03-05 11:24:31,558 [MainThread  ] [INFO ]  [&amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket10_atm.pdb&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket10_vert.pqr&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket11_atm.pdb&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket11_vert.pqr&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket12_atm.pdb&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket12_vert.pqr&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket1_atm.pdb&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket1_vert.pqr&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket2_atm.pdb&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket2_vert.pqr&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket3_atm.pdb&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket3_vert.pqr&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket4_atm.pdb&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket4_vert.pqr&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket5_atm.pdb&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket5_vert.pqr&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket6_atm.pdb&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket6_vert.pqr&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket7_atm.pdb&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket7_vert.pqr&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket8_atm.pdb&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket8_vert.pqr&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket9_atm.pdb&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket9_vert.pqr&amp;#x27;]\n2024-03-05 11:24:31,558 [MainThread  ] [INFO ]  Creating /tmp/biobb/unitests_11/fpocket_filter/output_filter_pockets.zip output file\n2024-03-05 11:24:31,559 [MainThread  ] [INFO ]  Adding:\n2024-03-05 11:24:31,559 [MainThread  ] [INFO ]  [&amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket1_atm.pdb&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket1_vert.pqr&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket2_atm.pdb&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket2_vert.pqr&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket4_atm.pdb&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket4_vert.pqr&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket7_atm.pdb&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket7_vert.pqr&amp;#x27;]\n2024-03-05 11:24:31,559 [MainThread  ] [INFO ]  to: /tmp/biobb/unitests_11/fpocket_filter/output_filter_pockets.zip\n2024-03-05 11:24:31,560 [MainThread  ] [INFO ]  Removed: [&amp;#x27;/tmp/biobb/unitests_11/fpocket_filter/2df98afd-18aa-4084-a00f-e790476417ea&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213&amp;#x27;]\nChecking if empty file: /tmp/biobb/unitests_11/fpocket_filter/output_filter_pockets.zip\nThis is a ZIP comparison!\nUnzipping:\nCreating a unique_dir for: /tmp/biobb/unitests_11/fpocket_filter/output_filter_pockets.zip\nCreating a unique_dir for: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/reference/fpocket/ref_output_filter_pockets.zip\nChecking RMSD between:\n     PDB_A: 3ce9f082-737a-4dae-8d4c-ecd45b6f051e/pocket1_atm.pdb\n     PDB_B: 5a36add3-0725-425e-a201-cc87d433fef3/pocket1_atm.pdb\n     Ignoring HETAMT in RMSD\n     Ignoring Hydrogen atoms in RMSD\n     Atoms ALIGNED in PDB_A: 54\n     Atoms ALIGNED in PDB_B: 54\n     RMS: 6.091987637433995e-16\n     RMS_CUTOFF: 1\nComparing: \n        File_A: 3ce9f082-737a-4dae-8d4c-ecd45b6f051e/pocket1_vert.pqr\n        File_B: 5a36add3-0725-425e-a201-cc87d433fef3/pocket1_vert.pqr\n        File_A hash: b&amp;#x27;~\\xd7\\xaf\\xe7\\xb4\\xbd9$]\\xa9\\xe8\\xc1\\xa7\\x01\\xcdk43OJR\\x1e\\x8cf\\x19\\xbc`\\xdc\\x908\\x9af&amp;#x27;\n        File_B hash: b&amp;#x27;~\\xd7\\xaf\\xe7\\xb4\\xbd9$]\\xa9\\xe8\\xc1\\xa7\\x01\\xcdk43OJR\\x1e\\x8cf\\x19\\xbc`\\xdc\\x908\\x9af&amp;#x27;\nChecking RMSD between:\n     PDB_A: 3ce9f082-737a-4dae-8d4c-ecd45b6f051e/pocket2_atm.pdb\n     PDB_B: 5a36add3-0725-425e-a201-cc87d433fef3/pocket2_atm.pdb\n     Ignoring HETAMT in RMSD\n     Ignoring Hydrogen atoms in RMSD\n     Atoms ALIGNED in PDB_A: 47\n     Atoms ALIGNED in PDB_B: 47\n     RMS: 8.412045032320183e-15\n     RMS_CUTOFF: 1\nComparing: \n        File_A: 3ce9f082-737a-4dae-8d4c-ecd45b6f051e/pocket2_vert.pqr\n        File_B: 5a36add3-0725-425e-a201-cc87d433fef3/pocket2_vert.pqr\n        File_A hash: b&amp;#x27;\\xc0\\xd1\\x86\\xe2\\xe9p\\xcc\\x92a\\x80$\\xa6/\\xc2O\\x8e\\x96d)\\xc5QZ\\x9bx\\xa1\\xc6r4H\\xdc\\xe1Q&amp;#x27;\n        File_B hash: b&amp;#x27;\\xc0\\xd1\\x86\\xe2\\xe9p\\xcc\\x92a\\x80$\\xa6/\\xc2O\\x8e\\x96d)\\xc5QZ\\x9bx\\xa1\\xc6r4H\\xdc\\xe1Q&amp;#x27;\nChecking RMSD between:\n     PDB_A: 3ce9f082-737a-4dae-8d4c-ecd45b6f051e/pocket4_atm.pdb\n     PDB_B: 5a36add3-0725-425e-a201-cc87d433fef3/pocket4_atm.pdb\n     Ignoring HETAMT in RMSD\n     Ignoring Hydrogen atoms in RMSD\n     Atoms ALIGNED in PDB_A: 25\n     Atoms ALIGNED in PDB_B: 25\n     RMS: 3.796962744218036e-15\n     RMS_CUTOFF: 1\nComparing: \n        File_A: 3ce9f082-737a-4dae-8d4c-ecd45b6f051e/pocket4_vert.pqr\n        File_B: 5a36add3-0725-425e-a201-cc87d433fef3/pocket4_vert.pqr\n        File_A hash: b&amp;#x27;\\xaa1-aO#\\x87?\\x1a\\x18tH)\\x93\\x10\\x82\\x814\\xc7\\xca\\x8bL\\xae\\xd9\\xfa\\xe0l\\xcd-\\xf4\\xc26&amp;#x27;\n        File_B hash: b&amp;#x27;\\xaa1-aO#\\x87?\\x1a\\x18tH)\\x93\\x10\\x82\\x814\\xc7\\xca\\x8bL\\xae\\xd9\\xfa\\xe0l\\xcd-\\xf4\\xc26&amp;#x27;\nChecking RMSD between:\n     PDB_A: 3ce9f082-737a-4dae-8d4c-ecd45b6f051e/pocket7_atm.pdb\n     PDB_B: 5a36add3-0725-425e-a201-cc87d433fef3/pocket7_atm.pdb\n     Ignoring HETAMT in RMSD\n     Ignoring Hydrogen atoms in RMSD\n     Atoms ALIGNED in PDB_A: 31\n     Atoms ALIGNED in PDB_B: 31\n     RMS: 3.8222859690969964e-15\n     RMS_CUTOFF: 1\nComparing: \n        File_A: 3ce9f082-737a-4dae-8d4c-ecd45b6f051e/pocket7_vert.pqr\n        File_B: 5a36add3-0725-425e-a201-cc87d433fef3/pocket7_vert.pqr\n        File_A hash: b&amp;#x27;\\xcd\\r\\xc1\\xcf\\x02\\xcb\\x05\\xaa\\x97\\xcfWmr\\x88m\\xa0\\xe4\\x97\\x0c\\xd1\\xc4\\xe3\\xca\\xed\\x99\\xbf\\xf0\\xbf\\xf3\\x88\\x1eO&amp;#x27;\n        File_B hash: b&amp;#x27;\\xcd\\r\\xc1\\xcf\\x02\\xcb\\x05\\xaa\\x97\\xcfWmr\\x88m\\xa0\\xe4\\x97\\x0c\\xd1\\xc4\\xe3\\xca\\xed\\x99\\xbf\\xf0\\xbf\\xf3\\x88\\x1eO&amp;#x27;\n\n------------------------------ Captured log call -------------------------------\nINFO     /tmp/biobb/unitests_11/fpocket_filter/fpocket_filter_log.out:file_utils.py:390 Executing biobb_vs.fpocket.fpocket_filter Version: 4.1.1\nINFO     /tmp/biobb/unitests_11/fpocket_filter/fpocket_filter_log.out:file_utils.py:390 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_pockets.zip to /tmp/biobb/unitests_11/fpocket_filter/2df98afd-18aa-4084-a00f-e790476417ea\nINFO     /tmp/biobb/unitests_11/fpocket_filter/fpocket_filter_log.out:file_utils.py:390 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_summary.json to /tmp/biobb/unitests_11/fpocket_filter/2df98afd-18aa-4084-a00f-e790476417ea\nINFO     /tmp/biobb/unitests_11/fpocket_filter/fpocket_filter_log.out:file_utils.py:390 Performing a search under the next parameters: score: [0.2, 1], druggability_score: [0.2, 0.9], volume: [100, 600]\nINFO     /tmp/biobb/unitests_11/fpocket_filter/fpocket_filter_log.out:file_utils.py:390 Found 4 matches:\n**********\npocket1\n**********\nscore: 0.896\ndruggability_score: 0.82\nvolume: 576.216\n\n**********\npocket2\n**********\nscore: 0.606\ndruggability_score: 0.56\nvolume: 368.749\n\n**********\npocket4\n**********\nscore: 0.359\ndruggability_score: 0.396\nvolume: 142.215\n\n**********\npocket7\n**********\nscore: 0.279\ndruggability_score: 0.218\nvolume: 327.622\n\nINFO     /tmp/biobb/unitests_11/fpocket_filter/fpocket_filter_log.out:file_utils.py:390 Creating a3252c79-995a-43a1-b888-22d17670c213 temporary folder\nINFO     /tmp/biobb/unitests_11/fpocket_filter/fpocket_filter_log.out:file_utils.py:171 Extracting: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_pockets.zip\nINFO     /tmp/biobb/unitests_11/fpocket_filter/fpocket_filter_log.out:file_utils.py:172 to:\nINFO     /tmp/biobb/unitests_11/fpocket_filter/fpocket_filter_log.out:file_utils.py:173 [&amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket10_atm.pdb&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket10_vert.pqr&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket11_atm.pdb&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket11_vert.pqr&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket12_atm.pdb&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket12_vert.pqr&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket1_atm.pdb&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket1_vert.pqr&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket2_atm.pdb&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket2_vert.pqr&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket3_atm.pdb&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket3_vert.pqr&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket4_atm.pdb&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket4_vert.pqr&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket5_atm.pdb&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket5_vert.pqr&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket6_atm.pdb&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket6_vert.pqr&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket7_atm.pdb&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket7_vert.pqr&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket8_atm.pdb&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket8_vert.pqr&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket9_atm.pdb&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket9_vert.pqr&amp;#x27;]\nINFO     /tmp/biobb/unitests_11/fpocket_filter/fpocket_filter_log.out:file_utils.py:390 Creating /tmp/biobb/unitests_11/fpocket_filter/output_filter_pockets.zip output file\nINFO     /tmp/biobb/unitests_11/fpocket_filter/fpocket_filter_log.out:file_utils.py:147 Adding:\nINFO     /tmp/biobb/unitests_11/fpocket_filter/fpocket_filter_log.out:file_utils.py:148 [&amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket1_atm.pdb&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket1_vert.pqr&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket2_atm.pdb&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket2_vert.pqr&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket4_atm.pdb&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket4_vert.pqr&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket7_atm.pdb&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213/pocket7_vert.pqr&amp;#x27;]\nINFO     /tmp/biobb/unitests_11/fpocket_filter/fpocket_filter_log.out:file_utils.py:149 to: /tmp/biobb/unitests_11/fpocket_filter/output_filter_pockets.zip\nINFO     /tmp/biobb/unitests_11/fpocket_filter/fpocket_filter_log.out:file_utils.py:390 Removed: [&amp;#x27;/tmp/biobb/unitests_11/fpocket_filter/2df98afd-18aa-4084-a00f-e790476417ea&amp;#x27;, &amp;#x27;a3252c79-995a-43a1-b888-22d17670c213&amp;#x27;]\n\n--------------------------- Captured stdout teardown ---------------------------\n\nRemoving: /tmp/biobb/unitests_11\n&#34;}], &#34;biobb_vs/test/unitests/test_fpocket/test_fpocket_run.py::TestFPocketRun::test_fpocket_run&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;biobb_vs/test/unitests/test_fpocket/test_fpocket_run.py::TestFPocketRun::test_fpocket_run&#34;, &#34;duration&#34;: &#34;00:00:01&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;biobb_vs/test/unitests/test_fpocket/test_fpocket_run.py::TestFPocketRun::test_fpocket_run&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:01&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\n2024-03-05 11:24:31,624 [MainThread  ] [INFO ]  Executing biobb_vs.fpocket.fpocket_run Version: 4.1.1\n2024-03-05 11:24:31,624 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/fpocket_input.pdb to /tmp/biobb/unitests_11/fpocket_run/f49045af-7c92-4159-81fe-34b06f4892d6\n2024-03-05 11:24:31,625 [MainThread  ] [INFO ]  Creating 8237f146-fa20-4cec-b182-ac3234cb2036 temporary folder\n2024-03-05 11:24:31,625 [MainThread  ] [INFO ]  Executing fpocket\n2024-03-05 11:24:31,625 [MainThread  ] [INFO ]  fpocket -f 8237f146-fa20-4cec-b182-ac3234cb2036/input.pdb -m 3 -M 6 -i 35\n\n2024-03-05 11:24:32,724 [MainThread  ] [INFO ]  Exit code 0\n\n2024-03-05 11:24:32,724 [MainThread  ] [INFO ]  ***** POCKET HUNTING BEGINS ***** \n***** POCKET HUNTING ENDS ***** \n\n2024-03-05 11:24:32,727 [MainThread  ] [INFO ]  14 pockets found\n2024-03-05 11:24:32,727 [MainThread  ] [INFO ]  Sorting output data by druggability_score\n2024-03-05 11:24:32,730 [MainThread  ] [INFO ]  Adding:\n2024-03-05 11:24:32,730 [MainThread  ] [INFO ]  [&amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket10_atm.pdb&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket10_vert.pqr&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket11_atm.pdb&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket11_vert.pqr&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket12_atm.pdb&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket12_vert.pqr&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket13_atm.pdb&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket13_vert.pqr&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket14_atm.pdb&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket14_vert.pqr&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket1_atm.pdb&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket1_vert.pqr&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket2_atm.pdb&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket2_vert.pqr&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket3_atm.pdb&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket3_vert.pqr&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket4_atm.pdb&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket4_vert.pqr&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket5_atm.pdb&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket5_vert.pqr&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket6_atm.pdb&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket6_vert.pqr&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket7_atm.pdb&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket7_vert.pqr&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket8_atm.pdb&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket8_vert.pqr&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket9_atm.pdb&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket9_vert.pqr&amp;#x27;]\n2024-03-05 11:24:32,730 [MainThread  ] [INFO ]  to: /tmp/biobb/unitests_11/fpocket_run/output_pockets.zip\n2024-03-05 11:24:32,731 [MainThread  ] [INFO ]  Saving summary to /tmp/biobb/unitests_11/fpocket_run/output_summary.json file\n2024-03-05 11:24:32,733 [MainThread  ] [INFO ]  Removed: [&amp;#x27;/tmp/biobb/unitests_11/fpocket_run/f49045af-7c92-4159-81fe-34b06f4892d6&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036&amp;#x27;]\nChecking if empty file: /tmp/biobb/unitests_11/fpocket_run/output_pockets.zip\nChecking if empty file: /tmp/biobb/unitests_11/fpocket_run/output_summary.json\n\n------------------------------ Captured log call -------------------------------\nINFO     /tmp/biobb/unitests_11/fpocket_run/fpocket_run_log.out:file_utils.py:390 Executing biobb_vs.fpocket.fpocket_run Version: 4.1.1\nINFO     /tmp/biobb/unitests_11/fpocket_run/fpocket_run_log.out:file_utils.py:390 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/fpocket_input.pdb to /tmp/biobb/unitests_11/fpocket_run/f49045af-7c92-4159-81fe-34b06f4892d6\nINFO     /tmp/biobb/unitests_11/fpocket_run/fpocket_run_log.out:file_utils.py:390 Creating 8237f146-fa20-4cec-b182-ac3234cb2036 temporary folder\nINFO     /tmp/biobb/unitests_11/fpocket_run/fpocket_run_log.out:file_utils.py:390 Executing fpocket\nINFO     /tmp/biobb/unitests_11/fpocket_run/fpocket_run_log.out:cmd_wrapper.py:33 fpocket -f 8237f146-fa20-4cec-b182-ac3234cb2036/input.pdb -m 3 -M 6 -i 35\n\nINFO     /tmp/biobb/unitests_11/fpocket_run/fpocket_run_log.out:cmd_wrapper.py:50 Exit code 0\n\nINFO     /tmp/biobb/unitests_11/fpocket_run/fpocket_run_log.out:cmd_wrapper.py:52 ***** POCKET HUNTING BEGINS ***** \n***** POCKET HUNTING ENDS ***** \n\nINFO     /tmp/biobb/unitests_11/fpocket_run/fpocket_run_log.out:file_utils.py:390 14 pockets found\nINFO     /tmp/biobb/unitests_11/fpocket_run/fpocket_run_log.out:file_utils.py:390 Sorting output data by druggability_score\nINFO     /tmp/biobb/unitests_11/fpocket_run/fpocket_run_log.out:file_utils.py:147 Adding:\nINFO     /tmp/biobb/unitests_11/fpocket_run/fpocket_run_log.out:file_utils.py:148 [&amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket10_atm.pdb&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket10_vert.pqr&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket11_atm.pdb&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket11_vert.pqr&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket12_atm.pdb&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket12_vert.pqr&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket13_atm.pdb&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket13_vert.pqr&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket14_atm.pdb&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket14_vert.pqr&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket1_atm.pdb&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket1_vert.pqr&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket2_atm.pdb&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket2_vert.pqr&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket3_atm.pdb&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket3_vert.pqr&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket4_atm.pdb&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket4_vert.pqr&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket5_atm.pdb&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket5_vert.pqr&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket6_atm.pdb&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket6_vert.pqr&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket7_atm.pdb&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket7_vert.pqr&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket8_atm.pdb&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket8_vert.pqr&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket9_atm.pdb&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036/input_out/pockets/pocket9_vert.pqr&amp;#x27;]\nINFO     /tmp/biobb/unitests_11/fpocket_run/fpocket_run_log.out:file_utils.py:149 to: /tmp/biobb/unitests_11/fpocket_run/output_pockets.zip\nINFO     /tmp/biobb/unitests_11/fpocket_run/fpocket_run_log.out:file_utils.py:390 Saving summary to /tmp/biobb/unitests_11/fpocket_run/output_summary.json file\nINFO     /tmp/biobb/unitests_11/fpocket_run/fpocket_run_log.out:file_utils.py:390 Removed: [&amp;#x27;/tmp/biobb/unitests_11/fpocket_run/f49045af-7c92-4159-81fe-34b06f4892d6&amp;#x27;, &amp;#x27;8237f146-fa20-4cec-b182-ac3234cb2036&amp;#x27;]\n\n--------------------------- Captured stdout teardown ---------------------------\n\nRemoving: /tmp/biobb/unitests_11\n&#34;}], &#34;biobb_vs/test/unitests/test_fpocket/test_fpocket_select.py::TestFPocketSelect::test_fpocket_select&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;biobb_vs/test/unitests/test_fpocket/test_fpocket_select.py::TestFPocketSelect::test_fpocket_select&#34;, &#34;duration&#34;: &#34;31 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;biobb_vs/test/unitests/test_fpocket/test_fpocket_select.py::TestFPocketSelect::test_fpocket_select&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;31 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\n2024-03-05 11:24:32,761 [MainThread  ] [INFO ]  Executing biobb_vs.fpocket.fpocket_select Version: 4.1.1\n2024-03-05 11:24:32,762 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_pockets.zip to /tmp/biobb/unitests_11/fpocket_select/d97b712e-9456-4e17-9be5-2a041852d096\n2024-03-05 11:24:32,762 [MainThread  ] [INFO ]  Creating 0ef1dcbe-2c85-4027-b689-f586c2645267 temporary folder\n2024-03-05 11:24:32,764 [MainThread  ] [INFO ]  Extracting: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_pockets.zip\n2024-03-05 11:24:32,765 [MainThread  ] [INFO ]  to:\n2024-03-05 11:24:32,765 [MainThread  ] [INFO ]  [&amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket10_atm.pdb&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket10_vert.pqr&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket11_atm.pdb&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket11_vert.pqr&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket12_atm.pdb&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket12_vert.pqr&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket1_atm.pdb&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket1_vert.pqr&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket2_atm.pdb&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket2_vert.pqr&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket3_atm.pdb&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket3_vert.pqr&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket4_atm.pdb&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket4_vert.pqr&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket5_atm.pdb&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket5_vert.pqr&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket6_atm.pdb&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket6_vert.pqr&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket7_atm.pdb&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket7_vert.pqr&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket8_atm.pdb&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket8_vert.pqr&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket9_atm.pdb&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket9_vert.pqr&amp;#x27;]\n2024-03-05 11:24:32,765 [MainThread  ] [INFO ]  Saving /tmp/biobb/unitests_11/fpocket_select/output_pocket.pdb file\n2024-03-05 11:24:32,765 [MainThread  ] [INFO ]  Saving /tmp/biobb/unitests_11/fpocket_select/output_pocket.pqr file\n2024-03-05 11:24:32,766 [MainThread  ] [INFO ]  Removed: [&amp;#x27;/tmp/biobb/unitests_11/fpocket_select/d97b712e-9456-4e17-9be5-2a041852d096&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267&amp;#x27;]\nChecking if empty file: /tmp/biobb/unitests_11/fpocket_select/output_pocket.pdb\nChecking RMSD between:\n     PDB_A: /tmp/biobb/unitests_11/fpocket_select/output_pocket.pdb\n     PDB_B: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/reference/fpocket/ref_output_pocket.pdb\n     Ignoring HETAMT in RMSD\n     Ignoring Hydrogen atoms in RMSD\n     Atoms ALIGNED in PDB_A: 25\n     Atoms ALIGNED in PDB_B: 25\n     RMS: 3.796962744218036e-15\n     RMS_CUTOFF: 1\nChecking if empty file: /tmp/biobb/unitests_11/fpocket_select/output_pocket.pqr\nComparing: \n        File_A: /tmp/biobb/unitests_11/fpocket_select/output_pocket.pqr\n        File_B: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/reference/fpocket/ref_output_pocket.pqr\n        File_A hash: b&amp;#x27;\\xaa1-aO#\\x87?\\x1a\\x18tH)\\x93\\x10\\x82\\x814\\xc7\\xca\\x8bL\\xae\\xd9\\xfa\\xe0l\\xcd-\\xf4\\xc26&amp;#x27;\n        File_B hash: b&amp;#x27;\\xaa1-aO#\\x87?\\x1a\\x18tH)\\x93\\x10\\x82\\x814\\xc7\\xca\\x8bL\\xae\\xd9\\xfa\\xe0l\\xcd-\\xf4\\xc26&amp;#x27;\n\n------------------------------ Captured log call -------------------------------\nINFO     /tmp/biobb/unitests_11/fpocket_select/fpocket_select_log.out:file_utils.py:390 Executing biobb_vs.fpocket.fpocket_select Version: 4.1.1\nINFO     /tmp/biobb/unitests_11/fpocket_select/fpocket_select_log.out:file_utils.py:390 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_pockets.zip to /tmp/biobb/unitests_11/fpocket_select/d97b712e-9456-4e17-9be5-2a041852d096\nINFO     /tmp/biobb/unitests_11/fpocket_select/fpocket_select_log.out:file_utils.py:390 Creating 0ef1dcbe-2c85-4027-b689-f586c2645267 temporary folder\nINFO     /tmp/biobb/unitests_11/fpocket_select/fpocket_select_log.out:file_utils.py:171 Extracting: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_pockets.zip\nINFO     /tmp/biobb/unitests_11/fpocket_select/fpocket_select_log.out:file_utils.py:172 to:\nINFO     /tmp/biobb/unitests_11/fpocket_select/fpocket_select_log.out:file_utils.py:173 [&amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket10_atm.pdb&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket10_vert.pqr&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket11_atm.pdb&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket11_vert.pqr&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket12_atm.pdb&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket12_vert.pqr&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket1_atm.pdb&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket1_vert.pqr&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket2_atm.pdb&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket2_vert.pqr&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket3_atm.pdb&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket3_vert.pqr&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket4_atm.pdb&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket4_vert.pqr&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket5_atm.pdb&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket5_vert.pqr&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket6_atm.pdb&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket6_vert.pqr&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket7_atm.pdb&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket7_vert.pqr&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket8_atm.pdb&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket8_vert.pqr&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket9_atm.pdb&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267/pocket9_vert.pqr&amp;#x27;]\nINFO     /tmp/biobb/unitests_11/fpocket_select/fpocket_select_log.out:file_utils.py:390 Saving /tmp/biobb/unitests_11/fpocket_select/output_pocket.pdb file\nINFO     /tmp/biobb/unitests_11/fpocket_select/fpocket_select_log.out:file_utils.py:390 Saving /tmp/biobb/unitests_11/fpocket_select/output_pocket.pqr file\nINFO     /tmp/biobb/unitests_11/fpocket_select/fpocket_select_log.out:file_utils.py:390 Removed: [&amp;#x27;/tmp/biobb/unitests_11/fpocket_select/d97b712e-9456-4e17-9be5-2a041852d096&amp;#x27;, &amp;#x27;0ef1dcbe-2c85-4027-b689-f586c2645267&amp;#x27;]\n\n--------------------------- Captured stdout teardown ---------------------------\n\nRemoving: /tmp/biobb/unitests_11\n&#34;}], &#34;biobb_vs/test/unitests/test_utils/test_box.py::TestBox::test_box&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;biobb_vs/test/unitests/test_utils/test_box.py::TestBox::test_box&#34;, &#34;duration&#34;: &#34;24 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;biobb_vs/test/unitests/test_utils/test_box.py::TestBox::test_box&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;24 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\n2024-03-05 11:24:32,793 [MainThread  ] [INFO ]  Executing biobb_vs.utils.box Version: 4.1.1\n2024-03-05 11:24:32,793 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/input_box.pqr to /tmp/biobb/unitests_11/box/205e0a04-2cf1-4d84-9124-e80837951baa\n2024-03-05 11:24:32,793 [MainThread  ] [INFO ]  Loading pocket PQR selection from /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/input_box.pqr\n2024-03-05 11:24:32,794 [MainThread  ] [INFO ]  Binding site center (Angstroms):      4.853   -62.298   -38.437\n2024-03-05 11:24:32,794 [MainThread  ] [INFO ]  Adding 2.0 Angstroms offset\n2024-03-05 11:24:32,794 [MainThread  ] [INFO ]  Binding site size (Angstroms):        4.070     4.801     5.508\n2024-03-05 11:24:32,794 [MainThread  ] [INFO ]  Volume (cubic Angstroms): 861\n2024-03-05 11:24:32,794 [MainThread  ] [INFO ]  Adding box coordinates\n2024-03-05 11:24:32,794 [MainThread  ] [INFO ]  Saving output PDB file (with box setting annotations): /tmp/biobb/unitests_11/box/output_box.pdb\n2024-03-05 11:24:32,794 [MainThread  ] [INFO ]  Removed: [&amp;#x27;/tmp/biobb/unitests_11/box/205e0a04-2cf1-4d84-9124-e80837951baa&amp;#x27;]\nChecking if empty file: /tmp/biobb/unitests_11/box/output_box.pdb\nComparing: \n        File_A: /tmp/biobb/unitests_11/box/output_box.pdb\n        File_B: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/reference/utils/ref_output_box.pdb\n        File_A hash: b&amp;#x27;\\x07w\\x8d \\xde\\x1cwc(\\xf3\\x14&amp;amp;\\x90\\xa8JiC\\xd5\\x8f&amp;amp;\\xf6\\xf2a\\x17z\\x7fw\\xd1@Ds/&amp;#x27;\n        File_B hash: b&amp;#x27;\\x07w\\x8d \\xde\\x1cwc(\\xf3\\x14&amp;amp;\\x90\\xa8JiC\\xd5\\x8f&amp;amp;\\xf6\\xf2a\\x17z\\x7fw\\xd1@Ds/&amp;#x27;\n\n------------------------------ Captured log call -------------------------------\nINFO     /tmp/biobb/unitests_11/box/box_log.out:file_utils.py:390 Executing biobb_vs.utils.box Version: 4.1.1\nINFO     /tmp/biobb/unitests_11/box/box_log.out:file_utils.py:390 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/input_box.pqr to /tmp/biobb/unitests_11/box/205e0a04-2cf1-4d84-9124-e80837951baa\nINFO     /tmp/biobb/unitests_11/box/box_log.out:file_utils.py:390 Loading pocket PQR selection from /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/input_box.pqr\nINFO     /tmp/biobb/unitests_11/box/box_log.out:file_utils.py:390 Binding site center (Angstroms):      4.853   -62.298   -38.437\nINFO     /tmp/biobb/unitests_11/box/box_log.out:file_utils.py:390 Adding 2.0 Angstroms offset\nINFO     /tmp/biobb/unitests_11/box/box_log.out:file_utils.py:390 Binding site size (Angstroms):        4.070     4.801     5.508\nINFO     /tmp/biobb/unitests_11/box/box_log.out:file_utils.py:390 Volume (cubic Angstroms): 861\nINFO     /tmp/biobb/unitests_11/box/box_log.out:file_utils.py:390 Adding box coordinates\nINFO     /tmp/biobb/unitests_11/box/box_log.out:file_utils.py:390 Saving output PDB file (with box setting annotations): /tmp/biobb/unitests_11/box/output_box.pdb\nINFO     /tmp/biobb/unitests_11/box/box_log.out:file_utils.py:390 Removed: [&amp;#x27;/tmp/biobb/unitests_11/box/205e0a04-2cf1-4d84-9124-e80837951baa&amp;#x27;]\n\n--------------------------- Captured stdout teardown ---------------------------\n\nRemoving: /tmp/biobb/unitests_11\n&#34;}], &#34;biobb_vs/test/unitests/test_utils/test_box_residues.py::TestBoxResidues::test_box_residues&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;biobb_vs/test/unitests/test_utils/test_box_residues.py::TestBoxResidues::test_box_residues&#34;, &#34;duration&#34;: &#34;82 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;biobb_vs/test/unitests/test_utils/test_box_residues.py::TestBoxResidues::test_box_residues&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;82 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\n2024-03-05 11:24:32,818 [MainThread  ] [INFO ]  Executing biobb_vs.utils.box_residues Version: 4.1.1\n2024-03-05 11:24:32,819 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/input_box_residues.pdb to /tmp/biobb/unitests_11/box_residues/bd774eac-9da7-4d8f-96fe-a1ac25824c5e\n2024-03-05 11:24:32,819 [MainThread  ] [INFO ]  Loading input PDB structure /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/input_box_residues.pdb\n2024-03-05 11:24:32,876 [MainThread  ] [INFO ]  Mapping residue structure into input structure\n2024-03-05 11:24:32,876 [MainThread  ] [INFO ]  Selection of residues successfully matched\n2024-03-05 11:24:32,877 [MainThread  ] [INFO ]  Binding site center (Angstroms):     -2.028   -54.362   -25.714\n2024-03-05 11:24:32,877 [MainThread  ] [INFO ]  Binding site size (Angstroms):        7.465    10.330    13.002\n2024-03-05 11:24:32,877 [MainThread  ] [INFO ]  Volume (cubic Angstroms): 8021\n2024-03-05 11:24:32,877 [MainThread  ] [INFO ]  Adding box coordinates\n2024-03-05 11:24:32,877 [MainThread  ] [INFO ]  Saving output PDB file (with box setting annotations): /tmp/biobb/unitests_11/box_residues/output_box_residues.pdb\n2024-03-05 11:24:32,877 [MainThread  ] [INFO ]  Removed: [&amp;#x27;/tmp/biobb/unitests_11/box_residues/bd774eac-9da7-4d8f-96fe-a1ac25824c5e&amp;#x27;]\nChecking if empty file: /tmp/biobb/unitests_11/box_residues/output_box_residues.pdb\nComparing: \n        File_A: /tmp/biobb/unitests_11/box_residues/output_box_residues.pdb\n        File_B: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/reference/utils/ref_output_box_residues.pdb\n        File_A hash: b&amp;#x27;\\xef\\x8a\\xceu\\x81\\xfe\\x9f\\xbb\\x92\\xabZA\\x96[\\x8d\\xa3\\xc6c\\x02\\xe4\\x90\\x07qg\\xc7\\x94\\x85,&amp;amp;f*g&amp;#x27;\n        File_B hash: b&amp;#x27;\\xef\\x8a\\xceu\\x81\\xfe\\x9f\\xbb\\x92\\xabZA\\x96[\\x8d\\xa3\\xc6c\\x02\\xe4\\x90\\x07qg\\xc7\\x94\\x85,&amp;amp;f*g&amp;#x27;\n\n------------------------------ Captured log call -------------------------------\nINFO     /tmp/biobb/unitests_11/box_residues/box_residues_log.out:file_utils.py:390 Executing biobb_vs.utils.box_residues Version: 4.1.1\nINFO     /tmp/biobb/unitests_11/box_residues/box_residues_log.out:file_utils.py:390 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/input_box_residues.pdb to /tmp/biobb/unitests_11/box_residues/bd774eac-9da7-4d8f-96fe-a1ac25824c5e\nINFO     /tmp/biobb/unitests_11/box_residues/box_residues_log.out:file_utils.py:390 Loading input PDB structure /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/input_box_residues.pdb\nINFO     /tmp/biobb/unitests_11/box_residues/box_residues_log.out:file_utils.py:390 Mapping residue structure into input structure\nINFO     /tmp/biobb/unitests_11/box_residues/box_residues_log.out:file_utils.py:390 Selection of residues successfully matched\nINFO     /tmp/biobb/unitests_11/box_residues/box_residues_log.out:file_utils.py:390 Binding site center (Angstroms):     -2.028   -54.362   -25.714\nINFO     /tmp/biobb/unitests_11/box_residues/box_residues_log.out:file_utils.py:390 Binding site size (Angstroms):        7.465    10.330    13.002\nINFO     /tmp/biobb/unitests_11/box_residues/box_residues_log.out:file_utils.py:390 Volume (cubic Angstroms): 8021\nINFO     /tmp/biobb/unitests_11/box_residues/box_residues_log.out:file_utils.py:390 Adding box coordinates\nINFO     /tmp/biobb/unitests_11/box_residues/box_residues_log.out:file_utils.py:390 Saving output PDB file (with box setting annotations): /tmp/biobb/unitests_11/box_residues/output_box_residues.pdb\nINFO     /tmp/biobb/unitests_11/box_residues/box_residues_log.out:file_utils.py:390 Removed: [&amp;#x27;/tmp/biobb/unitests_11/box_residues/bd774eac-9da7-4d8f-96fe-a1ac25824c5e&amp;#x27;]\n\n--------------------------- Captured stdout teardown ---------------------------\n\nRemoving: /tmp/biobb/unitests_11\n&#34;}], &#34;biobb_vs/test/unitests/test_utils/test_extract_model_pdbqt.py::TestExtractModelPDBQT::test_extract_model_pdbqt&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;biobb_vs/test/unitests/test_utils/test_extract_model_pdbqt.py::TestExtractModelPDBQT::test_extract_model_pdbqt&#34;, &#34;duration&#34;: &#34;27 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;biobb_vs/test/unitests/test_utils/test_extract_model_pdbqt.py::TestExtractModelPDBQT::test_extract_model_pdbqt&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;27 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\n2024-03-05 11:24:32,902 [MainThread  ] [INFO ]  Executing biobb_vs.utils.extract_model_pdbqt Version: 4.1.1\n2024-03-05 11:24:32,902 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/models.pdbqt to /tmp/biobb/unitests_11/extract_model_pdbqt/54854ee3-5fda-4aa0-a1b1-c2e15648b810\n2024-03-05 11:24:32,905 [MainThread  ] [INFO ]  Saving model 1 to /tmp/biobb/unitests_11/extract_model_pdbqt/output_extract.pdbqt\n2024-03-05 11:24:32,906 [MainThread  ] [INFO ]  Removed: [&amp;#x27;/tmp/biobb/unitests_11/extract_model_pdbqt/54854ee3-5fda-4aa0-a1b1-c2e15648b810&amp;#x27;]\nChecking if empty file: /tmp/biobb/unitests_11/extract_model_pdbqt/output_extract.pdbqt\nComparing: \n        File_A: /tmp/biobb/unitests_11/extract_model_pdbqt/output_extract.pdbqt\n        File_B: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/reference/utils/ref_extract_model.pdbqt\n        File_A hash: b&amp;#x27;\\xbf\\x80\\xf8\\xd1\\xcbo\\xde D%\\nQ\\xd7\\x02\\x93\\xf7y\\x82\\x97S\\xe6\\x96\\x84\\xd1u\\x89,\\xdc\\xfe\\xa4\\xe8]&amp;#x27;\n        File_B hash: b&amp;#x27;\\xbf\\x80\\xf8\\xd1\\xcbo\\xde D%\\nQ\\xd7\\x02\\x93\\xf7y\\x82\\x97S\\xe6\\x96\\x84\\xd1u\\x89,\\xdc\\xfe\\xa4\\xe8]&amp;#x27;\n\n------------------------------ Captured log call -------------------------------\nINFO     /tmp/biobb/unitests_11/extract_model_pdbqt/extract_model_pdbqt_log.out:file_utils.py:390 Executing biobb_vs.utils.extract_model_pdbqt Version: 4.1.1\nINFO     /tmp/biobb/unitests_11/extract_model_pdbqt/extract_model_pdbqt_log.out:file_utils.py:390 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/models.pdbqt to /tmp/biobb/unitests_11/extract_model_pdbqt/54854ee3-5fda-4aa0-a1b1-c2e15648b810\nINFO     /tmp/biobb/unitests_11/extract_model_pdbqt/extract_model_pdbqt_log.out:file_utils.py:390 Saving model 1 to /tmp/biobb/unitests_11/extract_model_pdbqt/output_extract.pdbqt\nINFO     /tmp/biobb/unitests_11/extract_model_pdbqt/extract_model_pdbqt_log.out:file_utils.py:390 Removed: [&amp;#x27;/tmp/biobb/unitests_11/extract_model_pdbqt/54854ee3-5fda-4aa0-a1b1-c2e15648b810&amp;#x27;]\n\n--------------------------- Captured stdout teardown ---------------------------\n\nRemoving: /tmp/biobb/unitests_11\n&#34;}], &#34;biobb_vs/test/unitests/test_vina/test_autodock_vina_run.py::TestAutoDockVinaRun::test_autodock_vina_run&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;biobb_vs/test/unitests/test_vina/test_autodock_vina_run.py::TestAutoDockVinaRun::test_autodock_vina_run&#34;, &#34;duration&#34;: &#34;00:00:18&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;biobb_vs/test/unitests/test_vina/test_autodock_vina_run.py::TestAutoDockVinaRun::test_autodock_vina_run&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:18&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\n2024-03-05 11:24:32,931 [MainThread  ] [INFO ]  Executing biobb_vs.vina.autodock_vina_run Version: 4.1.1\n2024-03-05 11:24:32,931 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/vina/vina_ligand.pdbqt to /tmp/biobb/unitests_11/autodock_vina_run/9600a05c-b8ae-4dab-baba-db2337a8dce8\n2024-03-05 11:24:32,932 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/vina/vina_receptor.pdbqt to /tmp/biobb/unitests_11/autodock_vina_run/9600a05c-b8ae-4dab-baba-db2337a8dce8\n2024-03-05 11:24:32,934 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/vina/vina_box.pdb to /tmp/biobb/unitests_11/autodock_vina_run/9600a05c-b8ae-4dab-baba-db2337a8dce8\n2024-03-05 11:24:32,934 [MainThread  ] [INFO ]  vina --ligand /tmp/biobb/unitests_11/autodock_vina_run/9600a05c-b8ae-4dab-baba-db2337a8dce8/vina_ligand.pdbqt --receptor /tmp/biobb/unitests_11/autodock_vina_run/9600a05c-b8ae-4dab-baba-db2337a8dce8/vina_receptor.pdbqt --center_x=7.293 --center_y=7.293 --center_z=-2.136 --size_x=16.319 --size_y=11.521 --size_z=13.047 --cpu 1 --exhaustiveness 8 --out /tmp/biobb/unitests_11/autodock_vina_run/9600a05c-b8ae-4dab-baba-db2337a8dce8/output_pdbqt_path.pdbqt --verbosity 1 &amp;gt; /tmp/biobb/unitests_11/autodock_vina_run/9600a05c-b8ae-4dab-baba-db2337a8dce8/output_log_path.log\n\n2024-03-05 11:24:50,612 [MainThread  ] [INFO ]  Exit code 0\n\n2024-03-05 11:24:50,614 [MainThread  ] [INFO ]  Removed: [&amp;#x27;/tmp/biobb/unitests_11/autodock_vina_run/9600a05c-b8ae-4dab-baba-db2337a8dce8&amp;#x27;]\nChecking if empty file: /tmp/biobb/unitests_11/autodock_vina_run/output_pdbqt_path.pdbqt\nChecking if empty file: /tmp/biobb/unitests_11/autodock_vina_run/output_log_path.log\n\n------------------------------ Captured log call -------------------------------\nINFO     /tmp/biobb/unitests_11/autodock_vina_run/autodock_vina_run_log.out:file_utils.py:390 Executing biobb_vs.vina.autodock_vina_run Version: 4.1.1\nINFO     /tmp/biobb/unitests_11/autodock_vina_run/autodock_vina_run_log.out:file_utils.py:390 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/vina/vina_ligand.pdbqt to /tmp/biobb/unitests_11/autodock_vina_run/9600a05c-b8ae-4dab-baba-db2337a8dce8\nINFO     /tmp/biobb/unitests_11/autodock_vina_run/autodock_vina_run_log.out:file_utils.py:390 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/vina/vina_receptor.pdbqt to /tmp/biobb/unitests_11/autodock_vina_run/9600a05c-b8ae-4dab-baba-db2337a8dce8\nINFO     /tmp/biobb/unitests_11/autodock_vina_run/autodock_vina_run_log.out:file_utils.py:390 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/vina/vina_box.pdb to /tmp/biobb/unitests_11/autodock_vina_run/9600a05c-b8ae-4dab-baba-db2337a8dce8\nINFO     /tmp/biobb/unitests_11/autodock_vina_run/autodock_vina_run_log.out:cmd_wrapper.py:33 vina --ligand /tmp/biobb/unitests_11/autodock_vina_run/9600a05c-b8ae-4dab-baba-db2337a8dce8/vina_ligand.pdbqt --receptor /tmp/biobb/unitests_11/autodock_vina_run/9600a05c-b8ae-4dab-baba-db2337a8dce8/vina_receptor.pdbqt --center_x=7.293 --center_y=7.293 --center_z=-2.136 --size_x=16.319 --size_y=11.521 --size_z=13.047 --cpu 1 --exhaustiveness 8 --out /tmp/biobb/unitests_11/autodock_vina_run/9600a05c-b8ae-4dab-baba-db2337a8dce8/output_pdbqt_path.pdbqt --verbosity 1 &amp;gt; /tmp/biobb/unitests_11/autodock_vina_run/9600a05c-b8ae-4dab-baba-db2337a8dce8/output_log_path.log\n\nINFO     /tmp/biobb/unitests_11/autodock_vina_run/autodock_vina_run_log.out:cmd_wrapper.py:50 Exit code 0\n\nINFO     /tmp/biobb/unitests_11/autodock_vina_run/autodock_vina_run_log.out:file_utils.py:390 Removed: [&amp;#x27;/tmp/biobb/unitests_11/autodock_vina_run/9600a05c-b8ae-4dab-baba-db2337a8dce8&amp;#x27;]\n\n--------------------------- Captured stdout teardown ---------------------------\n\nRemoving: /tmp/biobb/unitests_11\n&#34;}]}, &#34;renderCollapsed&#34;: [&#34;passed&#34;], &#34;initialSort&#34;: &#34;result&#34;, &#34;title&#34;: &#34;report.html&#34;}"></div>
+    <script>
+      (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+const { getCollapsedCategory, setCollapsedIds } = require('./storage.js')
 
-**********
-pocket2
-**********
-score: 0.606
-druggability_score: 0.56
-volume: 368.749
+class DataManager {
+    setManager(data) {
+        const collapsedCategories = [...getCollapsedCategory(data.renderCollapsed)]
+        const collapsedIds = []
+        const tests = Object.values(data.tests).flat().map((test, index) => {
+            const collapsed = collapsedCategories.includes(test.result.toLowerCase())
+            const id = `test_${index}`
+            if (collapsed) {
+                collapsedIds.push(id)
+            }
+            return {
+                ...test,
+                id,
+                collapsed,
+            }
+        })
+        const dataBlob = { ...data, tests }
+        this.data = { ...dataBlob }
+        this.renderData = { ...dataBlob }
+        setCollapsedIds(collapsedIds)
+    }
 
-**********
-pocket4
-**********
-score: 0.359
-druggability_score: 0.396
-volume: 142.215
+    get allData() {
+        return { ...this.data }
+    }
 
-**********
-pocket7
-**********
-score: 0.279
-druggability_score: 0.218
-volume: 327.622
+    resetRender() {
+        this.renderData = { ...this.data }
+    }
 
-2023-09-14 10:17:41,169 [MainThread  ] [INFO ]  Creating 19418f07-bf82-4d86-8702-b439a209e778 temporary folder
-2023-09-14 10:17:41,172 [MainThread  ] [INFO ]  Extracting: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_pockets.zip
-2023-09-14 10:17:41,172 [MainThread  ] [INFO ]  to:
-2023-09-14 10:17:41,172 [MainThread  ] [INFO ]  [&#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket10_atm.pdb&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket10_vert.pqr&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket11_atm.pdb&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket11_vert.pqr&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket12_atm.pdb&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket12_vert.pqr&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket1_atm.pdb&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket1_vert.pqr&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket2_atm.pdb&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket2_vert.pqr&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket3_atm.pdb&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket3_vert.pqr&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket4_atm.pdb&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket4_vert.pqr&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket5_atm.pdb&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket5_vert.pqr&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket6_atm.pdb&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket6_vert.pqr&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket7_atm.pdb&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket7_vert.pqr&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket8_atm.pdb&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket8_vert.pqr&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket9_atm.pdb&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket9_vert.pqr&#x27;]
-2023-09-14 10:17:41,173 [MainThread  ] [INFO ]  Creating /tmp/biobb/unitests_11/fpocket_filter/output_filter_pockets.zip output file
-2023-09-14 10:17:41,174 [MainThread  ] [INFO ]  Adding:
-2023-09-14 10:17:41,174 [MainThread  ] [INFO ]  [&#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket1_atm.pdb&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket1_vert.pqr&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket2_atm.pdb&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket2_vert.pqr&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket4_atm.pdb&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket4_vert.pqr&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket7_atm.pdb&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket7_vert.pqr&#x27;]
-2023-09-14 10:17:41,174 [MainThread  ] [INFO ]  to: /tmp/biobb/unitests_11/fpocket_filter/output_filter_pockets.zip
-2023-09-14 10:17:41,174 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_11/fpocket_filter/3f768e87-39df-40d9-9ec0-e97240f93622&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778&#x27;]
-Checking if empty file: /tmp/biobb/unitests_11/fpocket_filter/output_filter_pockets.zip
-This is a ZIP comparison!
-Unzipping:
-Creating a unique_dir for: /tmp/biobb/unitests_11/fpocket_filter/output_filter_pockets.zip
-Creating a unique_dir for: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/reference/fpocket/ref_output_filter_pockets.zip
-Checking RMSD between:
-     PDB_A: ce899524-1a91-416f-937b-952dee276ffd/pocket1_atm.pdb
-     PDB_B: 08fe3a36-ccdd-4a78-882d-6adffb569c92/pocket1_atm.pdb
-     Ignoring HETAMT in RMSD
-     Ignoring Hydrogen atoms in RMSD
-     Atoms ALIGNED in PDB_A: 54
-     Atoms ALIGNED in PDB_B: 54
-     RMS: 6.091987637433995e-16
-     RMS_CUTOFF: 1
-Comparing: 
-        File_A: ce899524-1a91-416f-937b-952dee276ffd/pocket1_vert.pqr
-        File_B: 08fe3a36-ccdd-4a78-882d-6adffb569c92/pocket1_vert.pqr
-        File_A hash: b&#x27;~\xd7\xaf\xe7\xb4\xbd9$]\xa9\xe8\xc1\xa7\x01\xcdk43OJR\x1e\x8cf\x19\xbc`\xdc\x908\x9af&#x27;
-        File_B hash: b&#x27;~\xd7\xaf\xe7\xb4\xbd9$]\xa9\xe8\xc1\xa7\x01\xcdk43OJR\x1e\x8cf\x19\xbc`\xdc\x908\x9af&#x27;
-Checking RMSD between:
-     PDB_A: ce899524-1a91-416f-937b-952dee276ffd/pocket2_atm.pdb
-     PDB_B: 08fe3a36-ccdd-4a78-882d-6adffb569c92/pocket2_atm.pdb
-     Ignoring HETAMT in RMSD
-     Ignoring Hydrogen atoms in RMSD
-     Atoms ALIGNED in PDB_A: 47
-     Atoms ALIGNED in PDB_B: 47
-     RMS: 8.412045032320183e-15
-     RMS_CUTOFF: 1
-Comparing: 
-        File_A: ce899524-1a91-416f-937b-952dee276ffd/pocket2_vert.pqr
-        File_B: 08fe3a36-ccdd-4a78-882d-6adffb569c92/pocket2_vert.pqr
-        File_A hash: b&#x27;\xc0\xd1\x86\xe2\xe9p\xcc\x92a\x80$\xa6/\xc2O\x8e\x96d)\xc5QZ\x9bx\xa1\xc6r4H\xdc\xe1Q&#x27;
-        File_B hash: b&#x27;\xc0\xd1\x86\xe2\xe9p\xcc\x92a\x80$\xa6/\xc2O\x8e\x96d)\xc5QZ\x9bx\xa1\xc6r4H\xdc\xe1Q&#x27;
-Checking RMSD between:
-     PDB_A: ce899524-1a91-416f-937b-952dee276ffd/pocket4_atm.pdb
-     PDB_B: 08fe3a36-ccdd-4a78-882d-6adffb569c92/pocket4_atm.pdb
-     Ignoring HETAMT in RMSD
-     Ignoring Hydrogen atoms in RMSD
-     Atoms ALIGNED in PDB_A: 25
-     Atoms ALIGNED in PDB_B: 25
-     RMS: 3.796962744218036e-15
-     RMS_CUTOFF: 1
-Comparing: 
-        File_A: ce899524-1a91-416f-937b-952dee276ffd/pocket4_vert.pqr
-        File_B: 08fe3a36-ccdd-4a78-882d-6adffb569c92/pocket4_vert.pqr
-        File_A hash: b&#x27;\xaa1-aO#\x87?\x1a\x18tH)\x93\x10\x82\x814\xc7\xca\x8bL\xae\xd9\xfa\xe0l\xcd-\xf4\xc26&#x27;
-        File_B hash: b&#x27;\xaa1-aO#\x87?\x1a\x18tH)\x93\x10\x82\x814\xc7\xca\x8bL\xae\xd9\xfa\xe0l\xcd-\xf4\xc26&#x27;
-Checking RMSD between:
-     PDB_A: ce899524-1a91-416f-937b-952dee276ffd/pocket7_atm.pdb
-     PDB_B: 08fe3a36-ccdd-4a78-882d-6adffb569c92/pocket7_atm.pdb
-     Ignoring HETAMT in RMSD
-     Ignoring Hydrogen atoms in RMSD
-     Atoms ALIGNED in PDB_A: 31
-     Atoms ALIGNED in PDB_B: 31
-     RMS: 3.8222859690969964e-15
-     RMS_CUTOFF: 1
-Comparing: 
-        File_A: ce899524-1a91-416f-937b-952dee276ffd/pocket7_vert.pqr
-        File_B: 08fe3a36-ccdd-4a78-882d-6adffb569c92/pocket7_vert.pqr
-        File_A hash: b&#x27;\xcd\r\xc1\xcf\x02\xcb\x05\xaa\x97\xcfWmr\x88m\xa0\xe4\x97\x0c\xd1\xc4\xe3\xca\xed\x99\xbf\xf0\xbf\xf3\x88\x1eO&#x27;
-        File_B hash: b&#x27;\xcd\r\xc1\xcf\x02\xcb\x05\xaa\x97\xcfWmr\x88m\xa0\xe4\x97\x0c\xd1\xc4\xe3\xca\xed\x99\xbf\xf0\xbf\xf3\x88\x1eO&#x27;
-<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_11/fpocket_filter/fpocket_filter_log.out:file_utils.py:390 Executing biobb_vs.fpocket.fpocket_filter Version: 4.1.1
-INFO     /tmp/biobb/unitests_11/fpocket_filter/fpocket_filter_log.out:file_utils.py:390 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_pockets.zip to /tmp/biobb/unitests_11/fpocket_filter/3f768e87-39df-40d9-9ec0-e97240f93622
-INFO     /tmp/biobb/unitests_11/fpocket_filter/fpocket_filter_log.out:file_utils.py:390 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_summary.json to /tmp/biobb/unitests_11/fpocket_filter/3f768e87-39df-40d9-9ec0-e97240f93622
-INFO     /tmp/biobb/unitests_11/fpocket_filter/fpocket_filter_log.out:file_utils.py:390 Performing a search under the next parameters: score: [0.2, 1], druggability_score: [0.2, 0.9], volume: [100, 600]
-INFO     /tmp/biobb/unitests_11/fpocket_filter/fpocket_filter_log.out:file_utils.py:390 Found 4 matches:
-**********
-pocket1
-**********
-score: 0.896
-druggability_score: 0.82
-volume: 576.216
+    setRender(data) {
+        this.renderData.tests = [...data]
+    }
 
-**********
-pocket2
-**********
-score: 0.606
-druggability_score: 0.56
-volume: 368.749
+    toggleCollapsedItem(id) {
+        this.renderData.tests = this.renderData.tests.map((test) =>
+            test.id === id ? { ...test, collapsed: !test.collapsed } : test,
+        )
+    }
 
-**********
-pocket4
-**********
-score: 0.359
-druggability_score: 0.396
-volume: 142.215
+    set allCollapsed(collapsed) {
+        this.renderData = { ...this.renderData, tests: [...this.renderData.tests.map((test) => (
+            { ...test, collapsed }
+        ))] }
+    }
 
-**********
-pocket7
-**********
-score: 0.279
-druggability_score: 0.218
-volume: 327.622
+    get testSubset() {
+        return [...this.renderData.tests]
+    }
 
-INFO     /tmp/biobb/unitests_11/fpocket_filter/fpocket_filter_log.out:file_utils.py:390 Creating 19418f07-bf82-4d86-8702-b439a209e778 temporary folder
-INFO     /tmp/biobb/unitests_11/fpocket_filter/fpocket_filter_log.out:file_utils.py:171 Extracting: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_pockets.zip
-INFO     /tmp/biobb/unitests_11/fpocket_filter/fpocket_filter_log.out:file_utils.py:172 to:
-INFO     /tmp/biobb/unitests_11/fpocket_filter/fpocket_filter_log.out:file_utils.py:173 [&#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket10_atm.pdb&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket10_vert.pqr&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket11_atm.pdb&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket11_vert.pqr&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket12_atm.pdb&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket12_vert.pqr&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket1_atm.pdb&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket1_vert.pqr&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket2_atm.pdb&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket2_vert.pqr&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket3_atm.pdb&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket3_vert.pqr&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket4_atm.pdb&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket4_vert.pqr&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket5_atm.pdb&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket5_vert.pqr&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket6_atm.pdb&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket6_vert.pqr&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket7_atm.pdb&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket7_vert.pqr&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket8_atm.pdb&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket8_vert.pqr&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket9_atm.pdb&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket9_vert.pqr&#x27;]
-INFO     /tmp/biobb/unitests_11/fpocket_filter/fpocket_filter_log.out:file_utils.py:390 Creating /tmp/biobb/unitests_11/fpocket_filter/output_filter_pockets.zip output file
-INFO     /tmp/biobb/unitests_11/fpocket_filter/fpocket_filter_log.out:file_utils.py:147 Adding:
-INFO     /tmp/biobb/unitests_11/fpocket_filter/fpocket_filter_log.out:file_utils.py:148 [&#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket1_atm.pdb&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket1_vert.pqr&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket2_atm.pdb&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket2_vert.pqr&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket4_atm.pdb&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket4_vert.pqr&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket7_atm.pdb&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778/pocket7_vert.pqr&#x27;]
-INFO     /tmp/biobb/unitests_11/fpocket_filter/fpocket_filter_log.out:file_utils.py:149 to: /tmp/biobb/unitests_11/fpocket_filter/output_filter_pockets.zip
-INFO     /tmp/biobb/unitests_11/fpocket_filter/fpocket_filter_log.out:file_utils.py:390 Removed: [&#x27;/tmp/biobb/unitests_11/fpocket_filter/3f768e87-39df-40d9-9ec0-e97240f93622&#x27;, &#x27;19418f07-bf82-4d86-8702-b439a209e778&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
-Removing: /tmp/biobb/unitests_11
-<br/></div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">biobb_vs/test/unitests/test_fpocket/test_fpocket_run.py::TestFPocketRun::test_fpocket_run</td>
-          <td class="col-duration">1.16</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-09-14 10:17:41,236 [MainThread  ] [INFO ]  Executing biobb_vs.fpocket.fpocket_run Version: 4.1.1
-2023-09-14 10:17:41,237 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/fpocket_input.pdb to /tmp/biobb/unitests_11/fpocket_run/5f11351e-31af-4564-977d-95c4e5e8f264
-2023-09-14 10:17:41,237 [MainThread  ] [INFO ]  Creating 1420afa8-52a9-4212-bc3f-45949c210f49 temporary folder
-2023-09-14 10:17:41,237 [MainThread  ] [INFO ]  Executing fpocket
-2023-09-14 10:17:41,238 [MainThread  ] [INFO ]  fpocket -f 1420afa8-52a9-4212-bc3f-45949c210f49/input.pdb -m 3 -M 6 -i 35
+    get environment() {
+        return this.renderData.environment
+    }
 
-2023-09-14 10:17:42,371 [MainThread  ] [INFO ]  Exit code 0
+    get initialSort() {
+        return this.data.initialSort
+    }
+}
 
-2023-09-14 10:17:42,372 [MainThread  ] [INFO ]  ***** POCKET HUNTING BEGINS ***** 
-***** POCKET HUNTING ENDS ***** 
+module.exports = {
+    manager: new DataManager(),
+}
 
-2023-09-14 10:17:42,374 [MainThread  ] [INFO ]  12 pockets found
-2023-09-14 10:17:42,374 [MainThread  ] [INFO ]  Sorting output data by druggability_score
-2023-09-14 10:17:42,377 [MainThread  ] [INFO ]  Adding:
-2023-09-14 10:17:42,377 [MainThread  ] [INFO ]  [&#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket10_atm.pdb&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket10_vert.pqr&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket11_atm.pdb&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket11_vert.pqr&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket12_atm.pdb&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket12_vert.pqr&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket1_atm.pdb&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket1_vert.pqr&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket2_atm.pdb&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket2_vert.pqr&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket3_atm.pdb&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket3_vert.pqr&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket4_atm.pdb&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket4_vert.pqr&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket5_atm.pdb&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket5_vert.pqr&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket6_atm.pdb&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket6_vert.pqr&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket7_atm.pdb&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket7_vert.pqr&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket8_atm.pdb&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket8_vert.pqr&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket9_atm.pdb&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket9_vert.pqr&#x27;]
-2023-09-14 10:17:42,377 [MainThread  ] [INFO ]  to: /tmp/biobb/unitests_11/fpocket_run/output_pockets.zip
-2023-09-14 10:17:42,377 [MainThread  ] [INFO ]  Saving summary to /tmp/biobb/unitests_11/fpocket_run/output_summary.json file
-2023-09-14 10:17:42,380 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_11/fpocket_run/5f11351e-31af-4564-977d-95c4e5e8f264&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49&#x27;]
-Checking if empty file: /tmp/biobb/unitests_11/fpocket_run/output_pockets.zip
-Checking if empty file: /tmp/biobb/unitests_11/fpocket_run/output_summary.json
-<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_11/fpocket_run/fpocket_run_log.out:file_utils.py:390 Executing biobb_vs.fpocket.fpocket_run Version: 4.1.1
-INFO     /tmp/biobb/unitests_11/fpocket_run/fpocket_run_log.out:file_utils.py:390 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/fpocket_input.pdb to /tmp/biobb/unitests_11/fpocket_run/5f11351e-31af-4564-977d-95c4e5e8f264
-INFO     /tmp/biobb/unitests_11/fpocket_run/fpocket_run_log.out:file_utils.py:390 Creating 1420afa8-52a9-4212-bc3f-45949c210f49 temporary folder
-INFO     /tmp/biobb/unitests_11/fpocket_run/fpocket_run_log.out:file_utils.py:390 Executing fpocket
-INFO     /tmp/biobb/unitests_11/fpocket_run/fpocket_run_log.out:cmd_wrapper.py:33 fpocket -f 1420afa8-52a9-4212-bc3f-45949c210f49/input.pdb -m 3 -M 6 -i 35
+},{"./storage.js":8}],2:[function(require,module,exports){
+const mediaViewer = require('./mediaviewer.js')
+const templateEnvRow = document.getElementById('template_environment_row')
+const templateResult = document.getElementById('template_results-table__tbody')
 
-INFO     /tmp/biobb/unitests_11/fpocket_run/fpocket_run_log.out:cmd_wrapper.py:50 Exit code 0
+function htmlToElements(html) {
+    const temp = document.createElement('template')
+    temp.innerHTML = html
+    return temp.content.childNodes
+}
 
-INFO     /tmp/biobb/unitests_11/fpocket_run/fpocket_run_log.out:cmd_wrapper.py:52 ***** POCKET HUNTING BEGINS ***** 
-***** POCKET HUNTING ENDS ***** 
+const find = (selector, elem) => {
+    if (!elem) {
+        elem = document
+    }
+    return elem.querySelector(selector)
+}
 
-INFO     /tmp/biobb/unitests_11/fpocket_run/fpocket_run_log.out:file_utils.py:390 12 pockets found
-INFO     /tmp/biobb/unitests_11/fpocket_run/fpocket_run_log.out:file_utils.py:390 Sorting output data by druggability_score
-INFO     /tmp/biobb/unitests_11/fpocket_run/fpocket_run_log.out:file_utils.py:147 Adding:
-INFO     /tmp/biobb/unitests_11/fpocket_run/fpocket_run_log.out:file_utils.py:148 [&#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket10_atm.pdb&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket10_vert.pqr&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket11_atm.pdb&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket11_vert.pqr&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket12_atm.pdb&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket12_vert.pqr&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket1_atm.pdb&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket1_vert.pqr&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket2_atm.pdb&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket2_vert.pqr&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket3_atm.pdb&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket3_vert.pqr&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket4_atm.pdb&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket4_vert.pqr&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket5_atm.pdb&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket5_vert.pqr&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket6_atm.pdb&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket6_vert.pqr&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket7_atm.pdb&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket7_vert.pqr&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket8_atm.pdb&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket8_vert.pqr&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket9_atm.pdb&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49/input_out/pockets/pocket9_vert.pqr&#x27;]
-INFO     /tmp/biobb/unitests_11/fpocket_run/fpocket_run_log.out:file_utils.py:149 to: /tmp/biobb/unitests_11/fpocket_run/output_pockets.zip
-INFO     /tmp/biobb/unitests_11/fpocket_run/fpocket_run_log.out:file_utils.py:390 Saving summary to /tmp/biobb/unitests_11/fpocket_run/output_summary.json file
-INFO     /tmp/biobb/unitests_11/fpocket_run/fpocket_run_log.out:file_utils.py:390 Removed: [&#x27;/tmp/biobb/unitests_11/fpocket_run/5f11351e-31af-4564-977d-95c4e5e8f264&#x27;, &#x27;1420afa8-52a9-4212-bc3f-45949c210f49&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
-Removing: /tmp/biobb/unitests_11
-<br/></div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">biobb_vs/test/unitests/test_fpocket/test_fpocket_select.py::TestFPocketSelect::test_fpocket_select</td>
-          <td class="col-duration">0.03</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-09-14 10:17:42,406 [MainThread  ] [INFO ]  Executing biobb_vs.fpocket.fpocket_select Version: 4.1.1
-2023-09-14 10:17:42,406 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_pockets.zip to /tmp/biobb/unitests_11/fpocket_select/ddc21f35-af53-4449-b41c-770777dba6bf
-2023-09-14 10:17:42,407 [MainThread  ] [INFO ]  Creating 7077c219-76a7-4d68-be11-5e016934e1d8 temporary folder
-2023-09-14 10:17:42,409 [MainThread  ] [INFO ]  Extracting: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_pockets.zip
-2023-09-14 10:17:42,409 [MainThread  ] [INFO ]  to:
-2023-09-14 10:17:42,410 [MainThread  ] [INFO ]  [&#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket10_atm.pdb&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket10_vert.pqr&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket11_atm.pdb&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket11_vert.pqr&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket12_atm.pdb&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket12_vert.pqr&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket1_atm.pdb&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket1_vert.pqr&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket2_atm.pdb&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket2_vert.pqr&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket3_atm.pdb&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket3_vert.pqr&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket4_atm.pdb&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket4_vert.pqr&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket5_atm.pdb&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket5_vert.pqr&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket6_atm.pdb&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket6_vert.pqr&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket7_atm.pdb&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket7_vert.pqr&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket8_atm.pdb&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket8_vert.pqr&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket9_atm.pdb&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket9_vert.pqr&#x27;]
-2023-09-14 10:17:42,410 [MainThread  ] [INFO ]  Saving /tmp/biobb/unitests_11/fpocket_select/output_pocket.pdb file
-2023-09-14 10:17:42,410 [MainThread  ] [INFO ]  Saving /tmp/biobb/unitests_11/fpocket_select/output_pocket.pqr file
-2023-09-14 10:17:42,410 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_11/fpocket_select/ddc21f35-af53-4449-b41c-770777dba6bf&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8&#x27;]
-Checking if empty file: /tmp/biobb/unitests_11/fpocket_select/output_pocket.pdb
-Checking RMSD between:
-     PDB_A: /tmp/biobb/unitests_11/fpocket_select/output_pocket.pdb
-     PDB_B: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/reference/fpocket/ref_output_pocket.pdb
-     Ignoring HETAMT in RMSD
-     Ignoring Hydrogen atoms in RMSD
-     Atoms ALIGNED in PDB_A: 25
-     Atoms ALIGNED in PDB_B: 25
-     RMS: 3.796962744218036e-15
-     RMS_CUTOFF: 1
-Checking if empty file: /tmp/biobb/unitests_11/fpocket_select/output_pocket.pqr
-Comparing: 
-        File_A: /tmp/biobb/unitests_11/fpocket_select/output_pocket.pqr
-        File_B: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/reference/fpocket/ref_output_pocket.pqr
-        File_A hash: b&#x27;\xaa1-aO#\x87?\x1a\x18tH)\x93\x10\x82\x814\xc7\xca\x8bL\xae\xd9\xfa\xe0l\xcd-\xf4\xc26&#x27;
-        File_B hash: b&#x27;\xaa1-aO#\x87?\x1a\x18tH)\x93\x10\x82\x814\xc7\xca\x8bL\xae\xd9\xfa\xe0l\xcd-\xf4\xc26&#x27;
-<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_11/fpocket_select/fpocket_select_log.out:file_utils.py:390 Executing biobb_vs.fpocket.fpocket_select Version: 4.1.1
-INFO     /tmp/biobb/unitests_11/fpocket_select/fpocket_select_log.out:file_utils.py:390 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_pockets.zip to /tmp/biobb/unitests_11/fpocket_select/ddc21f35-af53-4449-b41c-770777dba6bf
-INFO     /tmp/biobb/unitests_11/fpocket_select/fpocket_select_log.out:file_utils.py:390 Creating 7077c219-76a7-4d68-be11-5e016934e1d8 temporary folder
-INFO     /tmp/biobb/unitests_11/fpocket_select/fpocket_select_log.out:file_utils.py:171 Extracting: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/fpocket/input_pockets.zip
-INFO     /tmp/biobb/unitests_11/fpocket_select/fpocket_select_log.out:file_utils.py:172 to:
-INFO     /tmp/biobb/unitests_11/fpocket_select/fpocket_select_log.out:file_utils.py:173 [&#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket10_atm.pdb&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket10_vert.pqr&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket11_atm.pdb&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket11_vert.pqr&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket12_atm.pdb&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket12_vert.pqr&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket1_atm.pdb&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket1_vert.pqr&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket2_atm.pdb&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket2_vert.pqr&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket3_atm.pdb&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket3_vert.pqr&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket4_atm.pdb&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket4_vert.pqr&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket5_atm.pdb&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket5_vert.pqr&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket6_atm.pdb&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket6_vert.pqr&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket7_atm.pdb&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket7_vert.pqr&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket8_atm.pdb&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket8_vert.pqr&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket9_atm.pdb&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8/pocket9_vert.pqr&#x27;]
-INFO     /tmp/biobb/unitests_11/fpocket_select/fpocket_select_log.out:file_utils.py:390 Saving /tmp/biobb/unitests_11/fpocket_select/output_pocket.pdb file
-INFO     /tmp/biobb/unitests_11/fpocket_select/fpocket_select_log.out:file_utils.py:390 Saving /tmp/biobb/unitests_11/fpocket_select/output_pocket.pqr file
-INFO     /tmp/biobb/unitests_11/fpocket_select/fpocket_select_log.out:file_utils.py:390 Removed: [&#x27;/tmp/biobb/unitests_11/fpocket_select/ddc21f35-af53-4449-b41c-770777dba6bf&#x27;, &#x27;7077c219-76a7-4d68-be11-5e016934e1d8&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
-Removing: /tmp/biobb/unitests_11
-<br/></div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">biobb_vs/test/unitests/test_utils/test_box.py::TestBox::test_box</td>
-          <td class="col-duration">0.02</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-09-14 10:17:42,437 [MainThread  ] [INFO ]  Executing biobb_vs.utils.box Version: 4.1.1
-2023-09-14 10:17:42,438 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/input_box.pqr to /tmp/biobb/unitests_11/box/5af8119f-f271-4756-9514-aef9895c3bb8
-2023-09-14 10:17:42,438 [MainThread  ] [INFO ]  Loading pocket PQR selection from /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/input_box.pqr
-2023-09-14 10:17:42,438 [MainThread  ] [INFO ]  Binding site center (Angstroms):      4.853   -62.298   -38.437
-2023-09-14 10:17:42,438 [MainThread  ] [INFO ]  Adding 2.0 Angstroms offset
-2023-09-14 10:17:42,439 [MainThread  ] [INFO ]  Binding site size (Angstroms):        4.070     4.801     5.508
-2023-09-14 10:17:42,439 [MainThread  ] [INFO ]  Volume (cubic Angstroms): 861
-2023-09-14 10:17:42,439 [MainThread  ] [INFO ]  Adding box coordinates
-2023-09-14 10:17:42,439 [MainThread  ] [INFO ]  Saving output PDB file (with box setting annotations): /tmp/biobb/unitests_11/box/output_box.pdb
-2023-09-14 10:17:42,439 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_11/box/5af8119f-f271-4756-9514-aef9895c3bb8&#x27;]
-Checking if empty file: /tmp/biobb/unitests_11/box/output_box.pdb
-Comparing: 
-        File_A: /tmp/biobb/unitests_11/box/output_box.pdb
-        File_B: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/reference/utils/ref_output_box.pdb
-        File_A hash: b&#x27;\x07w\x8d \xde\x1cwc(\xf3\x14&amp;\x90\xa8JiC\xd5\x8f&amp;\xf6\xf2a\x17z\x7fw\xd1@Ds/&#x27;
-        File_B hash: b&#x27;\x07w\x8d \xde\x1cwc(\xf3\x14&amp;\x90\xa8JiC\xd5\x8f&amp;\xf6\xf2a\x17z\x7fw\xd1@Ds/&#x27;
-<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_11/box/box_log.out:file_utils.py:390 Executing biobb_vs.utils.box Version: 4.1.1
-INFO     /tmp/biobb/unitests_11/box/box_log.out:file_utils.py:390 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/input_box.pqr to /tmp/biobb/unitests_11/box/5af8119f-f271-4756-9514-aef9895c3bb8
-INFO     /tmp/biobb/unitests_11/box/box_log.out:file_utils.py:390 Loading pocket PQR selection from /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/input_box.pqr
-INFO     /tmp/biobb/unitests_11/box/box_log.out:file_utils.py:390 Binding site center (Angstroms):      4.853   -62.298   -38.437
-INFO     /tmp/biobb/unitests_11/box/box_log.out:file_utils.py:390 Adding 2.0 Angstroms offset
-INFO     /tmp/biobb/unitests_11/box/box_log.out:file_utils.py:390 Binding site size (Angstroms):        4.070     4.801     5.508
-INFO     /tmp/biobb/unitests_11/box/box_log.out:file_utils.py:390 Volume (cubic Angstroms): 861
-INFO     /tmp/biobb/unitests_11/box/box_log.out:file_utils.py:390 Adding box coordinates
-INFO     /tmp/biobb/unitests_11/box/box_log.out:file_utils.py:390 Saving output PDB file (with box setting annotations): /tmp/biobb/unitests_11/box/output_box.pdb
-INFO     /tmp/biobb/unitests_11/box/box_log.out:file_utils.py:390 Removed: [&#x27;/tmp/biobb/unitests_11/box/5af8119f-f271-4756-9514-aef9895c3bb8&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
-Removing: /tmp/biobb/unitests_11
-<br/></div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">biobb_vs/test/unitests/test_utils/test_box_residues.py::TestBoxResidues::test_box_residues</td>
-          <td class="col-duration">0.08</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-09-14 10:17:42,463 [MainThread  ] [INFO ]  Executing biobb_vs.utils.box_residues Version: 4.1.1
-2023-09-14 10:17:42,463 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/input_box_residues.pdb to /tmp/biobb/unitests_11/box_residues/b63594e1-3cab-43a8-b581-63d840888452
-2023-09-14 10:17:42,463 [MainThread  ] [INFO ]  Loading input PDB structure /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/input_box_residues.pdb
-2023-09-14 10:17:42,520 [MainThread  ] [INFO ]  Mapping residue structure into input structure
-2023-09-14 10:17:42,521 [MainThread  ] [INFO ]  Selection of residues successfully matched
-2023-09-14 10:17:42,521 [MainThread  ] [INFO ]  Binding site center (Angstroms):     -2.028   -54.362   -25.714
-2023-09-14 10:17:42,521 [MainThread  ] [INFO ]  Binding site size (Angstroms):        7.465    10.330    13.002
-2023-09-14 10:17:42,521 [MainThread  ] [INFO ]  Volume (cubic Angstroms): 8021
-2023-09-14 10:17:42,521 [MainThread  ] [INFO ]  Adding box coordinates
-2023-09-14 10:17:42,521 [MainThread  ] [INFO ]  Saving output PDB file (with box setting annotations): /tmp/biobb/unitests_11/box_residues/output_box_residues.pdb
-2023-09-14 10:17:42,522 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_11/box_residues/b63594e1-3cab-43a8-b581-63d840888452&#x27;]
-Checking if empty file: /tmp/biobb/unitests_11/box_residues/output_box_residues.pdb
-Comparing: 
-        File_A: /tmp/biobb/unitests_11/box_residues/output_box_residues.pdb
-        File_B: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/reference/utils/ref_output_box_residues.pdb
-        File_A hash: b&#x27;\xef\x8a\xceu\x81\xfe\x9f\xbb\x92\xabZA\x96[\x8d\xa3\xc6c\x02\xe4\x90\x07qg\xc7\x94\x85,&amp;f*g&#x27;
-        File_B hash: b&#x27;\xef\x8a\xceu\x81\xfe\x9f\xbb\x92\xabZA\x96[\x8d\xa3\xc6c\x02\xe4\x90\x07qg\xc7\x94\x85,&amp;f*g&#x27;
-<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_11/box_residues/box_residues_log.out:file_utils.py:390 Executing biobb_vs.utils.box_residues Version: 4.1.1
-INFO     /tmp/biobb/unitests_11/box_residues/box_residues_log.out:file_utils.py:390 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/input_box_residues.pdb to /tmp/biobb/unitests_11/box_residues/b63594e1-3cab-43a8-b581-63d840888452
-INFO     /tmp/biobb/unitests_11/box_residues/box_residues_log.out:file_utils.py:390 Loading input PDB structure /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/input_box_residues.pdb
-INFO     /tmp/biobb/unitests_11/box_residues/box_residues_log.out:file_utils.py:390 Mapping residue structure into input structure
-INFO     /tmp/biobb/unitests_11/box_residues/box_residues_log.out:file_utils.py:390 Selection of residues successfully matched
-INFO     /tmp/biobb/unitests_11/box_residues/box_residues_log.out:file_utils.py:390 Binding site center (Angstroms):     -2.028   -54.362   -25.714
-INFO     /tmp/biobb/unitests_11/box_residues/box_residues_log.out:file_utils.py:390 Binding site size (Angstroms):        7.465    10.330    13.002
-INFO     /tmp/biobb/unitests_11/box_residues/box_residues_log.out:file_utils.py:390 Volume (cubic Angstroms): 8021
-INFO     /tmp/biobb/unitests_11/box_residues/box_residues_log.out:file_utils.py:390 Adding box coordinates
-INFO     /tmp/biobb/unitests_11/box_residues/box_residues_log.out:file_utils.py:390 Saving output PDB file (with box setting annotations): /tmp/biobb/unitests_11/box_residues/output_box_residues.pdb
-INFO     /tmp/biobb/unitests_11/box_residues/box_residues_log.out:file_utils.py:390 Removed: [&#x27;/tmp/biobb/unitests_11/box_residues/b63594e1-3cab-43a8-b581-63d840888452&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
-Removing: /tmp/biobb/unitests_11
-<br/></div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">biobb_vs/test/unitests/test_utils/test_extract_model_pdbqt.py::TestExtractModelPDBQT::test_extract_model_pdbqt</td>
-          <td class="col-duration">0.02</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-09-14 10:17:42,545 [MainThread  ] [INFO ]  Executing biobb_vs.utils.extract_model_pdbqt Version: 4.1.1
-2023-09-14 10:17:42,546 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/models.pdbqt to /tmp/biobb/unitests_11/extract_model_pdbqt/872e1bd4-38a6-4a69-bb98-48e4fb8d8600
-2023-09-14 10:17:42,549 [MainThread  ] [INFO ]  Saving model 1 to /tmp/biobb/unitests_11/extract_model_pdbqt/output_extract.pdbqt
-2023-09-14 10:17:42,549 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_11/extract_model_pdbqt/872e1bd4-38a6-4a69-bb98-48e4fb8d8600&#x27;]
-Checking if empty file: /tmp/biobb/unitests_11/extract_model_pdbqt/output_extract.pdbqt
-Comparing: 
-        File_A: /tmp/biobb/unitests_11/extract_model_pdbqt/output_extract.pdbqt
-        File_B: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/reference/utils/ref_extract_model.pdbqt
-        File_A hash: b&#x27;\xbf\x80\xf8\xd1\xcbo\xde D%\nQ\xd7\x02\x93\xf7y\x82\x97S\xe6\x96\x84\xd1u\x89,\xdc\xfe\xa4\xe8]&#x27;
-        File_B hash: b&#x27;\xbf\x80\xf8\xd1\xcbo\xde D%\nQ\xd7\x02\x93\xf7y\x82\x97S\xe6\x96\x84\xd1u\x89,\xdc\xfe\xa4\xe8]&#x27;
-<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_11/extract_model_pdbqt/extract_model_pdbqt_log.out:file_utils.py:390 Executing biobb_vs.utils.extract_model_pdbqt Version: 4.1.1
-INFO     /tmp/biobb/unitests_11/extract_model_pdbqt/extract_model_pdbqt_log.out:file_utils.py:390 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/utils/models.pdbqt to /tmp/biobb/unitests_11/extract_model_pdbqt/872e1bd4-38a6-4a69-bb98-48e4fb8d8600
-INFO     /tmp/biobb/unitests_11/extract_model_pdbqt/extract_model_pdbqt_log.out:file_utils.py:390 Saving model 1 to /tmp/biobb/unitests_11/extract_model_pdbqt/output_extract.pdbqt
-INFO     /tmp/biobb/unitests_11/extract_model_pdbqt/extract_model_pdbqt_log.out:file_utils.py:390 Removed: [&#x27;/tmp/biobb/unitests_11/extract_model_pdbqt/872e1bd4-38a6-4a69-bb98-48e4fb8d8600&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
-Removing: /tmp/biobb/unitests_11
-<br/></div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">biobb_vs/test/unitests/test_vina/test_autodock_vina_run.py::TestAutoDockVinaRun::test_autodock_vina_run</td>
-          <td class="col-duration">17.11</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-09-14 10:17:42,573 [MainThread  ] [INFO ]  Executing biobb_vs.vina.autodock_vina_run Version: 4.1.1
-2023-09-14 10:17:42,574 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/vina/vina_ligand.pdbqt to /tmp/biobb/unitests_11/autodock_vina_run/e245a705-e300-47b9-b39b-0fc3ac15fabb
-2023-09-14 10:17:42,574 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/vina/vina_receptor.pdbqt to /tmp/biobb/unitests_11/autodock_vina_run/e245a705-e300-47b9-b39b-0fc3ac15fabb
-2023-09-14 10:17:42,576 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/vina/vina_box.pdb to /tmp/biobb/unitests_11/autodock_vina_run/e245a705-e300-47b9-b39b-0fc3ac15fabb
-2023-09-14 10:17:42,576 [MainThread  ] [INFO ]  vina --ligand /tmp/biobb/unitests_11/autodock_vina_run/e245a705-e300-47b9-b39b-0fc3ac15fabb/vina_ligand.pdbqt --receptor /tmp/biobb/unitests_11/autodock_vina_run/e245a705-e300-47b9-b39b-0fc3ac15fabb/vina_receptor.pdbqt --center_x=7.293 --center_y=7.293 --center_z=-2.136 --size_x=16.319 --size_y=11.521 --size_z=13.047 --cpu 1 --out /tmp/biobb/unitests_11/autodock_vina_run/e245a705-e300-47b9-b39b-0fc3ac15fabb/output_pdbqt_path.pdbqt --verbosity 1 &gt; /tmp/biobb/unitests_11/autodock_vina_run/e245a705-e300-47b9-b39b-0fc3ac15fabb/output_log_path.log
+const findAll = (selector, elem) => {
+    if (!elem) {
+        elem = document
+    }
+    return [...elem.querySelectorAll(selector)]
+}
 
-2023-09-14 10:17:59,665 [MainThread  ] [INFO ]  Exit code 0
+const dom = {
+    getStaticRow: (key, value) => {
+        const envRow = templateEnvRow.content.cloneNode(true)
+        const isObj = typeof value === 'object' && value !== null
+        const values = isObj ? Object.keys(value).map((k) => `${k}: ${value[k]}`) : null
 
-2023-09-14 10:17:59,667 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_11/autodock_vina_run/e245a705-e300-47b9-b39b-0fc3ac15fabb&#x27;]
-Checking if empty file: /tmp/biobb/unitests_11/autodock_vina_run/output_pdbqt_path.pdbqt
-Checking if empty file: /tmp/biobb/unitests_11/autodock_vina_run/output_log_path.log
-<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_11/autodock_vina_run/autodock_vina_run_log.out:file_utils.py:390 Executing biobb_vs.vina.autodock_vina_run Version: 4.1.1
-INFO     /tmp/biobb/unitests_11/autodock_vina_run/autodock_vina_run_log.out:file_utils.py:390 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/vina/vina_ligand.pdbqt to /tmp/biobb/unitests_11/autodock_vina_run/e245a705-e300-47b9-b39b-0fc3ac15fabb
-INFO     /tmp/biobb/unitests_11/autodock_vina_run/autodock_vina_run_log.out:file_utils.py:390 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/vina/vina_receptor.pdbqt to /tmp/biobb/unitests_11/autodock_vina_run/e245a705-e300-47b9-b39b-0fc3ac15fabb
-INFO     /tmp/biobb/unitests_11/autodock_vina_run/autodock_vina_run_log.out:file_utils.py:390 Copy: /home/user/actions-runner/_work/biobb_vs/biobb_vs/biobb_vs/test/data/vina/vina_box.pdb to /tmp/biobb/unitests_11/autodock_vina_run/e245a705-e300-47b9-b39b-0fc3ac15fabb
-INFO     /tmp/biobb/unitests_11/autodock_vina_run/autodock_vina_run_log.out:cmd_wrapper.py:33 vina --ligand /tmp/biobb/unitests_11/autodock_vina_run/e245a705-e300-47b9-b39b-0fc3ac15fabb/vina_ligand.pdbqt --receptor /tmp/biobb/unitests_11/autodock_vina_run/e245a705-e300-47b9-b39b-0fc3ac15fabb/vina_receptor.pdbqt --center_x=7.293 --center_y=7.293 --center_z=-2.136 --size_x=16.319 --size_y=11.521 --size_z=13.047 --cpu 1 --out /tmp/biobb/unitests_11/autodock_vina_run/e245a705-e300-47b9-b39b-0fc3ac15fabb/output_pdbqt_path.pdbqt --verbosity 1 &gt; /tmp/biobb/unitests_11/autodock_vina_run/e245a705-e300-47b9-b39b-0fc3ac15fabb/output_log_path.log
+        const valuesElement = htmlToElements(
+            values ? `<ul>${values.map((val) => `<li>${val}</li>`).join('')}<ul>` : `<div>${value}</div>`)[0]
+        const td = findAll('td', envRow)
+        td[0].textContent = key
+        td[1].appendChild(valuesElement)
 
-INFO     /tmp/biobb/unitests_11/autodock_vina_run/autodock_vina_run_log.out:cmd_wrapper.py:50 Exit code 0
+        return envRow
+    },
+    getResultTBody: ({ testId, id, log, extras, resultsTableRow, tableHtml, result, collapsed }) => {
+        const resultBody = templateResult.content.cloneNode(true)
+        resultBody.querySelector('tbody').classList.add(result.toLowerCase())
+        resultBody.querySelector('tbody').id = testId
+        resultBody.querySelector('.collapsible').dataset.id = id
 
-INFO     /tmp/biobb/unitests_11/autodock_vina_run/autodock_vina_run_log.out:file_utils.py:390 Removed: [&#x27;/tmp/biobb/unitests_11/autodock_vina_run/e245a705-e300-47b9-b39b-0fc3ac15fabb&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
-Removing: /tmp/biobb/unitests_11
-<br/></div></td></tr></tbody></table></body></html>
+        resultsTableRow.forEach((html) => {
+            const t = document.createElement('template')
+            t.innerHTML = html
+            resultBody.querySelector('.collapsible').appendChild(t.content)
+        })
+
+        if (log) {
+            // Wrap lines starting with "E" with span.error to color those lines red
+            const wrappedLog = log.replace(/^E.*$/gm, (match) => `<span class="error">${match}</span>`)
+            resultBody.querySelector('.log').innerHTML = wrappedLog
+        } else {
+            resultBody.querySelector('.log').remove()
+        }
+
+        if (collapsed) {
+            resultBody.querySelector('.collapsible > td')?.classList.add('collapsed')
+            resultBody.querySelector('.extras-row').classList.add('hidden')
+        } else {
+            resultBody.querySelector('.collapsible > td')?.classList.remove('collapsed')
+        }
+
+        const media = []
+        extras?.forEach(({ name, format_type, content }) => {
+            if (['image', 'video'].includes(format_type)) {
+                media.push({ path: content, name, format_type })
+            }
+
+            if (format_type === 'html') {
+                resultBody.querySelector('.extraHTML').insertAdjacentHTML('beforeend', `<div>${content}</div>`)
+            }
+        })
+        mediaViewer.setup(resultBody, media)
+
+        // Add custom html from the pytest_html_results_table_html hook
+        tableHtml?.forEach((item) => {
+            resultBody.querySelector('td[class="extra"]').insertAdjacentHTML('beforeend', item)
+        })
+
+        return resultBody
+    },
+}
+
+module.exports = {
+    dom,
+    htmlToElements,
+    find,
+    findAll,
+}
+
+},{"./mediaviewer.js":6}],3:[function(require,module,exports){
+const { manager } = require('./datamanager.js')
+const { doSort } = require('./sort.js')
+const storageModule = require('./storage.js')
+
+const getFilteredSubSet = (filter) =>
+    manager.allData.tests.filter(({ result }) => filter.includes(result.toLowerCase()))
+
+const doInitFilter = () => {
+    const currentFilter = storageModule.getVisible()
+    const filteredSubset = getFilteredSubSet(currentFilter)
+    manager.setRender(filteredSubset)
+}
+
+const doFilter = (type, show) => {
+    if (show) {
+        storageModule.showCategory(type)
+    } else {
+        storageModule.hideCategory(type)
+    }
+
+    const currentFilter = storageModule.getVisible()
+    const filteredSubset = getFilteredSubSet(currentFilter)
+    manager.setRender(filteredSubset)
+
+    const sortColumn = storageModule.getSort()
+    doSort(sortColumn, true)
+}
+
+module.exports = {
+    doFilter,
+    doInitFilter,
+}
+
+},{"./datamanager.js":1,"./sort.js":7,"./storage.js":8}],4:[function(require,module,exports){
+const { redraw, bindEvents, renderStatic } = require('./main.js')
+const { doInitFilter } = require('./filter.js')
+const { doInitSort } = require('./sort.js')
+const { manager } = require('./datamanager.js')
+const data = JSON.parse(document.getElementById('data-container').dataset.jsonblob)
+
+function init() {
+    manager.setManager(data)
+    doInitFilter()
+    doInitSort()
+    renderStatic()
+    redraw()
+    bindEvents()
+}
+
+init()
+
+},{"./datamanager.js":1,"./filter.js":3,"./main.js":5,"./sort.js":7}],5:[function(require,module,exports){
+const { dom, find, findAll } = require('./dom.js')
+const { manager } = require('./datamanager.js')
+const { doSort } = require('./sort.js')
+const { doFilter } = require('./filter.js')
+const {
+    getVisible,
+    getCollapsedIds,
+    setCollapsedIds,
+    getSort,
+    getSortDirection,
+    possibleFilters,
+} = require('./storage.js')
+
+const removeChildren = (node) => {
+    while (node.firstChild) {
+        node.removeChild(node.firstChild)
+    }
+}
+
+const renderStatic = () => {
+    const renderEnvironmentTable = () => {
+        const environment = manager.environment
+        const rows = Object.keys(environment).map((key) => dom.getStaticRow(key, environment[key]))
+        const table = document.getElementById('environment')
+        removeChildren(table)
+        rows.forEach((row) => table.appendChild(row))
+    }
+    renderEnvironmentTable()
+}
+
+const addItemToggleListener = (elem) => {
+    elem.addEventListener('click', ({ target }) => {
+        const id = target.parentElement.dataset.id
+        manager.toggleCollapsedItem(id)
+
+        const collapsedIds = getCollapsedIds()
+        if (collapsedIds.includes(id)) {
+            const updated = collapsedIds.filter((item) => item !== id)
+            setCollapsedIds(updated)
+        } else {
+            collapsedIds.push(id)
+            setCollapsedIds(collapsedIds)
+        }
+        redraw()
+    })
+}
+
+const renderContent = (tests) => {
+    const sortAttr = getSort(manager.initialSort)
+    const sortAsc = JSON.parse(getSortDirection())
+    const rows = tests.map(dom.getResultTBody)
+    const table = document.getElementById('results-table')
+    const tableHeader = document.getElementById('results-table-head')
+
+    const newTable = document.createElement('table')
+    newTable.id = 'results-table'
+
+    // remove all sorting classes and set the relevant
+    findAll('.sortable', tableHeader).forEach((elem) => elem.classList.remove('asc', 'desc'))
+    tableHeader.querySelector(`.sortable[data-column-type="${sortAttr}"]`)?.classList.add(sortAsc ? 'desc' : 'asc')
+    newTable.appendChild(tableHeader)
+
+    if (!rows.length) {
+        const emptyTable = document.getElementById('template_results-table__body--empty').content.cloneNode(true)
+        newTable.appendChild(emptyTable)
+    } else {
+        rows.forEach((row) => {
+            if (!!row) {
+                findAll('.collapsible td:not(.col-links', row).forEach(addItemToggleListener)
+                find('.logexpander', row).addEventListener('click',
+                    (evt) => evt.target.parentNode.classList.toggle('expanded'),
+                )
+                newTable.appendChild(row)
+            }
+        })
+    }
+
+    table.replaceWith(newTable)
+}
+
+const renderDerived = () => {
+    const currentFilter = getVisible()
+    possibleFilters.forEach((result) => {
+        const input = document.querySelector(`input[data-test-result="${result}"]`)
+        input.checked = currentFilter.includes(result)
+    })
+}
+
+const bindEvents = () => {
+    const filterColumn = (evt) => {
+        const { target: element } = evt
+        const { testResult } = element.dataset
+
+        doFilter(testResult, element.checked)
+        const collapsedIds = getCollapsedIds()
+        const updated = manager.renderData.tests.map((test) => {
+            return {
+                ...test,
+                collapsed: collapsedIds.includes(test.id),
+            }
+        })
+        manager.setRender(updated)
+        redraw()
+    }
+
+    const header = document.getElementById('environment-header')
+    header.addEventListener('click', () => {
+        const table = document.getElementById('environment')
+        table.classList.toggle('hidden')
+        header.classList.toggle('collapsed')
+    })
+
+    findAll('input[name="filter_checkbox"]').forEach((elem) => {
+        elem.addEventListener('click', filterColumn)
+    })
+
+    findAll('.sortable').forEach((elem) => {
+        elem.addEventListener('click', (evt) => {
+            const { target: element } = evt
+            const { columnType } = element.dataset
+            doSort(columnType)
+            redraw()
+        })
+    })
+
+    document.getElementById('show_all_details').addEventListener('click', () => {
+        manager.allCollapsed = false
+        setCollapsedIds([])
+        redraw()
+    })
+    document.getElementById('hide_all_details').addEventListener('click', () => {
+        manager.allCollapsed = true
+        const allIds = manager.renderData.tests.map((test) => test.id)
+        setCollapsedIds(allIds)
+        redraw()
+    })
+}
+
+const redraw = () => {
+    const { testSubset } = manager
+
+    renderContent(testSubset)
+    renderDerived()
+}
+
+module.exports = {
+    redraw,
+    bindEvents,
+    renderStatic,
+}
+
+},{"./datamanager.js":1,"./dom.js":2,"./filter.js":3,"./sort.js":7,"./storage.js":8}],6:[function(require,module,exports){
+class MediaViewer {
+    constructor(assets) {
+        this.assets = assets
+        this.index = 0
+    }
+
+    nextActive() {
+        this.index = this.index === this.assets.length - 1 ? 0 : this.index + 1
+        return [this.activeFile, this.index]
+    }
+
+    prevActive() {
+        this.index = this.index === 0 ? this.assets.length - 1 : this.index -1
+        return [this.activeFile, this.index]
+    }
+
+    get currentIndex() {
+        return this.index
+    }
+
+    get activeFile() {
+        return this.assets[this.index]
+    }
+}
+
+
+const setup = (resultBody, assets) => {
+    if (!assets.length) {
+        resultBody.querySelector('.media').classList.add('hidden')
+        return
+    }
+
+    const mediaViewer = new MediaViewer(assets)
+    const container = resultBody.querySelector('.media-container')
+    const leftArrow = resultBody.querySelector('.media-container__nav--left')
+    const rightArrow = resultBody.querySelector('.media-container__nav--right')
+    const mediaName = resultBody.querySelector('.media__name')
+    const counter = resultBody.querySelector('.media__counter')
+    const imageEl = resultBody.querySelector('img')
+    const sourceEl = resultBody.querySelector('source')
+    const videoEl = resultBody.querySelector('video')
+
+    const setImg = (media, index) => {
+        if (media?.format_type === 'image') {
+            imageEl.src = media.path
+
+            imageEl.classList.remove('hidden')
+            videoEl.classList.add('hidden')
+        } else if (media?.format_type === 'video') {
+            sourceEl.src = media.path
+
+            videoEl.classList.remove('hidden')
+            imageEl.classList.add('hidden')
+        }
+
+        mediaName.innerText = media?.name
+        counter.innerText = `${index + 1} / ${assets.length}`
+    }
+    setImg(mediaViewer.activeFile, mediaViewer.currentIndex)
+
+    const moveLeft = () => {
+        const [media, index] = mediaViewer.prevActive()
+        setImg(media, index)
+    }
+    const doRight = () => {
+        const [media, index] = mediaViewer.nextActive()
+        setImg(media, index)
+    }
+    const openImg = () => {
+        window.open(mediaViewer.activeFile.path, '_blank')
+    }
+    if (assets.length === 1) {
+        container.classList.add('media-container--fullscreen')
+    } else {
+        leftArrow.addEventListener('click', moveLeft)
+        rightArrow.addEventListener('click', doRight)
+    }
+    imageEl.addEventListener('click', openImg)
+}
+
+module.exports = {
+    setup,
+}
+
+},{}],7:[function(require,module,exports){
+const { manager } = require('./datamanager.js')
+const storageModule = require('./storage.js')
+
+const genericSort = (list, key, ascending, customOrder) => {
+    let sorted
+    if (customOrder) {
+        sorted = list.sort((a, b) => {
+            const aValue = a.result.toLowerCase()
+            const bValue = b.result.toLowerCase()
+
+            const aIndex = customOrder.findIndex((item) => item.toLowerCase() === aValue)
+            const bIndex = customOrder.findIndex((item) => item.toLowerCase() === bValue)
+
+            // Compare the indices to determine the sort order
+            return aIndex - bIndex
+        })
+    } else {
+        sorted = list.sort((a, b) => a[key] === b[key] ? 0 : a[key] > b[key] ? 1 : -1)
+    }
+
+    if (ascending) {
+        sorted.reverse()
+    }
+    return sorted
+}
+
+const durationSort = (list, ascending) => {
+    const parseDuration = (duration) => {
+        if (duration.includes(':')) {
+            // If it's in the format "HH:mm:ss"
+            const [hours, minutes, seconds] = duration.split(':').map(Number)
+            return (hours * 3600 + minutes * 60 + seconds) * 1000
+        } else {
+            // If it's in the format "nnn ms"
+            return parseInt(duration)
+        }
+    }
+    const sorted = list.sort((a, b) => parseDuration(a['duration']) - parseDuration(b['duration']))
+    if (ascending) {
+        sorted.reverse()
+    }
+    return sorted
+}
+
+const doInitSort = () => {
+    const type = storageModule.getSort(manager.initialSort)
+    const ascending = storageModule.getSortDirection()
+    const list = manager.testSubset
+    const initialOrder = ['Error', 'Failed', 'Rerun', 'XFailed', 'XPassed', 'Skipped', 'Passed']
+
+    storageModule.setSort(type)
+    storageModule.setSortDirection(ascending)
+
+    if (type?.toLowerCase() === 'original') {
+        manager.setRender(list)
+    } else {
+        let sortedList
+        switch (type) {
+        case 'duration':
+            sortedList = durationSort(list, ascending)
+            break
+        case 'result':
+            sortedList = genericSort(list, type, ascending, initialOrder)
+            break
+        default:
+            sortedList = genericSort(list, type, ascending)
+            break
+        }
+        manager.setRender(sortedList)
+    }
+}
+
+const doSort = (type, skipDirection) => {
+    const newSortType = storageModule.getSort(manager.initialSort) !== type
+    const currentAsc = storageModule.getSortDirection()
+    let ascending
+    if (skipDirection) {
+        ascending = currentAsc
+    } else {
+        ascending = newSortType ? false : !currentAsc
+    }
+    storageModule.setSort(type)
+    storageModule.setSortDirection(ascending)
+
+    const list = manager.testSubset
+    const sortedList = type === 'duration' ? durationSort(list, ascending) : genericSort(list, type, ascending)
+    manager.setRender(sortedList)
+}
+
+module.exports = {
+    doInitSort,
+    doSort,
+}
+
+},{"./datamanager.js":1,"./storage.js":8}],8:[function(require,module,exports){
+const possibleFilters = [
+    'passed',
+    'skipped',
+    'failed',
+    'error',
+    'xfailed',
+    'xpassed',
+    'rerun',
+]
+
+const getVisible = () => {
+    const url = new URL(window.location.href)
+    const settings = new URLSearchParams(url.search).get('visible')
+    const lower = (item) => {
+        const lowerItem = item.toLowerCase()
+        if (possibleFilters.includes(lowerItem)) {
+            return lowerItem
+        }
+        return null
+    }
+    return settings === null ?
+        possibleFilters :
+        [...new Set(settings?.split(',').map(lower).filter((item) => item))]
+}
+
+const hideCategory = (categoryToHide) => {
+    const url = new URL(window.location.href)
+    const visibleParams = new URLSearchParams(url.search).get('visible')
+    const currentVisible = visibleParams ? visibleParams.split(',') : [...possibleFilters]
+    const settings = [...new Set(currentVisible)].filter((f) => f !== categoryToHide).join(',')
+
+    url.searchParams.set('visible', settings)
+    window.history.pushState({}, null, unescape(url.href))
+}
+
+const showCategory = (categoryToShow) => {
+    if (typeof window === 'undefined') {
+        return
+    }
+    const url = new URL(window.location.href)
+    const currentVisible = new URLSearchParams(url.search).get('visible')?.split(',').filter(Boolean) ||
+        [...possibleFilters]
+    const settings = [...new Set([categoryToShow, ...currentVisible])]
+    const noFilter = possibleFilters.length === settings.length || !settings.length
+
+    noFilter ? url.searchParams.delete('visible') : url.searchParams.set('visible', settings.join(','))
+    window.history.pushState({}, null, unescape(url.href))
+}
+
+const getSort = (initialSort) => {
+    const url = new URL(window.location.href)
+    let sort = new URLSearchParams(url.search).get('sort')
+    if (!sort) {
+        sort = initialSort || 'result'
+    }
+    return sort
+}
+
+const setSort = (type) => {
+    const url = new URL(window.location.href)
+    url.searchParams.set('sort', type)
+    window.history.pushState({}, null, unescape(url.href))
+}
+
+const getCollapsedCategory = (renderCollapsed) => {
+    let categories
+    if (typeof window !== 'undefined') {
+        const url = new URL(window.location.href)
+        const collapsedItems = new URLSearchParams(url.search).get('collapsed')
+        switch (true) {
+        case !renderCollapsed && collapsedItems === null:
+            categories = ['passed']
+            break
+        case collapsedItems?.length === 0 || /^["']{2}$/.test(collapsedItems):
+            categories = []
+            break
+        case /^all$/.test(collapsedItems) || collapsedItems === null && /^all$/.test(renderCollapsed):
+            categories = [...possibleFilters]
+            break
+        default:
+            categories = collapsedItems?.split(',').map((item) => item.toLowerCase()) || renderCollapsed
+            break
+        }
+    } else {
+        categories = []
+    }
+    return categories
+}
+
+const getSortDirection = () => JSON.parse(sessionStorage.getItem('sortAsc')) || false
+const setSortDirection = (ascending) => sessionStorage.setItem('sortAsc', ascending)
+
+const getCollapsedIds = () => JSON.parse(sessionStorage.getItem('collapsedIds')) || []
+const setCollapsedIds = (list) => sessionStorage.setItem('collapsedIds', JSON.stringify(list))
+
+module.exports = {
+    getVisible,
+    hideCategory,
+    showCategory,
+    getCollapsedIds,
+    setCollapsedIds,
+    getSort,
+    setSort,
+    getSortDirection,
+    setSortDirection,
+    getCollapsedCategory,
+    possibleFilters,
+}
+
+},{}]},{},[4]);
+    </script>
+  </footer>
+</html>

@@ -23,6 +23,7 @@ class AutoDockVinaRun(BiobbObject):
         output_log_path (str) (Optional): Path to the log file. File type: output. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/vina/ref_output_vina.log>`_. Accepted formats: log (edam:format_2330).
         properties (dic - Python dictionary object containing the tool parameters, not input/output files):
             * **cpu** (*int*) - (1) [1~1000|1] the number of CPUs to use.
+            * **exhaustiveness** (*int*) - (8) [1~10000|1] exhaustiveness of the global search (roughly proportional to time).
             * **binary_path** (*string*) - ('vina') path to vina in your local computer.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
@@ -74,6 +75,7 @@ class AutoDockVinaRun(BiobbObject):
 
         # Properties specific for BB
         self.cpu = properties.get('cpu', 1)
+        self.exhaustiveness = properties.get('exhaustiveness', 8)
         self.binary_path = properties.get('binary_path', 'vina')
         self.properties = properties
 
@@ -126,6 +128,7 @@ class AutoDockVinaRun(BiobbObject):
                     '--center_x=' + x0, '--center_y=' + y0, '--center_z=' + z0,
                     '--size_x=' + sidex, '--size_y=' + sidey, '--size_z=' + sidez,
                     '--cpu', str(self.cpu),
+                    '--exhaustiveness', str(self.exhaustiveness),
                     '--out', self.stage_io_dict["out"]["output_pdbqt_path"],
                     '--verbosity', '1',
                     '>', self.stage_io_dict["out"]["output_log_path"]]

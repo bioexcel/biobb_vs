@@ -115,6 +115,15 @@
                     "max": 1000,
                     "step": 1
                 },
+                "exhaustiveness": {
+                    "type": "integer",
+                    "default": 8,
+                    "wf_prop": false,
+                    "description": "exhaustiveness of the global search (roughly proportional to time).",
+                    "min": 1,
+                    "max": 10000,
+                    "step": 1
+                },
                 "binary_path": {
                     "type": "string",
                     "default": "vina",

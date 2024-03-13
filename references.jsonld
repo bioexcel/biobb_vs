@@ -1,0 +1,28 @@
+{
+  "@context": "http://schema.org",
+  "@id": "https://github.com/bioexcel/biobb_vs",
+  "@type": "ItemList",
+  "name": "biobb_vs",
+  "itemListElement":[  
+    {
+      "@type": "SoftwareApplication",
+      "description": "AutoDock Vina is an open-source program for doing molecular docking.",
+      "name": "AutoDock Vina",
+      "url": "https://vina.scripps.edu/",
+      "applicationCategory": "Computational Biology tool",
+      "citation": "https://pubs.acs.org/doi/10.1021/acs.jcim.1c00203",
+      "license": "https://www.apache.org/licenses/LICENSE-2.0",
+      "softwareVersion": "1.2.3"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "description": "fpocket is a very fast open source protein pocket (cavity) detection algorithm based on Voronoi tessellation.",
+      "name": "fpocket",
+      "url": "https://fpocket.sourceforge.net/",
+      "applicationCategory": "Computational Biology tool",
+      "citation": "https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-10-168",
+      "license": "https://opensource.org/license/mit",
+      "softwareVersion": "3.1.4.2"
+    }
+  ]
+}

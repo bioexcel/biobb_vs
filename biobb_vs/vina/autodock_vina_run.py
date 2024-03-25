@@ -24,6 +24,9 @@ class AutoDockVinaRun(BiobbObject):
         properties (dic - Python dictionary object containing the tool parameters, not input/output files):
             * **cpu** (*int*) - (1) [1~1000|1] the number of CPUs to use.
             * **exhaustiveness** (*int*) - (8) [1~10000|1] exhaustiveness of the global search (roughly proportional to time).
+            * **num_modes** (*int*) - (9) [1~1000|1] maximum number of binding modes to generate.
+            * **min_rmsd** (*int*) - (1) [1~1000|1] minimum RMSD between output poses.
+            * **energy_range** (*int*) - (3) [1~1000|1] maximum energy difference between the best binding mode and the worst one displayed (kcal/mol).
             * **binary_path** (*string*) - ('vina') path to vina in your local computer.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
@@ -76,6 +79,9 @@ class AutoDockVinaRun(BiobbObject):
         # Properties specific for BB
         self.cpu = properties.get('cpu', 1)
         self.exhaustiveness = properties.get('exhaustiveness', 8)
+        self.num_modes = properties.get('num_modes', 9)
+        self.min_rmsd = properties.get('min_rmsd', 1)
+        self.energy_range = properties.get('energy_range', 3)
         self.binary_path = properties.get('binary_path', 'vina')
         self.properties = properties
 
@@ -129,6 +135,9 @@ class AutoDockVinaRun(BiobbObject):
                     '--size_x=' + sidex, '--size_y=' + sidey, '--size_z=' + sidez,
                     '--cpu', str(self.cpu),
                     '--exhaustiveness', str(self.exhaustiveness),
+                    '--num_modes', str(self.num_modes),
+                    '--min_rmsd', str(self.min_rmsd),
+                    '--energy_range', str(self.energy_range),
                     '--out', self.stage_io_dict["out"]["output_pdbqt_path"],
                     '--verbosity', '1',
                     '>', self.stage_io_dict["out"]["output_log_path"]]

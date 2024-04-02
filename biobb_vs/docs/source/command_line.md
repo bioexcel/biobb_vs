@@ -47,6 +47,9 @@ Syntax: input_parameter (datatype) - (default_value) Definition
 Config parameters for this building block:
 * **cpu** (*integer*): (1) the number of CPUs to use..
 * **exhaustiveness** (*integer*): (8) exhaustiveness of the global search (roughly proportional to time)..
+* **num_modes** (*integer*): (9) maximum number of binding modes to generate..
+* **min_rmsd** (*integer*): (1) minimum RMSD between output poses..
+* **energy_range** (*integer*): (3) maximum energy difference between the best binding mode and the worst one displayed (kcal/mol)..
 * **binary_path** (*string*): (vina) path to vina in your local computer..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..

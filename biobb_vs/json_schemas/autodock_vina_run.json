@@ -124,6 +124,33 @@
                     "max": 10000,
                     "step": 1
                 },
+                "num_modes": {
+                    "type": "integer",
+                    "default": 9,
+                    "wf_prop": false,
+                    "description": "maximum number of binding modes to generate.",
+                    "min": 1,
+                    "max": 1000,
+                    "step": 1
+                },
+                "min_rmsd": {
+                    "type": "integer",
+                    "default": 1,
+                    "wf_prop": false,
+                    "description": "minimum RMSD between output poses.",
+                    "min": 1,
+                    "max": 1000,
+                    "step": 1
+                },
+                "energy_range": {
+                    "type": "integer",
+                    "default": 3,
+                    "wf_prop": false,
+                    "description": "maximum energy difference between the best binding mode and the worst one displayed (kcal/mol).",
+                    "min": 1,
+                    "max": 1000,
+                    "step": 1
+                },
                 "binary_path": {
                     "type": "string",
                     "default": "vina",

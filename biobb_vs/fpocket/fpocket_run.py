@@ -54,7 +54,7 @@ class FPocketRun(BiobbObject):
     Info:
         * wrapped_software:
             * name: fpocket
-            * version: >=3.1.4.2
+            * version: ==4.1
             * license: MIT
         * ontology:
             * name: EDAM

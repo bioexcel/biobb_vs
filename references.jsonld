@@ -22,7 +22,7 @@
       "applicationCategory": "Computational Biology tool",
       "citation": "https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-10-168",
       "license": "https://opensource.org/license/mit",
-      "softwareVersion": "3.1.4.2"
+      "softwareVersion": "4.1"
     }
   ]
 }

@@ -12,7 +12,8 @@ with warnings.catch_warnings():
         import Bio.SubsMat.MatrixInfo
     except ImportError:
         import Bio.Align.substitution_matrices
-    from Bio.Data.SCOPData import protein_letters_3to1 as prot_one_letter
+    # from Bio.Data.SCOPData import protein_letters_3to1 as prot_one_letter
+    from Bio.Data.PDBData import protein_letters_3to1 as prot_one_letter
 
 
 # CHECK PARAMETERS

@@ -39,7 +39,7 @@ bindingsite:
     ref_output_pdb_path: file:test_reference_dir/utils/ref_output_bindingsite.pdb
   properties:
     ligand: PGA
-    matrix_name: blosum62
+    matrix_name: BLOSUM62
     gap_open: -10.0
     gap_extend: -0.5
     max_num_ligands: 15

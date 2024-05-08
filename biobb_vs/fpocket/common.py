@@ -53,7 +53,7 @@ def is_valid_file(ext, argument):
 def check_range(name, property, values, out_log, classname):
     """ Checks the format of a range for fpocket_filter """
 
-    if not type(property) == list or len(property) != 2 or not all(isinstance(n, int) or isinstance(n, float) for n in property):
+    if not isinstance(property, list) or len(property) != 2 or not all(isinstance(n, (int, float)) for n in property):
         fu.log(classname + ': Incorrect format for %s property, exiting' % name, out_log)
         raise SystemExit(classname + ': Incorrect format for %s property, exiting' % name)
 

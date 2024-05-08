@@ -1,5 +1,13 @@
 # Biobb Virtual Screening changelog
 
+## What's new in version [4.1.2](https://github.com/bioexcel/biobb_vs/releases/tag/v4.1.2)?
+In version 4.1.2 the code has been updated for being compatible with biopython 1.83 and fpocket version dependency has been fixed to 4.1.
+
+### New features
+
+* Compatibility with biopython 1.83.
+* Fpocket fixed to 4.1 version.
+
 ## What's new in version [4.1.1](https://github.com/bioexcel/biobb_vs/releases/tag/v4.1.1)?
 In version 4.1.1 some minor bugs have been fixed. 
 

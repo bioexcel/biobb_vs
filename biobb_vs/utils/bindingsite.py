@@ -37,7 +37,7 @@ class BindingSite(BiobbObject):
             * **ligand** (*str*) - (None) Ligand to be found in the protein structure. If no ligand provided, the largest one will be selected, if more than one.
             * **radius** (*float*) - (5.0) [0.1~1000|0.1] Cut-off distance (Ångstroms) around ligand atoms to consider a protein atom as a binding site atom.
             * **max_num_ligands** (*int*) - (15) [0~1000|1] Total number of superimposed ligands to be extracted from the identity cluster. For populated clusters, the restriction avoids to superimpose redundant structures. If 0, all ligands extracted will be considered.
-            * **matrix_name** (*str*) - ("blosum62") Substitution matrices for use in alignments. Values: benner6, benner22, benner74, blosum100, blosum30, blosum35, blosum40, blosum45, blosum50, blosum55, blosum60, blosum62, blosum65, blosum70, blosum75, blosum80, blosum85, blosum90, blosum95, feng, fitch, genetic, gonnet, grant, ident, johnson, levin, mclach, miyata, nwsgappep, pam120, pam180, pam250, pam30, pam300, pam60, pam90, rao, risler, structure.
+            * **matrix_name** (*str*) - ("BLOSUM62") Substitution matrices for use in alignments. Values: BENNER22, BENNER6, BENNER74, BLASTN, BLASTP, BLOSUM45, BLOSUM50, BLOSUM62, BLOSUM80, BLOSUM90, DAYHOFF, FENG, GENETIC, GONNET1992, HOXD70, JOHNSON, JONES, LEVIN, MCLACHLAN, MDM78, MEGABLAST, NUC.4.4, PAM250, PAM30, PAM70, RAO, RISLER, SCHNEIDER, STR, TRANS.
             * **gap_open** (*float*) - (-10.0) [-1000~1000|0.1] Gap open penalty.
             * **gap_extend** (*float*) - (-0.5) [-1000~1000|0.1] Gap extend penalty.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
@@ -49,7 +49,7 @@ class BindingSite(BiobbObject):
             from biobb_vs.utils.bindingsite import bindingsite
             prop = {
                 'ligand': 'PGA',
-                'matrix_name': 'blosum62',
+                'matrix_name': 'BLOSUM62',
                 'gap_open': -10.0,
                 'gap_extend': -0.5,
                 'max_num_ligands': 15,
@@ -89,7 +89,7 @@ class BindingSite(BiobbObject):
         self.ligand = properties.get('ligand', None)
         self.radius = float(properties.get('radius', 5.0))
         self.max_num_ligands = properties.get('max_num_ligands', 15)
-        self.matrix_name = properties.get('matrix_name', 'blosum62')
+        self.matrix_name = properties.get('matrix_name', 'BLOSUM62')
         self.gap_open = properties.get('gap_open', -10.0)
         self.gap_extend = properties.get('gap_extend', -0.5)
         self.properties = properties

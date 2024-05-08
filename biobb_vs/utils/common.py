@@ -91,7 +91,7 @@ def get_sequence_nucs(structure):
     return seq
 
 
-def align_sequences(seqA, seqB, matrix_name='blosum62', gap_open=-10.0, gap_extend=-0.5):
+def align_sequences(seqA, seqB, matrix_name='BLOSUM62', gap_open=-10.0, gap_extend=-0.5):
     """
     Performs a global pairwise alignment between two sequences using the Needleman-Wunsch algorithm as implemented in Biopython.
     Returns the alignment and the residue mapping between both original sequences.

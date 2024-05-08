@@ -99,210 +99,160 @@
                 },
                 "matrix_name": {
                     "type": "string",
-                    "default": "blosum62",
+                    "default": "BLOSUM62",
                     "wf_prop": false,
                     "description": "Substitution matrices for use in alignments. ",
                     "enum": [
-                        "benner6",
-                        "benner22",
-                        "benner74",
-                        "blosum100",
-                        "blosum30",
-                        "blosum35",
-                        "blosum40",
-                        "blosum45",
-                        "blosum50",
-                        "blosum55",
-                        "blosum60",
-                        "blosum62",
-                        "blosum65",
-                        "blosum70",
-                        "blosum75",
-                        "blosum80",
-                        "blosum85",
-                        "blosum90",
-                        "blosum95",
-                        "feng",
-                        "fitch",
-                        "genetic",
-                        "gonnet",
-                        "grant",
-                        "ident",
-                        "johnson",
-                        "levin",
-                        "mclach",
-                        "miyata",
-                        "nwsgappep",
-                        "pam120",
-                        "pam180",
-                        "pam250",
-                        "pam30",
-                        "pam300",
-                        "pam60",
-                        "pam90",
-                        "rao",
-                        "risler",
-                        "structure"
+                        "BENNER22",
+                        "BENNER6",
+                        "BENNER74",
+                        "BLASTN",
+                        "BLASTP",
+                        "BLOSUM45",
+                        "BLOSUM50",
+                        "BLOSUM62",
+                        "BLOSUM80",
+                        "BLOSUM90",
+                        "DAYHOFF",
+                        "FENG",
+                        "GENETIC",
+                        "GONNET1992",
+                        "HOXD70",
+                        "JOHNSON",
+                        "JONES",
+                        "LEVIN",
+                        "MCLACHLAN",
+                        "MDM78",
+                        "MEGABLAST",
+                        "NUC.4.4",
+                        "PAM250",
+                        "PAM30",
+                        "PAM70",
+                        "RAO",
+                        "RISLER",
+                        "SCHNEIDER",
+                        "STR",
+                        "TRANS"
                     ],
                     "property_formats": [
                         {
-                            "name": "benner6",
+                            "name": "BENNER22",
                             "description": null
                         },
                         {
-                            "name": "benner22",
+                            "name": "BENNER6",
                             "description": null
                         },
                         {
-                            "name": "benner74",
+                            "name": "BENNER74",
                             "description": null
                         },
                         {
-                            "name": "blosum100",
+                            "name": "BLASTN",
                             "description": null
                         },
                         {
-                            "name": "blosum30",
+                            "name": "BLASTP",
                             "description": null
                         },
                         {
-                            "name": "blosum35",
+                            "name": "BLOSUM45",
                             "description": null
                         },
                         {
-                            "name": "blosum40",
+                            "name": "BLOSUM50",
                             "description": null
                         },
                         {
-                            "name": "blosum45",
+                            "name": "BLOSUM62",
                             "description": null
                         },
                         {
-                            "name": "blosum50",
+                            "name": "BLOSUM80",
                             "description": null
                         },
                         {
-                            "name": "blosum55",
+                            "name": "BLOSUM90",
                             "description": null
                         },
                         {
-                            "name": "blosum60",
+                            "name": "DAYHOFF",
                             "description": null
                         },
                         {
-                            "name": "blosum62",
+                            "name": "FENG",
                             "description": null
                         },
                         {
-                            "name": "blosum65",
+                            "name": "GENETIC",
                             "description": null
                         },
                         {
-                            "name": "blosum70",
+                            "name": "GONNET1992",
                             "description": null
                         },
                         {
-                            "name": "blosum75",
+                            "name": "HOXD70",
                             "description": null
                         },
                         {
-                            "name": "blosum80",
+                            "name": "JOHNSON",
                             "description": null
                         },
                         {
-                            "name": "blosum85",
+                            "name": "JONES",
                             "description": null
                         },
                         {
-                            "name": "blosum90",
+                            "name": "LEVIN",
                             "description": null
                         },
                         {
-                            "name": "blosum95",
+                            "name": "MCLACHLAN",
                             "description": null
                         },
                         {
-                            "name": "feng",
+                            "name": "MDM78",
                             "description": null
                         },
                         {
-                            "name": "fitch",
+                            "name": "MEGABLAST",
                             "description": null
                         },
                         {
-                            "name": "genetic",
+                            "name": "NUC.4.4",
                             "description": null
                         },
                         {
-                            "name": "gonnet",
+                            "name": "PAM250",
                             "description": null
                         },
                         {
-                            "name": "grant",
+                            "name": "PAM30",
                             "description": null
                         },
                         {
-                            "name": "ident",
+                            "name": "PAM70",
                             "description": null
                         },
                         {
-                            "name": "johnson",
+                            "name": "RAO",
                             "description": null
                         },
                         {
-                            "name": "levin",
+                            "name": "RISLER",
                             "description": null
                         },
                         {
-                            "name": "mclach",
+                            "name": "SCHNEIDER",
                             "description": null
                         },
                         {
-                            "name": "miyata",
+                            "name": "STR",
                             "description": null
                         },
                         {
-                            "name": "nwsgappep",
-                            "description": null
-                        },
-                        {
-                            "name": "pam120",
-                            "description": null
-                        },
-                        {
-                            "name": "pam180",
-                            "description": null
-                        },
-                        {
-                            "name": "pam250",
-                            "description": null
-                        },
-                        {
-                            "name": "pam30",
-                            "description": null
-                        },
-                        {
-                            "name": "pam300",
-                            "description": null
-                        },
-                        {
-                            "name": "pam60",
-                            "description": null
-                        },
-                        {
-                            "name": "pam90",
-                            "description": null
-                        },
-                        {
-                            "name": "rao",
-                            "description": null
-                        },
-                        {
-                            "name": "risler",
-                            "description": null
-                        },
-                        {
-                            "name": "structure",
+                            "name": "TRANS",
                             "description": null
                         }
                     ]

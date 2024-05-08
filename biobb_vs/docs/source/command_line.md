@@ -140,7 +140,7 @@ Config parameters for this building block:
 * **ligand** (*string*): (None) Ligand to be found in the protein structure. If no ligand provided, the largest one will be selected, if more than one..
 * **radius** (*number*): (5.0) Cut-off distance (Ångstroms) around ligand atoms to consider a protein atom as a binding site atom..
 * **max_num_ligands** (*integer*): (15) Total number of superimposed ligands to be extracted from the identity cluster. For populated clusters, the restriction avoids to superimpose redundant structures. If 0, all ligands extracted will be considered..
-* **matrix_name** (*string*): (blosum62) Substitution matrices for use in alignments. .
+* **matrix_name** (*string*): (BLOSUM62) Substitution matrices for use in alignments. .
 * **gap_open** (*number*): (-10.0) Gap open penalty..
 * **gap_extend** (*number*): (-0.5) Gap extend penalty..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
@@ -152,7 +152,7 @@ properties:
   gap_extend: -0.5
   gap_open: -10.0
   ligand: PGA
-  matrix_name: blosum62
+  matrix_name: BLOSUM62
   max_num_ligands: 15
   radius: 5
 
@@ -167,7 +167,7 @@ bindingsite --config config_bindingsite.yml --input_pdb_path bindingsite.pdb --i
 {
   "properties": {
     "ligand": "PGA",
-    "matrix_name": "blosum62",
+    "matrix_name": "BLOSUM62",
     "gap_open": -10.0,
     "gap_extend": -0.5,
     "max_num_ligands": 15,

@@ -3,7 +3,7 @@
     "$id": "http://bioexcel.eu/biobb_vs/json_schemas/1.0/extract_model_pdbqt",
     "name": "biobb_vs ExtractModelPDBQT",
     "title": "Extracts a model from a PDBQT file with several models.",
-    "description": null,
+    "description": "Extracts a model from a PDBQT file with several models. The model number to extract is defined by the user.",
     "type": "object",
     "info": {
         "wrapped_software": {

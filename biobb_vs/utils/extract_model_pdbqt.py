@@ -26,6 +26,7 @@ class ExtractModelPDBQT(BiobbObject):
     """
     | biobb_vs ExtractModelPDBQT
     | Extracts a model from a PDBQT file with several models.
+    | Extracts a model from a PDBQT file with several models. The model number to extract is defined by the user.
 
     Args:
         input_pdbqt_path (str): Input PDBQT file. File type: input. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/models.pdbqt>`_. Accepted formats: pdbqt (edam:format_1476).

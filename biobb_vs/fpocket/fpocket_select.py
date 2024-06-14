@@ -25,6 +25,7 @@ class FPocketSelect(BiobbObject):
             * **pocket** (*int*) - (1) [1~1000|1] Pocket id from the summary json given by the fpocket building block.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
+            * **sandbox_path** (*str*) - ("./") [WF property] Parent path to the sandbox directory.
 
     Examples:
         This is a use example of how to use the building block from Python::

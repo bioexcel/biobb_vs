@@ -53,6 +53,7 @@ Config parameters for this building block:
 * **binary_path** (*string*): (vina) path to vina in your local computer..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
 * **container_path** (*string*): (None) Container path definition..
 * **container_image** (*string*): (biocontainers/autodock-vina:v1.1.2-5b1-deb_cv1) Container image definition..
 * **container_volume_path** (*string*): (/tmp) Container volume path definition..
@@ -145,6 +146,7 @@ Config parameters for this building block:
 * **gap_extend** (*number*): (-0.5) Gap extend penalty..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_bindingsite.yml)
 ```python
@@ -214,6 +216,7 @@ Config parameters for this building block:
 * **box_coordinates** (*boolean*): (False) Add box coordinates as 8 ATOM records..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_box.yml)
 ```python
@@ -279,6 +282,7 @@ Config parameters for this building block:
 * **volume** (*array*): (None) List of two float numbers indicating the volume range. Indicates the pocket volume..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_fpocket_filter.yml)
 ```python
@@ -359,6 +363,7 @@ Config parameters for this building block:
 * **residue_offset** (*integer*): (0) Residue id offset..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_box_residues.yml)
 ```python
@@ -451,6 +456,7 @@ Config parameters for this building block:
 * **binary_path** (*string*): (fpocket) path to fpocket in your local computer..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
 * **container_path** (*string*): (None) Container path definition..
 * **container_image** (*string*): (fpocket/fpocket:latest) Container image definition..
 * **container_volume_path** (*string*): (/tmp) Container volume path definition..
@@ -552,6 +558,7 @@ Config parameters for this building block:
 * **pocket** (*integer*): (1) Pocket id from the summary json given by the fpocket building block..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_fpocket_select.yml)
 ```python
@@ -610,6 +617,7 @@ Config parameters for this building block:
 * **model** (*integer*): (1) Model number to extract from input_pdbqt_path..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_extract_model_pdbqt.yml)
 ```python

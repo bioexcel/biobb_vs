@@ -1,4 +1,5 @@
-working_dir_path: /tmp/biobb/unitests
+global_properties:
+  working_dir_path: /tmp/biobb/unitests
 
 # VINA
 
@@ -72,7 +73,7 @@ extract_model_pdbqt:
   properties:
     model: 1
 
-# FPOCKET 
+# FPOCKET
 
 fpocket_run:
   paths:

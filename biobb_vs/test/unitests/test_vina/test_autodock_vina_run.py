@@ -1,3 +1,4 @@
+# type: ignore
 from biobb_common.tools import test_fixtures as fx
 from biobb_vs.vina.autodock_vina_run import autodock_vina_run
 

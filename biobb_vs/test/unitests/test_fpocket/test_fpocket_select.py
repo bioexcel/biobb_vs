@@ -1,3 +1,4 @@
+# type: ignore
 from biobb_common.tools import test_fixtures as fx
 from biobb_vs.fpocket.fpocket_select import fpocket_select
 

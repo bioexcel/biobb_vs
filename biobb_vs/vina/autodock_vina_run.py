@@ -2,6 +2,7 @@
 
 """Module containing the AutoDockVinaRun class and the command line interface."""
 import argparse
+from typing import Optional
 import os
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
@@ -151,7 +152,7 @@ class AutoDockVinaRun(BiobbObject):
 
         # remove temporary folder(s)
         self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir")
+            self.stage_io_dict.get("unique_dir", "")
         ])
         self.remove_tmp_files()
 
@@ -160,7 +161,7 @@ class AutoDockVinaRun(BiobbObject):
         return self.return_code
 
 
-def autodock_vina_run(input_ligand_pdbqt_path: str, input_receptor_pdbqt_path: str, input_box_path: str, output_pdbqt_path: str, output_log_path: str = None, properties: dict = None, **kwargs) -> int:
+def autodock_vina_run(input_ligand_pdbqt_path: str, input_receptor_pdbqt_path: str, input_box_path: str, output_pdbqt_path: str, output_log_path: Optional[str] = None, properties: Optional[dict] = None, **kwargs) -> int:
     """Execute the :class:`AutoDockVinaRun <vina.autodock_vina_run.AutoDockVinaRun>` class and
     execute the :meth:`launch() <vina.autodock_vina_run.AutoDockVinaRun.launch>` method."""
 

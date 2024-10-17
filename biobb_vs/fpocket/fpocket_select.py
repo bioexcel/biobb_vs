@@ -2,6 +2,7 @@
 
 """Module containing the FPocketSelect class and the command line interface."""
 import argparse
+from typing import Optional
 import shutil
 from pathlib import PurePath
 from biobb_common.generic.biobb_object import BiobbObject
@@ -110,7 +111,7 @@ class FPocketSelect(BiobbObject):
         self.copy_to_host()
 
         self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir"),
+            self.stage_io_dict.get("unique_dir", ""),
             self.tmp_folder
         ])
         self.remove_tmp_files()
@@ -120,7 +121,7 @@ class FPocketSelect(BiobbObject):
         return 0
 
 
-def fpocket_select(input_pockets_zip: str, output_pocket_pdb: str, output_pocket_pqr: str, properties: dict = None, **kwargs) -> int:
+def fpocket_select(input_pockets_zip: str, output_pocket_pdb: str, output_pocket_pqr: str, properties: Optional[dict] = None, **kwargs) -> int:
     """Execute the :class:`FPocketSelect <fpocket.fpocket_select.FPocketSelect>` class and
     execute the :meth:`launch() <fpocket.fpocket_select.FPocketSelect.launch>` method."""
 

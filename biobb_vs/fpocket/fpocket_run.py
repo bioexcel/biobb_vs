@@ -2,6 +2,7 @@
 
 """Module containing the FPocketRun class and the command line interface."""
 import argparse
+from typing import Optional
 import shutil
 from pathlib import PurePath
 from biobb_common.generic.biobb_object import BiobbObject
@@ -150,7 +151,7 @@ class FPocketRun(BiobbObject):
                                self.__class__.__name__)
 
         self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir"),
+            self.stage_io_dict.get("unique_dir", ""),
             self.tmp_folder
         ])
         self.remove_tmp_files()
@@ -158,7 +159,7 @@ class FPocketRun(BiobbObject):
         return self.return_code
 
 
-def fpocket_run(input_pdb_path: str, output_pockets_zip: str, output_summary: str, properties: dict = None, **kwargs) -> int:
+def fpocket_run(input_pdb_path: str, output_pockets_zip: str, output_summary: str, properties: Optional[dict] = None, **kwargs) -> int:
     """Execute the :class:`FPocketRun <fpocket.fpocket_run.FPocketRun>` class and
     execute the :meth:`launch() <fpocket.fpocket_run.FPocketRun.launch>` method."""
 

@@ -2,6 +2,7 @@
 
 """Module containing the ExtractModelPDBQT class and the command line interface."""
 import argparse
+from typing import Optional
 from pathlib import PurePath
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
@@ -134,7 +135,7 @@ class ExtractModelPDBQT(BiobbObject):
         self.copy_to_host()
 
         self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir")
+            self.stage_io_dict.get("unique_dir", "")
         ])
         self.remove_tmp_files()
 
@@ -143,7 +144,7 @@ class ExtractModelPDBQT(BiobbObject):
         return 0
 
 
-def extract_model_pdbqt(input_pdbqt_path: str, output_pdbqt_path: str, properties: dict = None, **kwargs) -> int:
+def extract_model_pdbqt(input_pdbqt_path: str, output_pdbqt_path: str, properties: Optional[dict] = None, **kwargs) -> int:
     """Execute the :class:`ExtractModelPDBQT <utils.extract_model_pdbqt.ExtractModelPDBQT>` class and
     execute the :meth:`launch() <utils.extract_model_pdbqt.ExtractModelPDBQT.launch>` method."""
 

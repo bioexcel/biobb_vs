@@ -2,6 +2,7 @@
 
 """Module containing the FPocketFilter class and the command line interface."""
 import argparse
+from typing import Optional
 import json
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
@@ -153,7 +154,7 @@ class FPocketFilter(BiobbObject):
         self.copy_to_host()
 
         self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir"),
+            self.stage_io_dict.get("unique_dir", ""),
             self.tmp_folder
         ])
         self.remove_tmp_files()
@@ -163,7 +164,7 @@ class FPocketFilter(BiobbObject):
         return 0
 
 
-def fpocket_filter(input_pockets_zip: str, input_summary: str, output_filter_pockets_zip: str, properties: dict = None, **kwargs) -> int:
+def fpocket_filter(input_pockets_zip: str, input_summary: str, output_filter_pockets_zip: str, properties: Optional[dict] = None, **kwargs) -> int:
     """Execute the :class:`FPocketFilter <fpocket.fpocket_filter.FPocketFilter>` class and
     execute the :meth:`launch() <fpocket.fpocket_filter.FPocketFilter.launch>` method."""
 

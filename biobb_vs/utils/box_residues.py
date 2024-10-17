@@ -2,6 +2,7 @@
 
 """Module containing the BoxResidues class and the command line interface."""
 import argparse
+from typing import Optional
 import numpy as np
 from pathlib import PurePath
 from biobb_common.generic.biobb_object import BiobbObject
@@ -181,14 +182,14 @@ class BoxResidues(BiobbObject):
         self.copy_to_host()
 
         self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir")
+            self.stage_io_dict.get("unique_dir", "")
         ])
         self.remove_tmp_files()
 
         return 0
 
 
-def box_residues(input_pdb_path: str, output_pdb_path: str, properties: dict = None, **kwargs) -> int:
+def box_residues(input_pdb_path: str, output_pdb_path: str, properties: Optional[dict] = None, **kwargs) -> int:
     """Execute the :class:`BoxResidues <utils.box_residues.BoxResidues>` class and
     execute the :meth:`launch() <utils.box_residues.BoxResidues.launch>` method."""
 

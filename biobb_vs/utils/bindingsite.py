@@ -2,6 +2,7 @@
 
 """Module containing the BindingSite class and the command line interface."""
 import argparse
+from typing import Optional
 import re
 from pathlib import PurePath
 from biobb_common.generic.biobb_object import BiobbObject
@@ -312,7 +313,7 @@ class BindingSite(BiobbObject):
         self.copy_to_host()
 
         self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir"),
+            self.stage_io_dict.get("unique_dir", ""),
             str(unique_dir)
         ])
         self.remove_tmp_files()
@@ -322,7 +323,7 @@ class BindingSite(BiobbObject):
         return 0
 
 
-def bindingsite(input_pdb_path: str, input_clusters_zip: str, output_pdb_path: str, properties: dict = None, **kwargs) -> int:
+def bindingsite(input_pdb_path: str, input_clusters_zip: str, output_pdb_path: str, properties: Optional[dict] = None, **kwargs) -> int:
     """Execute the :class:`BindingSite <utils.bindingsite.BindingSite>` class and
     execute the :meth:`launch() <utils.bindingsite.BindingSite.launch>` method."""
 

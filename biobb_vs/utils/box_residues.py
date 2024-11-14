@@ -1,27 +1,34 @@
 #!/usr/bin/env python3
 
 """Module containing the BoxResidues class and the command line interface."""
+
 import argparse
-from typing import Optional
-import numpy as np
+import warnings
 from pathlib import PurePath
-from biobb_common.generic.biobb_object import BiobbObject
+from typing import Optional
+
+import numpy as np
+from Bio import BiopythonDeprecationWarning
 from biobb_common.configuration import settings
+from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
-from biobb_vs.utils.common import check_input_path, check_output_path, get_box_coordinates
 
-from Bio import BiopythonDeprecationWarning
-import warnings
+from biobb_vs.utils.common import (
+    _from_string_to_list,
+    check_input_path,
+    check_output_path,
+    get_box_coordinates,
+)
+
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", BiopythonDeprecationWarning)
-    import Bio.PDB
-    import Bio.pairwise2
     # try:
     #    import Bio.SubsMat.MatrixInfo
     # except ImportError:
-
     import Bio.Align.substitution_matrices
+    import Bio.pairwise2
+    import Bio.PDB
 
 
 class BoxResidues(BiobbObject):
@@ -66,8 +73,9 @@ class BoxResidues(BiobbObject):
 
     """
 
-    def __init__(self, input_pdb_path, output_pdb_path,
-                 properties=None, **kwargs) -> None:
+    def __init__(
+        self, input_pdb_path, output_pdb_path, properties=None, **kwargs
+    ) -> None:
         properties = properties or {}
 
         # Call parent class constructor
@@ -77,14 +85,14 @@ class BoxResidues(BiobbObject):
         # Input/Output files
         self.io_dict = {
             "in": {"input_pdb_path": input_pdb_path},
-            "out": {"output_pdb_path": output_pdb_path}
+            "out": {"output_pdb_path": output_pdb_path},
         }
 
         # Properties specific for BB
-        self.resid_list = properties.get('resid_list', [])
-        self.offset = float(properties.get('offset', 2.0))
-        self.box_coordinates = float(properties.get('box_coordinates', False))
-        self.residue_offset = properties.get('residue_offset', 0)
+        self.resid_list = _from_string_to_list(properties.get("resid_list", []))
+        self.offset = float(properties.get("offset", 2.0))
+        self.box_coordinates = float(properties.get("box_coordinates", False))
+        self.residue_offset = properties.get("residue_offset", 0)
         self.properties = properties
 
         # Check the properties
@@ -92,9 +100,20 @@ class BoxResidues(BiobbObject):
         self.check_arguments()
 
     def check_data_params(self, out_log, err_log):
-        """ Checks all the input/output paths and parameters """
-        self.io_dict["in"]["input_pdb_path"] = check_input_path(self.io_dict["in"]["input_pdb_path"], "input_pdb_path", self.out_log, self.__class__.__name__)
-        self.io_dict["out"]["output_pdb_path"] = check_output_path(self.io_dict["out"]["output_pdb_path"], "output_pdb_path", False, self.out_log, self.__class__.__name__)
+        """Checks all the input/output paths and parameters"""
+        self.io_dict["in"]["input_pdb_path"] = check_input_path(
+            self.io_dict["in"]["input_pdb_path"],
+            "input_pdb_path",
+            self.out_log,
+            self.__class__.__name__,
+        )
+        self.io_dict["out"]["output_pdb_path"] = check_output_path(
+            self.io_dict["out"]["output_pdb_path"],
+            "output_pdb_path",
+            False,
+            self.out_log,
+            self.__class__.__name__,
+        )
 
     @launchlogger
     def launch(self) -> int:
@@ -109,25 +128,35 @@ class BoxResidues(BiobbObject):
         self.stage_files()
 
         # Parse structure
-        fu.log('Loading input PDB structure %s' % (self.io_dict["in"]["input_pdb_path"]), self.out_log, self.global_log)
+        fu.log(
+            "Loading input PDB structure %s" % (self.io_dict["in"]["input_pdb_path"]),
+            self.out_log,
+            self.global_log,
+        )
         structure_name = PurePath(self.io_dict["in"]["input_pdb_path"]).name
         parser = Bio.PDB.PDBParser(QUIET=True)
-        structPDB = parser.get_structure(structure_name, self.io_dict["in"]["input_pdb_path"])
+        structPDB = parser.get_structure(
+            structure_name, self.io_dict["in"]["input_pdb_path"]
+        )
 
         if len(structPDB):
             structPDB = structPDB[0]
 
         # Mapping residue structure into input structure
 
-        fu.log('Mapping residue structure into input structure', self.out_log, self.global_log)
+        fu.log(
+            "Mapping residue structure into input structure",
+            self.out_log,
+            self.global_log,
+        )
 
         # Listing residues to be selected from the residue structure
         residPDB_res_list = []
         for residPDB_res in self.resid_list:
             if self.residue_offset:
-                residPDB_res_list.append((' ', residPDB_res+self.residue_offset, ' '))
+                residPDB_res_list.append((" ", residPDB_res + self.residue_offset, " "))
             else:
-                residPDB_res_list.append((' ', residPDB_res, ' '))
+                residPDB_res_list.append((" ", residPDB_res, " "))
 
         selection_res_list = []
         selection_atoms_num = 0
@@ -138,85 +167,167 @@ class BoxResidues(BiobbObject):
                     selection_atoms_num += len(struct_res.get_list())
 
         if len(selection_res_list) == 0:
-            fu.log(self.__class__.__name__ + ': Cannot match any of the residues listed in [%s] into %s' % (', '.join(str(v) for v in self.resid_list), self.io_dict["in"]["input_pdb_path"]), self.out_log)
-            raise SystemExit(self.__class__.__name__ + ': Cannot match any of the residues listed in [%s] into %s' % (', '.join(str(v) for v in self.resid_list), self.io_dict["in"]["input_pdb_path"]))
+            fu.log(
+                self.__class__.__name__
+                + ": Cannot match any of the residues listed in [%s] into %s"
+                % (
+                    ", ".join(str(v) for v in self.resid_list),
+                    self.io_dict["in"]["input_pdb_path"],
+                ),
+                self.out_log,
+            )
+            raise SystemExit(
+                self.__class__.__name__
+                + ": Cannot match any of the residues listed in [%s] into %s"
+                % (
+                    ", ".join(str(v) for v in self.resid_list),
+                    self.io_dict["in"]["input_pdb_path"],
+                )
+            )
         elif len(selection_res_list) != len(residPDB_res_list):
-            fu.log('Cannot match all the residues listed in %s into %s. Found %s out of %s' % (', '.join(str(v) for v in self.resid_list), self.io_dict["in"]["input_pdb_path"], len(selection_res_list), len(residPDB_res_list)), self.out_log)
+            fu.log(
+                "Cannot match all the residues listed in %s into %s. Found %s out of %s"
+                % (
+                    ", ".join(str(v) for v in self.resid_list),
+                    self.io_dict["in"]["input_pdb_path"],
+                    len(selection_res_list),
+                    len(residPDB_res_list),
+                ),
+                self.out_log,
+            )
         else:
-            fu.log('Selection of residues successfully matched', self.out_log, self.global_log)
+            fu.log(
+                "Selection of residues successfully matched",
+                self.out_log,
+                self.global_log,
+            )
 
         # Compute binding site box size
 
         # compute box center
-        selection_box_center = sum(atom.coord for res in selection_res_list for atom in res.get_atoms()) / selection_atoms_num
-        fu.log('Binding site center (Angstroms): %10.3f%10.3f%10.3f' % (selection_box_center[0], selection_box_center[1], selection_box_center[2]), self.out_log, self.global_log)
+        selection_box_center = (
+            sum(atom.coord for res in selection_res_list for atom in res.get_atoms())
+            / selection_atoms_num
+        )
+        fu.log(
+            "Binding site center (Angstroms): %10.3f%10.3f%10.3f"
+            % (
+                selection_box_center[0],
+                selection_box_center[1],
+                selection_box_center[2],
+            ),
+            self.out_log,
+            self.global_log,
+        )
 
         # compute box size
-        selection_coords_max = np.amax([atom.coord for res in selection_res_list for atom in res.get_atoms()], axis=0)
+        selection_coords_max = np.amax(
+            [atom.coord for res in selection_res_list for atom in res.get_atoms()],
+            axis=0,
+        )
         selection_box_size = selection_coords_max - selection_box_center
         if self.offset:
             selection_box_size = [c + self.offset for c in selection_box_size]
-        fu.log('Binding site size (Angstroms):   %10.3f%10.3f%10.3f' % (selection_box_size[0], selection_box_size[1], selection_box_size[2]), self.out_log, self.global_log)
+        fu.log(
+            "Binding site size (Angstroms):   %10.3f%10.3f%10.3f"
+            % (selection_box_size[0], selection_box_size[1], selection_box_size[2]),
+            self.out_log,
+            self.global_log,
+        )
 
         # compute volume
         vol = np.prod(selection_box_size) * 2**3
-        fu.log('Volume (cubic Angstroms): %.0f' % (vol), self.out_log, self.global_log)
+        fu.log("Volume (cubic Angstroms): %.0f" % (vol), self.out_log, self.global_log)
 
         # add box details as PDB remarks
-        remarks = "REMARK BOX CENTER:%10.3f%10.3f%10.3f" % (selection_box_center[0], selection_box_center[1], selection_box_center[2])
-        remarks += " SIZE:%10.3f%10.3f%10.3f" % (selection_box_size[0], selection_box_size[1], selection_box_size[2])
+        remarks = "REMARK BOX CENTER:%10.3f%10.3f%10.3f" % (
+            selection_box_center[0],
+            selection_box_center[1],
+            selection_box_center[2],
+        )
+        remarks += " SIZE:%10.3f%10.3f%10.3f" % (
+            selection_box_size[0],
+            selection_box_size[1],
+            selection_box_size[2],
+        )
 
         selection_box_coords_txt = ""
         # add (optional) box coordinates as 8 ATOM records
         if self.box_coordinates:
-            fu.log('Adding box coordinates', self.out_log, self.global_log)
-            selection_box_coords_txt = get_box_coordinates(selection_box_center, selection_box_size)
+            fu.log("Adding box coordinates", self.out_log, self.global_log)
+            selection_box_coords_txt = get_box_coordinates(
+                selection_box_center, selection_box_size
+            )
 
-        with open(self.io_dict["out"]["output_pdb_path"], 'w') as f:
+        with open(self.io_dict["out"]["output_pdb_path"], "w") as f:
             f.seek(0, 0)
-            f.write(remarks.rstrip('\r\n') + '\n' + selection_box_coords_txt)
+            f.write(remarks.rstrip("\r\n") + "\n" + selection_box_coords_txt)
 
-        fu.log('Saving output PDB file (with box setting annotations): %s' % (self.io_dict["out"]["output_pdb_path"]), self.out_log, self.global_log)
+        fu.log(
+            "Saving output PDB file (with box setting annotations): %s"
+            % (self.io_dict["out"]["output_pdb_path"]),
+            self.out_log,
+            self.global_log,
+        )
 
         # Copy files to host
         self.copy_to_host()
 
-        self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir", "")
-        ])
+        self.tmp_files.extend([self.stage_io_dict.get("unique_dir", "")])
         self.remove_tmp_files()
 
         return 0
 
 
-def box_residues(input_pdb_path: str, output_pdb_path: str, properties: Optional[dict] = None, **kwargs) -> int:
+def box_residues(
+    input_pdb_path: str,
+    output_pdb_path: str,
+    properties: Optional[dict] = None,
+    **kwargs,
+) -> int:
     """Execute the :class:`BoxResidues <utils.box_residues.BoxResidues>` class and
     execute the :meth:`launch() <utils.box_residues.BoxResidues.launch>` method."""
 
-    return BoxResidues(input_pdb_path=input_pdb_path,
-                       output_pdb_path=output_pdb_path,
-                       properties=properties, **kwargs).launch()
+    return BoxResidues(
+        input_pdb_path=input_pdb_path,
+        output_pdb_path=output_pdb_path,
+        properties=properties,
+        **kwargs,
+    ).launch()
 
 
 def main():
     """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(description="Sets the center and the size of a rectangular parallelepiped box around a selection of residues found in a given PDB.", formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
-    parser.add_argument('--config', required=False, help='Configuration file')
+    parser = argparse.ArgumentParser(
+        description="Sets the center and the size of a rectangular parallelepiped box around a selection of residues found in a given PDB.",
+        formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999),
+    )
+    parser.add_argument("--config", required=False, help="Configuration file")
 
     # Specific args of each building block
-    required_args = parser.add_argument_group('required arguments')
-    required_args.add_argument('--input_pdb_path', required=True, help='PDB protein structure for which the box will be build. Its size and center will be set around the \'resid_list\' property once mapped against this PDB. Accepted formats: pdb.')
-    required_args.add_argument('--output_pdb_path', required=True, help='PDB including the annotation of the box center and size as REMARKs. Accepted formats: pdb.')
+    required_args = parser.add_argument_group("required arguments")
+    required_args.add_argument(
+        "--input_pdb_path",
+        required=True,
+        help="PDB protein structure for which the box will be build. Its size and center will be set around the 'resid_list' property once mapped against this PDB. Accepted formats: pdb.",
+    )
+    required_args.add_argument(
+        "--output_pdb_path",
+        required=True,
+        help="PDB including the annotation of the box center and size as REMARKs. Accepted formats: pdb.",
+    )
 
     args = parser.parse_args()
     args.config = args.config or "{}"
     properties = settings.ConfReader(config=args.config).get_prop_dic()
 
     # Specific call of each building block
-    box_residues(input_pdb_path=args.input_pdb_path,
-                 output_pdb_path=args.output_pdb_path,
-                 properties=properties)
+    box_residues(
+        input_pdb_path=args.input_pdb_path,
+        output_pdb_path=args.output_pdb_path,
+        properties=properties,
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

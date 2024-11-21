@@ -1,5 +1,19 @@
 # Biobb Virtual Screening changelog
 
+## What's new in version [5.0.0](https://github.com/bioexcel/biobb_vs/releases/tag/v5.0.0)?
+
+### Changes
+
+* [FIX](all): Accept lists in different formats on input properties.
+* [CI/CD](env.yaml): Update biobb_common version.
+* [CI/CD](linting_and_testing.yml): Update set-up micromamba.
+* [CI/CD](linting_and_testing): Update GA test workflow to Python >3.9
+* [DOCS](.readthedocs.yaml): Updating to Python 3.9
+* [CI/CD](GITIGNORE): Update .gitignore to include the new file extensions to ignore
+* [FEATURE](__init__): Importing submodules when a module is loaded
+* [CI/CD](conf.yml): Change test conf.yml to adapt to new settings configuration
+* [FEATURE] New sandbox_path property
+
 ## What's new in version [4.2.0](https://github.com/bioexcel/biobb_vs/releases/tag/v4.2.0)?
 In version 4.2.0 the dependency biobb_common has been updated to 4.2.0 version.
 
@@ -16,7 +30,7 @@ In version 4.1.2 the code has been updated for being compatible with biopython 1
 * Fpocket fixed to 4.1 version.
 
 ## What's new in version [4.1.1](https://github.com/bioexcel/biobb_vs/releases/tag/v4.1.1)?
-In version 4.1.1 some minor bugs have been fixed. 
+In version 4.1.1 some minor bugs have been fixed.
 
 ### New features
 
@@ -30,7 +44,7 @@ In version 4.1.0 the dependency biobb_common has been updated to 4.1.0 version.
 * Update to biobb_common 4.1.0 (general)
 
 ## What's new in version [4.0.0](https://github.com/bioexcel/biobb_vs/releases/tag/v4.0.0)?
-In version 4.0.0 the dependency biobb_common has been updated to 4.0.0 version. Also Autodock Vina has been updated from 1.1.2 to 1.2.3. 
+In version 4.0.0 the dependency biobb_common has been updated to 4.0.0 version. Also Autodock Vina has been updated from 1.1.2 to 1.2.3.
 
 ### New features
 
@@ -46,35 +60,35 @@ In version 3.9.0 the dependency biobb_common has been updated to 3.9.0 version.
 * All inputs/outputs are checked for correct file format, extension and type (general)
 
 ## What's new in version [3.8.1](https://github.com/bioexcel/biobb_vs/releases/tag/v3.8.1)?
-In version 3.8.1 the AutoDockVinaRun and FPocketRun tools have added the ability to be executed through docker. 
+In version 3.8.1 the AutoDockVinaRun and FPocketRun tools have added the ability to be executed through docker.
 
 ### New features
 
 * Added docker containers for AutoDockVinaRun and FPocketRun tools
 
 ## What's new in version [3.8.0](https://github.com/bioexcel/biobb_vs/releases/tag/v3.8.0)?
-In version 3.8.0 the dependency biobb_common has been updated to 3.8.1 version. 
+In version 3.8.0 the dependency biobb_common has been updated to 3.8.1 version.
 
 ### New features
 
 * Update to biobb_common 3.8.0 (general)
 
 ## What's new in version [3.7.1](https://github.com/bioexcel/biobb_vs/releases/tag/v3.7.1)?
-In version 3.7.1 some minor bugs have been fixed. 
+In version 3.7.1 some minor bugs have been fixed.
 
 ### Other changes
 
 * Minor bug fixes in AutoDockVinaRun
 
 ## What's new in version [3.7.0](https://github.com/bioexcel/biobb_vs/releases/tag/v3.7.0)?
-In version 3.7.0 the dependency biobb_common has been updated to 3.7.0 version. 
+In version 3.7.0 the dependency biobb_common has been updated to 3.7.0 version.
 
 ### New features
 
 * Update to biobb_common 3.7.0 (general)
 
 ## What's new in version [3.6.0](https://github.com/bioexcel/biobb_vs/releases/tag/v3.6.0)?
-In version 3.6.0 the dependency biobb_common has been updated to 3.6.0 version. 
+In version 3.6.0 the dependency biobb_common has been updated to 3.6.0 version.
 
 ### New features
 

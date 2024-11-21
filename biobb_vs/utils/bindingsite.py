@@ -1,27 +1,37 @@
 #!/usr/bin/env python3
 
 """Module containing the BindingSite class and the command line interface."""
+
 import argparse
-from typing import Optional
 import re
+import warnings
 from pathlib import PurePath
-from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.configuration import settings
-from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
-from biobb_vs.utils.common import check_input_path, check_output_path, get_pdb_sequence, get_ligand_residues, align_sequences, calculate_alignment_identity, get_residue_by_id
+from typing import Optional
 
 from Bio import BiopythonDeprecationWarning
-import warnings
+from biobb_common.configuration import settings
+from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.tools import file_utils as fu
+from biobb_common.tools.file_utils import launchlogger
+
+from biobb_vs.utils.common import (
+    align_sequences,
+    calculate_alignment_identity,
+    check_input_path,
+    check_output_path,
+    get_ligand_residues,
+    get_pdb_sequence,
+    get_residue_by_id,
+)
+
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", BiopythonDeprecationWarning)
-    import Bio.PDB
-    import Bio.pairwise2
     # try:
     #    import Bio.SubsMat.MatrixInfo
     # except ImportError:
-
     import Bio.Align.substitution_matrices
+    import Bio.pairwise2
+    import Bio.PDB
 
 
 class BindingSite(BiobbObject):
@@ -73,8 +83,14 @@ class BindingSite(BiobbObject):
 
     """
 
-    def __init__(self, input_pdb_path, input_clusters_zip, output_pdb_path,
-                 properties=None, **kwargs) -> None:
+    def __init__(
+        self,
+        input_pdb_path,
+        input_clusters_zip,
+        output_pdb_path,
+        properties=None,
+        **kwargs,
+    ) -> None:
         properties = properties or {}
 
         # Call parent class constructor
@@ -83,17 +99,20 @@ class BindingSite(BiobbObject):
 
         # Input/Output files
         self.io_dict = {
-            "in": {"input_pdb_path": input_pdb_path, "input_clusters_zip": input_clusters_zip},
-            "out": {"output_pdb_path": output_pdb_path}
+            "in": {
+                "input_pdb_path": input_pdb_path,
+                "input_clusters_zip": input_clusters_zip,
+            },
+            "out": {"output_pdb_path": output_pdb_path},
         }
 
         # Properties specific for BB
-        self.ligand = properties.get('ligand', None)
-        self.radius = float(properties.get('radius', 5.0))
-        self.max_num_ligands = properties.get('max_num_ligands', 15)
-        self.matrix_name = properties.get('matrix_name', 'BLOSUM62')
-        self.gap_open = properties.get('gap_open', -10.0)
-        self.gap_extend = properties.get('gap_extend', -0.5)
+        self.ligand = properties.get("ligand", None)
+        self.radius = float(properties.get("radius", 5.0))
+        self.max_num_ligands = properties.get("max_num_ligands", 15)
+        self.matrix_name = properties.get("matrix_name", "BLOSUM62")
+        self.gap_open = properties.get("gap_open", -10.0)
+        self.gap_extend = properties.get("gap_extend", -0.5)
         self.properties = properties
 
         # Check the properties
@@ -101,10 +120,26 @@ class BindingSite(BiobbObject):
         self.check_arguments()
 
     def check_data_params(self, out_log, err_log):
-        """ Checks all the input/output paths and parameters """
-        self.io_dict["in"]["input_pdb_path"] = check_input_path(self.io_dict["in"]["input_pdb_path"], "input_pdb_path", self.out_log, self.__class__.__name__)
-        self.io_dict["in"]["input_clusters_zip"] = check_input_path(self.io_dict["in"]["input_clusters_zip"], "input_clusters_zip", self.out_log, self.__class__.__name__)
-        self.io_dict["out"]["output_pdb_path"] = check_output_path(self.io_dict["out"]["output_pdb_path"], "output_pdb_path", False, self.out_log, self.__class__.__name__)
+        """Checks all the input/output paths and parameters"""
+        self.io_dict["in"]["input_pdb_path"] = check_input_path(
+            self.io_dict["in"]["input_pdb_path"],
+            "input_pdb_path",
+            self.out_log,
+            self.__class__.__name__,
+        )
+        self.io_dict["in"]["input_clusters_zip"] = check_input_path(
+            self.io_dict["in"]["input_clusters_zip"],
+            "input_clusters_zip",
+            self.out_log,
+            self.__class__.__name__,
+        )
+        self.io_dict["out"]["output_pdb_path"] = check_output_path(
+            self.io_dict["out"]["output_pdb_path"],
+            "output_pdb_path",
+            False,
+            self.out_log,
+            self.__class__.__name__,
+        )
 
     @launchlogger
     def launch(self) -> int:
@@ -119,10 +154,16 @@ class BindingSite(BiobbObject):
         self.stage_files()
 
         # Parse structure
-        fu.log('Loading input PDB structure %s' % (self.io_dict["in"]["input_pdb_path"]), self.out_log, self.global_log)
+        fu.log(
+            "Loading input PDB structure %s" % (self.io_dict["in"]["input_pdb_path"]),
+            self.out_log,
+            self.global_log,
+        )
         structure_name = PurePath(self.io_dict["in"]["input_pdb_path"]).name
         parser = Bio.PDB.PDBParser(QUIET=True)
-        structPDB = parser.get_structure(structure_name, self.io_dict["in"]["input_pdb_path"])
+        structPDB = parser.get_structure(
+            structure_name, self.io_dict["in"]["input_pdb_path"]
+        )
 
         if len(structPDB):
             structPDB = structPDB[0]
@@ -130,7 +171,11 @@ class BindingSite(BiobbObject):
         # Use only one chain
         n_chains = structPDB.get_list()
         if len(n_chains) != 1:
-            fu.log('More than one chain found in the input PDB structure. Using only the first chain to find the binding site', self.out_log, self.global_log)
+            fu.log(
+                "More than one chain found in the input PDB structure. Using only the first chain to find the binding site",
+                self.out_log,
+                self.global_log,
+            )
             # get first chain in case there is more than one chain
             for struct_chain in structPDB.get_chains():
                 structPDB = struct_chain
@@ -138,42 +183,66 @@ class BindingSite(BiobbObject):
         # Get AA sequence
         structPDB_seq = get_pdb_sequence(structPDB)
         if len(structPDB_seq) == 0:
-            fu.log(self.__class__.__name__ + ': Cannot extract AA sequence from the input PDB structure %s. Wrong format?' % self.io_dict["in"]["input_pdb_path"], self.out_log)
-            raise SystemExit(self.__class__.__name__ + ': Cannot extract AA sequence from the input PDB structure %s. Wrong format?' % self.io_dict["in"]["input_pdb_path"])
+            fu.log(
+                self.__class__.__name__
+                + ": Cannot extract AA sequence from the input PDB structure %s. Wrong format?"
+                % self.io_dict["in"]["input_pdb_path"],
+                self.out_log,
+            )
+            raise SystemExit(
+                self.__class__.__name__
+                + ": Cannot extract AA sequence from the input PDB structure %s. Wrong format?"
+                % self.io_dict["in"]["input_pdb_path"]
+            )
         else:
-            fu.log('Found %s residues in %s' % (len(structPDB_seq), self.io_dict["in"]["input_pdb_path"]), self.out_log)
+            fu.log(
+                "Found %s residues in %s"
+                % (len(structPDB_seq), self.io_dict["in"]["input_pdb_path"]),
+                self.out_log,
+            )
 
         # create temporary folder for decompressing the input_clusters_zip file
         unique_dir = PurePath(fu.create_unique_dir())
-        fu.log('Creating %s temporary folder' % unique_dir, self.out_log, self.global_log)
+        fu.log(
+            "Creating %s temporary folder" % unique_dir, self.out_log, self.global_log
+        )
 
         # decompress the input_clusters_zip file
-        cluster_list = fu.unzip_list(zip_file=self.io_dict["in"]["input_clusters_zip"], dest_dir=unique_dir, out_log=self.out_log)
+        cluster_list = fu.unzip_list(
+            zip_file=self.io_dict["in"]["input_clusters_zip"],
+            dest_dir=str(unique_dir),
+            out_log=self.out_log,
+        )
 
         clusterPDB_ligands_aligned = []
         clusterPDB_ligands_num = 0
 
-        fu.log('Iterating on all clusters:', self.out_log)
+        fu.log("Iterating on all clusters:", self.out_log)
 
         for idx, cluster_path in enumerate(cluster_list):
-
             cluster_name = PurePath(cluster_path).stem
-            fu.log(' ', self.out_log)
-            fu.log('------------ Iteration #%s --------------' % (idx + 1), self.out_log)
-            fu.log('Cluster member: %s' % cluster_name, self.out_log)
+            fu.log(" ", self.out_log)
+            fu.log(
+                "------------ Iteration #%s --------------" % (idx + 1), self.out_log
+            )
+            fu.log("Cluster member: %s" % cluster_name, self.out_log)
 
             # Load and Parse PDB
             clusterPDB = {}
             clusterPDB = parser.get_structure(cluster_name, cluster_path)[0]
 
             # Use only the first chain
-            for cluster_chain in clusterPDB.get_chains():
+            for cluster_chain in clusterPDB.get_chains():  # type: ignore
                 clusterPDB = cluster_chain
 
             # Looking for ligands
             clusterPDB_ligands = get_ligand_residues(clusterPDB)
             if (len(clusterPDB_ligands)) == 0:
-                fu.log('No ligands found that could guide the binding site search. Ignoring this member: %s' % cluster_name, self.out_log)
+                fu.log(
+                    "No ligands found that could guide the binding site search. Ignoring this member: %s"
+                    % cluster_name,
+                    self.out_log,
+                )
                 continue
 
             # Selecting the largest ligand, if more than one
@@ -185,15 +254,27 @@ class BindingSite(BiobbObject):
                         if lig.get_resname() == self.ligand:
                             clusterPDB_ligand = lig
                             lig_atoms_num = len(lig.get_list())
-                            fu.log('Ligand found: %s  (%s atoms)' % (lig.get_resname(), lig_atoms_num), self.out_log)
+                            fu.log(
+                                "Ligand found: %s  (%s atoms)"
+                                % (lig.get_resname(), lig_atoms_num),
+                                self.out_log,
+                            )
                 else:
-                    fu.log('Ligand %s not found in %s cluster member, skipping this cluster' % (self.ligand, cluster_name), self.out_log)
+                    fu.log(
+                        "Ligand %s not found in %s cluster member, skipping this cluster"
+                        % (self.ligand, cluster_name),
+                        self.out_log,
+                    )
                     continue
             else:
                 if len(clusterPDB_ligands) > 1:
                     for lig_res in clusterPDB_ligands:
                         lig_res_atoms_num = len(lig_res.get_list())
-                        fu.log('Ligand found: %s  (%s atoms)' % (lig_res.get_resname(), lig_res_atoms_num), self.out_log)
+                        fu.log(
+                            "Ligand found: %s  (%s atoms)"
+                            % (lig_res.get_resname(), lig_res_atoms_num),
+                            self.out_log,
+                        )
                         if lig_res_atoms_num > lig_atoms_num:
                             clusterPDB_ligand = lig_res
                             lig_atoms_num = lig_res_atoms_num
@@ -201,7 +282,11 @@ class BindingSite(BiobbObject):
                     clusterPDB_ligand = clusterPDB_ligands[0]
                     lig_atoms_num = len(clusterPDB_ligands[0].get_list())
 
-            fu.log('Member accepted. Valid ligand found: %s (%s atoms)' % (clusterPDB_ligand.get_resname(), lig_atoms_num), self.out_log)
+            fu.log(
+                "Member accepted. Valid ligand found: %s (%s atoms)"
+                % (clusterPDB_ligand.get_resname(), lig_atoms_num),  # type: ignore
+                self.out_log,
+            )
 
             # Mapping residues by sequence alignment to match structPDB-clusterPDB paired residues
 
@@ -209,13 +294,25 @@ class BindingSite(BiobbObject):
             clusterPDB_seq = get_pdb_sequence(clusterPDB)
 
             # Pairwise align
-            aln, residue_map = align_sequences(structPDB_seq, clusterPDB_seq, self.matrix_name, self.gap_open, self.gap_extend)
-            fu.log('Matching residues to input PDB structure. Alignment is:\n%s' % (aln[1]), self.out_log)
+            aln, residue_map = align_sequences(
+                structPDB_seq,
+                clusterPDB_seq,
+                self.matrix_name,
+                self.gap_open,
+                self.gap_extend,
+            )
+            fu.log(
+                "Matching residues to input PDB structure. Alignment is:\n%s"
+                % (aln[1]),
+                self.out_log,
+            )
 
             # Calculate (gapless) sequence identity
-            seq_identity, gap_seq_identity = calculate_alignment_identity(aln[0], aln[1])
-            fu.log('Sequence identity (%%): %s' % (seq_identity), self.out_log)
-            fu.log('Gap less identity (%%): %s' % (gap_seq_identity), self.out_log)
+            seq_identity, gap_seq_identity = calculate_alignment_identity(
+                aln[0], aln[1]
+            )
+            fu.log("Sequence identity (%%): %s" % (seq_identity), self.out_log)
+            fu.log("Gap less identity (%%): %s" % (gap_seq_identity), self.out_log)
 
             # Selecting aligned CA atoms from first model, first chain
 
@@ -224,28 +321,47 @@ class BindingSite(BiobbObject):
 
             for struct_res in residue_map:
                 try:
-                    cluster_atoms.append(clusterPDB[residue_map[struct_res]]['CA'])
-                    struct_atoms.append(get_residue_by_id(structPDB, struct_res)['CA'])
+                    cluster_atoms.append(clusterPDB[residue_map[struct_res]]["CA"])
+                    struct_atoms.append(get_residue_by_id(structPDB, struct_res)["CA"])
                 except KeyError:
-                    fu.log('Cannot find CA atom for residue %s  (input PDB  %s)' % (get_residue_by_id(structPDB, struct_res).get_resname(), struct_res), self.out_log)
+                    fu.log(
+                        "Cannot find CA atom for residue %s  (input PDB  %s)"
+                        % (
+                            get_residue_by_id(structPDB, struct_res).get_resname(),
+                            struct_res,
+                        ),
+                        self.out_log,
+                    )
                     pass
 
             if len(cluster_atoms) == 0:
-                fu.log(self.__class__.__name__ + ': Cannot find CA atoms (1st model, 1st chain) in cluster member %s when aligning against %s. Ignoring this member.' % (cluster_name, structure_name), self.out_log)
-                raise SystemExit(self.__class__.__name__ + ': Cannot find CA atoms (1st model, 1st chain) in cluster member %s when aligning against %s. Ignoring this member.' % (cluster_name, structure_name))
+                fu.log(
+                    self.__class__.__name__
+                    + ": Cannot find CA atoms (1st model, 1st chain) in cluster member %s when aligning against %s. Ignoring this member."
+                    % (cluster_name, structure_name),
+                    self.out_log,
+                )
+                raise SystemExit(
+                    self.__class__.__name__
+                    + ": Cannot find CA atoms (1st model, 1st chain) in cluster member %s when aligning against %s. Ignoring this member."
+                    % (cluster_name, structure_name)
+                )
             else:
-                fu.log('Superimposing %s aligned protein residues' % (len(cluster_atoms)), self.out_log)
+                fu.log(
+                    "Superimposing %s aligned protein residues" % (len(cluster_atoms)),
+                    self.out_log,
+                )
 
             # Align against input structure
 
             si = Bio.PDB.Superimposer()
             si.set_atoms(struct_atoms, cluster_atoms)
-            si.apply(clusterPDB.get_atoms())
-            fu.log('RMSD: %s' % (si.rms), self.out_log)
+            si.apply(clusterPDB.get_atoms())  # type: ignore
+            fu.log("RMSD: %s" % (si.rms), self.out_log)
 
             # Save transformed structure (and ligand)
-            clusterPDB_ligand_aligned = clusterPDB[clusterPDB_ligand.get_id()]
-            fu.log('Saving transformed ligand coordinates', self.out_log)
+            clusterPDB_ligand_aligned = clusterPDB[clusterPDB_ligand.get_id()]  # type: ignore
+            fu.log("Saving transformed ligand coordinates", self.out_log)
 
             clusterPDB_ligands_aligned.append(clusterPDB_ligand_aligned)
 
@@ -256,17 +372,26 @@ class BindingSite(BiobbObject):
             if clusterPDB_ligands_num > self.max_num_ligands:
                 break
 
-        fu.log(' ', self.out_log)
-        fu.log('----------------------------------------', self.out_log)
-        fu.log('All transformed ligand coordinates saved, getting binding site residues', self.out_log)
+        fu.log(" ", self.out_log)
+        fu.log("----------------------------------------", self.out_log)
+        fu.log(
+            "All transformed ligand coordinates saved, getting binding site residues",
+            self.out_log,
+        )
 
         # Select binding site atoms as those around cluster superimposed ligands
 
-        fu.log('Defining binding site residues as those %sÅ around the %s cluster superimposed ligands' % (self.radius, clusterPDB_ligands_num), self.out_log)
+        fu.log(
+            "Defining binding site residues as those %sÅ around the %s cluster superimposed ligands"
+            % (self.radius, clusterPDB_ligands_num),
+            self.out_log,
+        )
 
         # select Atoms from aligned ligands
         clusterPDB_ligands_aligned2 = [res for res in clusterPDB_ligands_aligned]
-        clusterPDB_ligands_aligned_atoms = Bio.PDB.Selection.unfold_entities(clusterPDB_ligands_aligned2, 'A')
+        clusterPDB_ligands_aligned_atoms = Bio.PDB.Selection.unfold_entities(
+            clusterPDB_ligands_aligned2, "A"
+        )
 
         # select Atoms from input PDB structure
         structPDB_atoms = [atom for atom in structPDB.get_atoms()]
@@ -276,18 +401,22 @@ class BindingSite(BiobbObject):
         structPDB_neighbors = Bio.PDB.NeighborSearch(structPDB_atoms)
         for ligand_atom in clusterPDB_ligands_aligned_atoms:
             # look for PDB atoms 5A around each ligand atom
-            k_l = structPDB_neighbors.search(ligand_atom.coord, self.radius, 'R')
+            k_l = structPDB_neighbors.search(ligand_atom.coord, self.radius, "R")
             for k in k_l:
                 structPDB_bs_residues_raw[k.get_id()] = k.get_full_id()
 
         # Save binding site to PDB
 
         io = Bio.PDB.PDBIO()
-        fu.log('Writing binding site residues into %s' % (self.io_dict["out"]["output_pdb_path"]), self.out_log)
+        fu.log(
+            "Writing binding site residues into %s"
+            % (self.io_dict["out"]["output_pdb_path"]),
+            self.out_log,
+        )
 
         # unselect input PDB atoms not in binding site
         structPDB_bs_atoms = 0
-        p = re.compile('H_|W_|W')
+        p = re.compile("H_|W_|W")
         residue_ids_to_remove = []
         for res in structPDB.get_residues():
             if res.id not in structPDB_bs_residues_raw.keys():
@@ -312,10 +441,9 @@ class BindingSite(BiobbObject):
         # Copy files to host
         self.copy_to_host()
 
-        self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir", ""),
-            str(unique_dir)
-        ])
+        self.tmp_files.extend(
+            [self.stage_io_dict.get("unique_dir", ""), str(unique_dir)]
+        )
         self.remove_tmp_files()
 
         self.check_arguments(output_files_created=True, raise_exception=False)
@@ -323,37 +451,63 @@ class BindingSite(BiobbObject):
         return 0
 
 
-def bindingsite(input_pdb_path: str, input_clusters_zip: str, output_pdb_path: str, properties: Optional[dict] = None, **kwargs) -> int:
+def bindingsite(
+    input_pdb_path: str,
+    input_clusters_zip: str,
+    output_pdb_path: str,
+    properties: Optional[dict] = None,
+    **kwargs,
+) -> int:
     """Execute the :class:`BindingSite <utils.bindingsite.BindingSite>` class and
     execute the :meth:`launch() <utils.bindingsite.BindingSite.launch>` method."""
 
-    return BindingSite(input_pdb_path=input_pdb_path,
-                       input_clusters_zip=input_clusters_zip,
-                       output_pdb_path=output_pdb_path,
-                       properties=properties, **kwargs).launch()
+    return BindingSite(
+        input_pdb_path=input_pdb_path,
+        input_clusters_zip=input_clusters_zip,
+        output_pdb_path=output_pdb_path,
+        properties=properties,
+        **kwargs,
+    ).launch()
 
 
 def main():
     """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(description="Finds the binding site of the input_pdb file based on the ligands' location of similar structures (members of the sequence identity cluster)", formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
-    parser.add_argument('--config', required=False, help='Configuration file')
+    parser = argparse.ArgumentParser(
+        description="Finds the binding site of the input_pdb file based on the ligands' location of similar structures (members of the sequence identity cluster)",
+        formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999),
+    )
+    parser.add_argument("--config", required=False, help="Configuration file")
 
     # Specific args of each building block
-    required_args = parser.add_argument_group('required arguments')
-    required_args.add_argument('--input_pdb_path', required=True, help='Path to the PDB structure where the binding site is to be found. Accepted formats: pdb.')
-    required_args.add_argument('--input_clusters_zip', required=True, help='Path to the ZIP file with all the PDB members of the identity cluster. Accepted formats: zip.')
-    required_args.add_argument('--output_pdb_path', required=True, help='Path to the PDB containig the residues belonging to the binding site. Accepted formats: pdb.')
+    required_args = parser.add_argument_group("required arguments")
+    required_args.add_argument(
+        "--input_pdb_path",
+        required=True,
+        help="Path to the PDB structure where the binding site is to be found. Accepted formats: pdb.",
+    )
+    required_args.add_argument(
+        "--input_clusters_zip",
+        required=True,
+        help="Path to the ZIP file with all the PDB members of the identity cluster. Accepted formats: zip.",
+    )
+    required_args.add_argument(
+        "--output_pdb_path",
+        required=True,
+        help="Path to the PDB containig the residues belonging to the binding site. Accepted formats: pdb.",
+    )
 
     args = parser.parse_args()
     args.config = args.config or "{}"
     properties = settings.ConfReader(config=args.config).get_prop_dic()
 
     # Specific call of each building block
-    bindingsite(input_pdb_path=args.input_pdb_path,
-                input_clusters_zip=args.input_clusters_zip,
-                output_pdb_path=args.output_pdb_path,
-                properties=properties)
+    bindingsite(
+        input_pdb_path=args.input_pdb_path,
+        input_clusters_zip=args.input_clusters_zip,
+        output_pdb_path=args.output_pdb_path,
+        properties=properties,
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

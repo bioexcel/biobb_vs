@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 
 """Module containing the AutoDockVinaRun class and the command line interface."""
+
 import argparse
-from typing import Optional
 import os
-from biobb_common.generic.biobb_object import BiobbObject
+from typing import Optional
+
 from biobb_common.configuration import settings
+from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools.file_utils import launchlogger
+
 from biobb_vs.vina.common import check_input_path, check_output_path
 
 
@@ -64,8 +67,16 @@ class AutoDockVinaRun(BiobbObject):
 
     """
 
-    def __init__(self, input_ligand_pdbqt_path, input_receptor_pdbqt_path, input_box_path, output_pdbqt_path,
-                 output_log_path=None, properties=None, **kwargs) -> None:
+    def __init__(
+        self,
+        input_ligand_pdbqt_path,
+        input_receptor_pdbqt_path,
+        input_box_path,
+        output_pdbqt_path,
+        output_log_path=None,
+        properties=None,
+        **kwargs,
+    ) -> None:
         properties = properties or {}
 
         # Call parent class constructor
@@ -74,17 +85,24 @@ class AutoDockVinaRun(BiobbObject):
 
         # Input/Output files
         self.io_dict = {
-            "in": {"input_ligand_pdbqt_path": input_ligand_pdbqt_path, "input_receptor_pdbqt_path": input_receptor_pdbqt_path, "input_box_path": input_box_path},
-            "out": {"output_pdbqt_path": output_pdbqt_path, "output_log_path": output_log_path}
+            "in": {
+                "input_ligand_pdbqt_path": input_ligand_pdbqt_path,
+                "input_receptor_pdbqt_path": input_receptor_pdbqt_path,
+                "input_box_path": input_box_path,
+            },
+            "out": {
+                "output_pdbqt_path": output_pdbqt_path,
+                "output_log_path": output_log_path,
+            },
         }
 
         # Properties specific for BB
-        self.cpu = properties.get('cpu', 1)
-        self.exhaustiveness = properties.get('exhaustiveness', 8)
-        self.num_modes = properties.get('num_modes', 9)
-        self.min_rmsd = properties.get('min_rmsd', 1)
-        self.energy_range = properties.get('energy_range', 3)
-        self.binary_path = properties.get('binary_path', 'vina')
+        self.cpu = properties.get("cpu", 1)
+        self.exhaustiveness = properties.get("exhaustiveness", 8)
+        self.num_modes = properties.get("num_modes", 9)
+        self.min_rmsd = properties.get("min_rmsd", 1)
+        self.energy_range = properties.get("energy_range", 3)
+        self.binary_path = properties.get("binary_path", "vina")
         self.properties = properties
 
         # Check the properties
@@ -92,22 +110,61 @@ class AutoDockVinaRun(BiobbObject):
         self.check_arguments()
 
     def check_data_params(self, out_log, err_log):
-        """ Checks all the input/output paths and parameters """
-        self.io_dict["in"]["input_ligand_pdbqt_path"] = check_input_path(self.io_dict["in"]["input_ligand_pdbqt_path"], "input_ligand_pdbqt_path", self.out_log, self.__class__.__name__)
-        self.io_dict["in"]["input_receptor_pdbqt_path"] = check_input_path(self.io_dict["in"]["input_receptor_pdbqt_path"], "input_receptor_pdbqt_path", self.out_log, self.__class__.__name__)
-        self.io_dict["in"]["input_box_path"] = check_input_path(self.io_dict["in"]["input_box_path"], "input_box_path", self.out_log, self.__class__.__name__)
-        self.io_dict["out"]["output_pdbqt_path"] = check_output_path(self.io_dict["out"]["output_pdbqt_path"], "output_pdbqt_path", False, self.out_log, self.__class__.__name__)
-        self.io_dict["out"]["output_log_path"] = check_output_path(self.io_dict["out"]["output_log_path"], "output_log_path", True, self.out_log, self.__class__.__name__)
+        """Checks all the input/output paths and parameters"""
+        self.io_dict["in"]["input_ligand_pdbqt_path"] = check_input_path(
+            self.io_dict["in"]["input_ligand_pdbqt_path"],
+            "input_ligand_pdbqt_path",
+            self.out_log,
+            self.__class__.__name__,
+        )
+        self.io_dict["in"]["input_receptor_pdbqt_path"] = check_input_path(
+            self.io_dict["in"]["input_receptor_pdbqt_path"],
+            "input_receptor_pdbqt_path",
+            self.out_log,
+            self.__class__.__name__,
+        )
+        self.io_dict["in"]["input_box_path"] = check_input_path(
+            self.io_dict["in"]["input_box_path"],
+            "input_box_path",
+            self.out_log,
+            self.__class__.__name__,
+        )
+        self.io_dict["out"]["output_pdbqt_path"] = check_output_path(
+            self.io_dict["out"]["output_pdbqt_path"],
+            "output_pdbqt_path",
+            False,
+            self.out_log,
+            self.__class__.__name__,
+        )
+        self.io_dict["out"]["output_log_path"] = check_output_path(
+            self.io_dict["out"]["output_log_path"],
+            "output_log_path",
+            True,
+            self.out_log,
+            self.__class__.__name__,
+        )
 
     def calculate_box(self, box_file_path):
-        with open(box_file_path, 'r') as box_file:
+        with open(box_file_path, "r") as box_file:
             for line in box_file:
                 line = line.rstrip(os.linesep)
                 if line.startswith("REMARK BOX CENTER"):
                     fields = line.split()
                     center = fields[3:6]
                     size = fields[-3:]
-                    return list(map(str, [center[0], center[1], center[2], size[0], size[1], size[2]]))
+                    return list(
+                        map(
+                            str,
+                            [
+                                center[0],
+                                center[1],
+                                center[2],
+                                size[0],
+                                size[1],
+                                size[2],
+                            ],
+                        )
+                    )
             return list(map(str, [0, 0, 0, 0, 0, 0]))
 
     @launchlogger
@@ -123,26 +180,44 @@ class AutoDockVinaRun(BiobbObject):
         self.stage_files()
 
         # calculating box position and size
-        x0, y0, z0, sidex, sidey, sidez = self.calculate_box(self.io_dict["in"]["input_box_path"])
+        x0, y0, z0, sidex, sidey, sidez = self.calculate_box(
+            self.io_dict["in"]["input_box_path"]
+        )
 
         # in case ligand or receptor end with END, remove last line
         # check_input_autodock(self.io_dict["in"]["input_ligand_pdbqt_path"], self.out_log)
         # check_input_autodock(self.io_dict["in"]["input_receptor_pdbqt_path"], self.out_log)
 
         # create cmd
-        self.cmd = [self.binary_path,
-                    '--ligand', self.stage_io_dict["in"]["input_ligand_pdbqt_path"],
-                    '--receptor', self.stage_io_dict["in"]["input_receptor_pdbqt_path"],
-                    '--center_x=' + x0, '--center_y=' + y0, '--center_z=' + z0,
-                    '--size_x=' + sidex, '--size_y=' + sidey, '--size_z=' + sidez,
-                    '--cpu', str(self.cpu),
-                    '--exhaustiveness', str(self.exhaustiveness),
-                    '--num_modes', str(self.num_modes),
-                    '--min_rmsd', str(self.min_rmsd),
-                    '--energy_range', str(self.energy_range),
-                    '--out', self.stage_io_dict["out"]["output_pdbqt_path"],
-                    '--verbosity', '1',
-                    '>', self.stage_io_dict["out"]["output_log_path"]]
+        self.cmd = [
+            self.binary_path,
+            "--ligand",
+            self.stage_io_dict["in"]["input_ligand_pdbqt_path"],
+            "--receptor",
+            self.stage_io_dict["in"]["input_receptor_pdbqt_path"],
+            "--center_x=" + x0,
+            "--center_y=" + y0,
+            "--center_z=" + z0,
+            "--size_x=" + sidex,
+            "--size_y=" + sidey,
+            "--size_z=" + sidez,
+            "--cpu",
+            str(self.cpu),
+            "--exhaustiveness",
+            str(self.exhaustiveness),
+            "--num_modes",
+            str(self.num_modes),
+            "--min_rmsd",
+            str(self.min_rmsd),
+            "--energy_range",
+            str(self.energy_range),
+            "--out",
+            self.stage_io_dict["out"]["output_pdbqt_path"],
+            "--verbosity",
+            "1",
+            ">",
+            self.stage_io_dict["out"]["output_log_path"],
+        ]
 
         # Run Biobb block
         self.run_biobb()
@@ -151,9 +226,7 @@ class AutoDockVinaRun(BiobbObject):
         self.copy_to_host()
 
         # remove temporary folder(s)
-        self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir", "")
-        ])
+        self.tmp_files.extend([self.stage_io_dict.get("unique_dir", "")])
         self.remove_tmp_files()
 
         self.check_arguments(output_files_created=True, raise_exception=False)
@@ -161,43 +234,79 @@ class AutoDockVinaRun(BiobbObject):
         return self.return_code
 
 
-def autodock_vina_run(input_ligand_pdbqt_path: str, input_receptor_pdbqt_path: str, input_box_path: str, output_pdbqt_path: str, output_log_path: Optional[str] = None, properties: Optional[dict] = None, **kwargs) -> int:
+def autodock_vina_run(
+    input_ligand_pdbqt_path: str,
+    input_receptor_pdbqt_path: str,
+    input_box_path: str,
+    output_pdbqt_path: str,
+    output_log_path: Optional[str] = None,
+    properties: Optional[dict] = None,
+    **kwargs,
+) -> int:
     """Execute the :class:`AutoDockVinaRun <vina.autodock_vina_run.AutoDockVinaRun>` class and
     execute the :meth:`launch() <vina.autodock_vina_run.AutoDockVinaRun.launch>` method."""
 
-    return AutoDockVinaRun(input_ligand_pdbqt_path=input_ligand_pdbqt_path,
-                           input_receptor_pdbqt_path=input_receptor_pdbqt_path,
-                           input_box_path=input_box_path,
-                           output_pdbqt_path=output_pdbqt_path,
-                           output_log_path=output_log_path,
-                           properties=properties, **kwargs).launch()
+    return AutoDockVinaRun(
+        input_ligand_pdbqt_path=input_ligand_pdbqt_path,
+        input_receptor_pdbqt_path=input_receptor_pdbqt_path,
+        input_box_path=input_box_path,
+        output_pdbqt_path=output_pdbqt_path,
+        output_log_path=output_log_path,
+        properties=properties,
+        **kwargs,
+    ).launch()
 
 
 def main():
     """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(description="Prepares input ligand for an Autodock Vina Virtual Screening.", formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
-    parser.add_argument('--config', required=False, help='Configuration file')
+    parser = argparse.ArgumentParser(
+        description="Prepares input ligand for an Autodock Vina Virtual Screening.",
+        formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999),
+    )
+    parser.add_argument("--config", required=False, help="Configuration file")
 
     # Specific args of each building block
-    required_args = parser.add_argument_group('required arguments')
-    required_args.add_argument('--input_ligand_pdbqt_path', required=True, help='Path to the input PDBQT ligand. Accepted formats: pdbqt.')
-    required_args.add_argument('--input_receptor_pdbqt_path', required=True, help='Path to the input PDBQT receptor. Accepted formats: pdbqt.')
-    required_args.add_argument('--input_box_path', required=True, help='Path to the PDB containig the residues belonging to the binding site. Accepted formats: pdb.')
-    required_args.add_argument('--output_pdbqt_path', required=True, help='Path to the output PDBQT file. Accepted formats: pdbqt.')
-    parser.add_argument('--output_log_path', required=False, help='Path to the log file. Accepted formats: log.')
+    required_args = parser.add_argument_group("required arguments")
+    required_args.add_argument(
+        "--input_ligand_pdbqt_path",
+        required=True,
+        help="Path to the input PDBQT ligand. Accepted formats: pdbqt.",
+    )
+    required_args.add_argument(
+        "--input_receptor_pdbqt_path",
+        required=True,
+        help="Path to the input PDBQT receptor. Accepted formats: pdbqt.",
+    )
+    required_args.add_argument(
+        "--input_box_path",
+        required=True,
+        help="Path to the PDB containig the residues belonging to the binding site. Accepted formats: pdb.",
+    )
+    required_args.add_argument(
+        "--output_pdbqt_path",
+        required=True,
+        help="Path to the output PDBQT file. Accepted formats: pdbqt.",
+    )
+    parser.add_argument(
+        "--output_log_path",
+        required=False,
+        help="Path to the log file. Accepted formats: log.",
+    )
 
     args = parser.parse_args()
     args.config = args.config or "{}"
     properties = settings.ConfReader(config=args.config).get_prop_dic()
 
     # Specific call of each building block
-    autodock_vina_run(input_ligand_pdbqt_path=args.input_ligand_pdbqt_path,
-                      input_receptor_pdbqt_path=args.input_receptor_pdbqt_path,
-                      input_box_path=args.input_box_path,
-                      output_pdbqt_path=args.output_pdbqt_path,
-                      output_log_path=args.output_log_path,
-                      properties=properties)
+    autodock_vina_run(
+        input_ligand_pdbqt_path=args.input_ligand_pdbqt_path,
+        input_receptor_pdbqt_path=args.input_receptor_pdbqt_path,
+        input_box_path=args.input_box_path,
+        output_pdbqt_path=args.output_pdbqt_path,
+        output_log_path=args.output_log_path,
+        properties=properties,
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

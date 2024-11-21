@@ -1,6 +1,5 @@
-from . import fpocket
-from . import vina
-from . import utils
+from . import fpocket, utils, vina
+
 name = "biobb_vs"
 __all__ = ["fpocket", "vina", "utils"]
-__version__ = "4.2.0"
+__version__ = "5.0.0"

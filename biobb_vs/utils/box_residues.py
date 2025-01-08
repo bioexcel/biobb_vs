@@ -168,8 +168,7 @@ class BoxResidues(BiobbObject):
 
         if len(selection_res_list) == 0:
             fu.log(
-                self.__class__.__name__
-                + ": Cannot match any of the residues listed in [%s] into %s"
+                self.__class__.__name__ + ": Cannot match any of the residues listed in [%s] into %s"
                 % (
                     ", ".join(str(v) for v in self.resid_list),
                     self.io_dict["in"]["input_pdb_path"],
@@ -177,8 +176,7 @@ class BoxResidues(BiobbObject):
                 self.out_log,
             )
             raise SystemExit(
-                self.__class__.__name__
-                + ": Cannot match any of the residues listed in [%s] into %s"
+                self.__class__.__name__ + ": Cannot match any of the residues listed in [%s] into %s"
                 % (
                     ", ".join(str(v) for v in self.resid_list),
                     self.io_dict["in"]["input_pdb_path"],
@@ -206,8 +204,7 @@ class BoxResidues(BiobbObject):
 
         # compute box center
         selection_box_center = (
-            sum(atom.coord for res in selection_res_list for atom in res.get_atoms())
-            / selection_atoms_num
+            sum(atom.coord for res in selection_res_list for atom in res.get_atoms()) / selection_atoms_num
         )
         fu.log(
             "Binding site center (Angstroms): %10.3f%10.3f%10.3f"

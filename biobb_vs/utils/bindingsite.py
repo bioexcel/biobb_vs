@@ -184,14 +184,12 @@ class BindingSite(BiobbObject):
         structPDB_seq = get_pdb_sequence(structPDB)
         if len(structPDB_seq) == 0:
             fu.log(
-                self.__class__.__name__
-                + ": Cannot extract AA sequence from the input PDB structure %s. Wrong format?"
+                self.__class__.__name__ + ": Cannot extract AA sequence from the input PDB structure %s. Wrong format?"
                 % self.io_dict["in"]["input_pdb_path"],
                 self.out_log,
             )
             raise SystemExit(
-                self.__class__.__name__
-                + ": Cannot extract AA sequence from the input PDB structure %s. Wrong format?"
+                self.__class__.__name__ + ": Cannot extract AA sequence from the input PDB structure %s. Wrong format?"
                 % self.io_dict["in"]["input_pdb_path"]
             )
         else:
@@ -336,14 +334,12 @@ class BindingSite(BiobbObject):
 
             if len(cluster_atoms) == 0:
                 fu.log(
-                    self.__class__.__name__
-                    + ": Cannot find CA atoms (1st model, 1st chain) in cluster member %s when aligning against %s. Ignoring this member."
+                    self.__class__.__name__ + ": Cannot find CA atoms (1st model, 1st chain) in cluster member %s when aligning against %s. Ignoring this member."
                     % (cluster_name, structure_name),
                     self.out_log,
                 )
                 raise SystemExit(
-                    self.__class__.__name__
-                    + ": Cannot find CA atoms (1st model, 1st chain) in cluster member %s when aligning against %s. Ignoring this member."
+                    self.__class__.__name__ + ": Cannot find CA atoms (1st model, 1st chain) in cluster member %s when aligning against %s. Ignoring this member."
                     % (cluster_name, structure_name)
                 )
             else:

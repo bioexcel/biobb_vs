@@ -131,8 +131,7 @@ class FPocketFilter(BiobbObject):
 
     def druggability_score_matcher(self, druggability_score):
         return (
-            lambda d: d["druggability_score"] > druggability_score[0]
-            and d["druggability_score"] <= druggability_score[1]
+            lambda d: d["druggability_score"] > druggability_score[0] and d["druggability_score"] <= druggability_score[1]
         )
 
     def volume_matcher(self, volume):

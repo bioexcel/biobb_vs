@@ -135,14 +135,12 @@ class ExtractModelPDBQT(BiobbObject):
 
         if self.model not in models:
             fu.log(
-                self.__class__.__name__
-                + ": Selected model %d not found in %s structure."
+                self.__class__.__name__ + ": Selected model %d not found in %s structure."
                 % (self.model, self.io_dict["in"]["input_pdbqt_path"]),
                 self.out_log,
             )
             raise SystemExit(
-                self.__class__.__name__
-                + ": Selected model %d not found in %s structure."
+                self.__class__.__name__ + ": Selected model %d not found in %s structure."
                 % (self.model, self.io_dict["in"]["input_pdbqt_path"])
             )
 

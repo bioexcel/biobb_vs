@@ -215,7 +215,7 @@ class Box(BiobbObject):
         # Copy files to host
         self.copy_to_host()
 
-        self.tmp_files.extend([self.stage_io_dict.get("unique_dir", "")])
+        # self.tmp_files.extend([self.stage_io_dict.get("unique_dir", "")])
         self.remove_tmp_files()
 
         self.check_arguments(output_files_created=True, raise_exception=False)
@@ -238,6 +238,8 @@ def box(
         properties=properties,
         **kwargs,
     ).launch()
+
+    box.__doc__ = Box.__doc__
 
 
 def main():

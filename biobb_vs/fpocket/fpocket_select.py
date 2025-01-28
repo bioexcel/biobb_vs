@@ -111,7 +111,7 @@ class FPocketSelect(BiobbObject):
         self.copy_to_host()
 
         self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir", ""),
+            # self.stage_io_dict.get("unique_dir", ""),
             self.tmp_folder
         ])
         self.remove_tmp_files()
@@ -129,6 +129,8 @@ def fpocket_select(input_pockets_zip: str, output_pocket_pdb: str, output_pocket
                          output_pocket_pdb=output_pocket_pdb,
                          output_pocket_pqr=output_pocket_pqr,
                          properties=properties, **kwargs).launch()
+
+    fpocket_select.__doc__ = FPocketSelect.__doc__
 
 
 def main():

@@ -270,7 +270,7 @@ class BoxResidues(BiobbObject):
         # Copy files to host
         self.copy_to_host()
 
-        self.tmp_files.extend([self.stage_io_dict.get("unique_dir", "")])
+        # self.tmp_files.extend([self.stage_io_dict.get("unique_dir", "")])
         self.remove_tmp_files()
 
         return 0
@@ -291,6 +291,8 @@ def box_residues(
         properties=properties,
         **kwargs,
     ).launch()
+
+    box_residues.__doc__ = BoxResidues.__doc__
 
 
 def main():

@@ -151,7 +151,7 @@ class FPocketRun(BiobbObject):
                                self.__class__.__name__)
 
         self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir", ""),
+            # self.stage_io_dict.get("unique_dir", ""),
             self.tmp_folder
         ])
         self.remove_tmp_files()
@@ -167,6 +167,8 @@ def fpocket_run(input_pdb_path: str, output_pockets_zip: str, output_summary: st
                       output_pockets_zip=output_pockets_zip,
                       output_summary=output_summary,
                       properties=properties, **kwargs).launch()
+
+    fpocket_run.__doc__ = FPocketRun.__doc__
 
 
 def main():

@@ -1,5 +1,11 @@
 # Biobb Virtual Screening changelog
 
+## What's new in version [5.1.0](https://github.com/bioexcel/biobb_vs/releases/tag/v5.1.0)?
+
+### Changes
+
+* [UPDATE]: Update to biobb_common 5.1.0
+
 ## What's new in version [5.0.0](https://github.com/bioexcel/biobb_vs/releases/tag/v5.0.0)?
 
 ### Changes

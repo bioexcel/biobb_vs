@@ -17,7 +17,7 @@ autodock_vina_run -h
     
     Prepares input ligand for an Autodock Vina Virtual Screening.
     
-    optional arguments:
+    options:
       -h, --help            show this help message and exit
       --config CONFIG       Configuration file
       --output_log_path OUTPUT_LOG_PATH
@@ -116,7 +116,7 @@ bindingsite -h
     
     Finds the binding site of the input_pdb file based on the ligands' location of similar structures (members of the sequence identity cluster)
     
-    optional arguments:
+    options:
       -h, --help            show this help message and exit
       --config CONFIG       Configuration file
     
@@ -193,7 +193,7 @@ box -h
     
     Sets the center and the size of a rectangular parallelepiped box around a set of residues from a given PDB or a pocket from a given PQR.
     
-    optional arguments:
+    options:
       -h, --help            show this help message and exit
       --config CONFIG       Configuration file
     
@@ -244,89 +244,6 @@ box --config config_box.yml --input_pdb_path input_box.pqr --output_pdb_path ref
 box --config config_box.json --input_pdb_path input_box.pqr --output_pdb_path ref_output_box.pdb
 ```
 
-## Fpocket_filter
-Performs a search over the outputs of the fpocket building block.
-### Get help
-Command:
-```python
-fpocket_filter -h
-```
-    usage: fpocket_filter [-h] [--config CONFIG] --input_pockets_zip INPUT_POCKETS_ZIP --input_summary INPUT_SUMMARY --output_filter_pockets_zip OUTPUT_FILTER_POCKETS_ZIP
-    
-    Finds one or more binding sites in the outputs of the fpocket building block from given parameters.
-    
-    optional arguments:
-      -h, --help            show this help message and exit
-      --config CONFIG       Configuration file
-    
-    required arguments:
-      --input_pockets_zip INPUT_POCKETS_ZIP
-                            Path to all the pockets found by fpocket. Accepted formats: zip.
-      --input_summary INPUT_SUMMARY
-                            Path to the JSON summary file returned by fpocket. Accepted formats: json.
-      --output_filter_pockets_zip OUTPUT_FILTER_POCKETS_ZIP
-                            Path to the selected pockets after filtering. Accepted formats: zip.
-### I / O Arguments
-Syntax: input_argument (datatype) : Definition
-
-Config input / output arguments for this building block:
-* **input_pockets_zip** (*string*): Path to all the pockets found by fpocket. File type: input. [Sample file](https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/fpocket/input_pockets.zip). Accepted formats: ZIP
-* **input_summary** (*string*): Path to the JSON summary file returned by fpocket. File type: input. [Sample file](https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/fpocket/input_summary.json). Accepted formats: JSON
-* **output_filter_pockets_zip** (*string*): Path to the selected pockets after filtering. File type: output. [Sample file](https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/fpocket/ref_output_filter_pockets.zip). Accepted formats: ZIP
-### Config
-Syntax: input_parameter (datatype) - (default_value) Definition
-
-Config parameters for this building block:
-* **score** (*array*): (None) List of two float numbers between 0 and 1 indicating the score range. Indicates the fpocket score after the evaluation of pocket prediction accuracy as defined in the fpocket paper..
-* **druggability_score** (*array*): (None) List of two float numbers between 0 and 1 indicating the druggability_score range. It's a value between 0 and 1, 0 signifying that the pocket is likely to not bind a drug like molecule and 1, that it is very likely to bind the latter..
-* **volume** (*array*): (None) List of two float numbers indicating the volume range. Indicates the pocket volume..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
-### YAML
-#### [Common config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_fpocket_filter.yml)
-```python
-properties:
-  druggability_score:
-  - 0.2
-  - 0.9
-  score:
-  - 0.2
-  - 1
-  volume:
-  - 100
-  - 600
-
-```
-#### Command line
-```python
-fpocket_filter --config config_fpocket_filter.yml --input_pockets_zip input_pockets.zip --input_summary input_summary.json --output_filter_pockets_zip ref_output_filter_pockets.zip
-```
-### JSON
-#### [Common config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_fpocket_filter.json)
-```python
-{
-  "properties": {
-    "score": [
-      0.2,
-      1
-    ],
-    "druggability_score": [
-      0.2,
-      0.9
-    ],
-    "volume": [
-      100,
-      600
-    ]
-  }
-}
-```
-#### Command line
-```python
-fpocket_filter --config config_fpocket_filter.json --input_pockets_zip input_pockets.zip --input_summary input_summary.json --output_filter_pockets_zip ref_output_filter_pockets.zip
-```
-
 ## Box_residues
 This class sets the center and the size of a rectangular parallelepiped box around a set of residues.
 ### Get help
@@ -338,7 +255,7 @@ box_residues -h
     
     Sets the center and the size of a rectangular parallelepiped box around a selection of residues found in a given PDB.
     
-    optional arguments:
+    options:
       -h, --help            show this help message and exit
       --config CONFIG       Configuration file
     
@@ -416,6 +333,148 @@ box_residues --config config_box_residues.yml --input_pdb_path input_box_residue
 box_residues --config config_box_residues.json --input_pdb_path input_box_residues.pdb --output_pdb_path ref_output_box_residues.pdb
 ```
 
+## Extract_model_pdbqt
+Extracts a model from a PDBQT file with several models.
+### Get help
+Command:
+```python
+extract_model_pdbqt -h
+```
+    usage: extract_model_pdbqt [-h] [--config CONFIG] --input_pdbqt_path INPUT_PDBQT_PATH --output_pdbqt_path OUTPUT_PDBQT_PATH
+    
+    Extracts a model from a PDBQT file with several models.
+    
+    options:
+      -h, --help            show this help message and exit
+      --config CONFIG       Configuration file
+    
+    required arguments:
+      --input_pdbqt_path INPUT_PDBQT_PATH
+                            Input PDBQT file. Accepted formats: pdbqt.
+      --output_pdbqt_path OUTPUT_PDBQT_PATH
+                            Output PDBQT file. Accepted formats: pdbqt.
+### I / O Arguments
+Syntax: input_argument (datatype) : Definition
+
+Config input / output arguments for this building block:
+* **input_pdbqt_path** (*string*): Input PDBQT file. File type: input. [Sample file](https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/models.pdbqt). Accepted formats: PDBQT
+* **output_pdbqt_path** (*string*): Output PDBQT file. File type: output. [Sample file](https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/utils/ref_extract_model.pdbqt). Accepted formats: PDBQT
+### Config
+Syntax: input_parameter (datatype) - (default_value) Definition
+
+Config parameters for this building block:
+* **model** (*integer*): (1) Model number to extract from input_pdbqt_path..
+* **remove_tmp** (*boolean*): (True) Remove temporal files..
+* **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+### YAML
+#### [Common config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_extract_model_pdbqt.yml)
+```python
+properties:
+  model: 1
+
+```
+#### Command line
+```python
+extract_model_pdbqt --config config_extract_model_pdbqt.yml --input_pdbqt_path models.pdbqt --output_pdbqt_path ref_extract_model.pdbqt
+```
+### JSON
+#### [Common config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_extract_model_pdbqt.json)
+```python
+{
+  "properties": {
+    "model": 1
+  }
+}
+```
+#### Command line
+```python
+extract_model_pdbqt --config config_extract_model_pdbqt.json --input_pdbqt_path models.pdbqt --output_pdbqt_path ref_extract_model.pdbqt
+```
+
+## Fpocket_filter
+Performs a search over the outputs of the fpocket building block.
+### Get help
+Command:
+```python
+fpocket_filter -h
+```
+    usage: fpocket_filter [-h] [--config CONFIG] --input_pockets_zip INPUT_POCKETS_ZIP --input_summary INPUT_SUMMARY --output_filter_pockets_zip OUTPUT_FILTER_POCKETS_ZIP
+    
+    Finds one or more binding sites in the outputs of the fpocket building block from given parameters.
+    
+    options:
+      -h, --help            show this help message and exit
+      --config CONFIG       Configuration file
+    
+    required arguments:
+      --input_pockets_zip INPUT_POCKETS_ZIP
+                            Path to all the pockets found by fpocket. Accepted formats: zip.
+      --input_summary INPUT_SUMMARY
+                            Path to the JSON summary file returned by fpocket. Accepted formats: json.
+      --output_filter_pockets_zip OUTPUT_FILTER_POCKETS_ZIP
+                            Path to the selected pockets after filtering. Accepted formats: zip.
+### I / O Arguments
+Syntax: input_argument (datatype) : Definition
+
+Config input / output arguments for this building block:
+* **input_pockets_zip** (*string*): Path to all the pockets found by fpocket. File type: input. [Sample file](https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/fpocket/input_pockets.zip). Accepted formats: ZIP
+* **input_summary** (*string*): Path to the JSON summary file returned by fpocket. File type: input. [Sample file](https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/fpocket/input_summary.json). Accepted formats: JSON
+* **output_filter_pockets_zip** (*string*): Path to the selected pockets after filtering. File type: output. [Sample file](https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/fpocket/ref_output_filter_pockets.zip). Accepted formats: ZIP
+### Config
+Syntax: input_parameter (datatype) - (default_value) Definition
+
+Config parameters for this building block:
+* **score** (*array*): (None) List of two float numbers between 0 and 1 indicating the score range. Indicates the fpocket score after the evaluation of pocket prediction accuracy as defined in the fpocket paper..
+* **druggability_score** (*array*): (None) List of two float numbers between 0 and 1 indicating the druggability_score range. It's a value between 0 and 1, 0 signifying that the pocket is likely to not bind a drug like molecule and 1, that it is very likely to bind the latter..
+* **volume** (*array*): (None) List of two float numbers indicating the volume range. Indicates the pocket volume..
+* **remove_tmp** (*boolean*): (True) Remove temporal files..
+* **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+### YAML
+#### [Common config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_fpocket_filter.yml)
+```python
+properties:
+  druggability_score:
+  - 0.2
+  - 0.9
+  score:
+  - 0.2
+  - 1
+  volume:
+  - 100
+  - 600
+
+```
+#### Command line
+```python
+fpocket_filter --config config_fpocket_filter.yml --input_pockets_zip input_pockets.zip --input_summary input_summary.json --output_filter_pockets_zip ref_output_filter_pockets.zip
+```
+### JSON
+#### [Common config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_fpocket_filter.json)
+```python
+{
+  "properties": {
+    "score": [
+      0.2,
+      1
+    ],
+    "druggability_score": [
+      0.2,
+      0.9
+    ],
+    "volume": [
+      100,
+      600
+    ]
+  }
+}
+```
+#### Command line
+```python
+fpocket_filter --config config_fpocket_filter.json --input_pockets_zip input_pockets.zip --input_summary input_summary.json --output_filter_pockets_zip ref_output_filter_pockets.zip
+```
+
 ## Fpocket_run
 Wrapper of the fpocket software.
 ### Get help
@@ -427,7 +486,7 @@ fpocket_run -h
     
     Finds the binding site of the input_pdb_path file via the fpocket software
     
-    optional arguments:
+    options:
       -h, --help            show this help message and exit
       --config CONFIG       Configuration file
     
@@ -533,7 +592,7 @@ fpocket_select -h
     
     Selects a single pocket in the outputs of the fpocket building block from a given parameter.
     
-    optional arguments:
+    options:
       -h, --help            show this help message and exit
       --config CONFIG       Configuration file
     
@@ -582,63 +641,4 @@ fpocket_select --config config_fpocket_select.yml --input_pockets_zip input_pock
 #### Command line
 ```python
 fpocket_select --config config_fpocket_select.json --input_pockets_zip input_pockets.zip --output_pocket_pdb ref_output_pocket.pdb --output_pocket_pqr ref_output_pocket.pqr
-```
-
-## Extract_model_pdbqt
-Extracts a model from a PDBQT file with several models.
-### Get help
-Command:
-```python
-extract_model_pdbqt -h
-```
-    usage: extract_model_pdbqt [-h] [--config CONFIG] --input_pdbqt_path INPUT_PDBQT_PATH --output_pdbqt_path OUTPUT_PDBQT_PATH
-    
-    Extracts a model from a PDBQT file with several models.
-    
-    optional arguments:
-      -h, --help            show this help message and exit
-      --config CONFIG       Configuration file
-    
-    required arguments:
-      --input_pdbqt_path INPUT_PDBQT_PATH
-                            Input PDBQT file. Accepted formats: pdbqt.
-      --output_pdbqt_path OUTPUT_PDBQT_PATH
-                            Output PDBQT file. Accepted formats: pdbqt.
-### I / O Arguments
-Syntax: input_argument (datatype) : Definition
-
-Config input / output arguments for this building block:
-* **input_pdbqt_path** (*string*): Input PDBQT file. File type: input. [Sample file](https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/models.pdbqt). Accepted formats: PDBQT
-* **output_pdbqt_path** (*string*): Output PDBQT file. File type: output. [Sample file](https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/utils/ref_extract_model.pdbqt). Accepted formats: PDBQT
-### Config
-Syntax: input_parameter (datatype) - (default_value) Definition
-
-Config parameters for this building block:
-* **model** (*integer*): (1) Model number to extract from input_pdbqt_path..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
-### YAML
-#### [Common config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_extract_model_pdbqt.yml)
-```python
-properties:
-  model: 1
-
-```
-#### Command line
-```python
-extract_model_pdbqt --config config_extract_model_pdbqt.yml --input_pdbqt_path models.pdbqt --output_pdbqt_path ref_extract_model.pdbqt
-```
-### JSON
-#### [Common config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_extract_model_pdbqt.json)
-```python
-{
-  "properties": {
-    "model": 1
-  }
-}
-```
-#### Command line
-```python
-extract_model_pdbqt --config config_extract_model_pdbqt.json --input_pdbqt_path models.pdbqt --output_pdbqt_path ref_extract_model.pdbqt
 ```

@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 
 """Module containing the FPocketRun class and the command line interface."""
-import argparse
 from typing import Optional
 import shutil
 from pathlib import PurePath
 from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
 from biobb_vs.fpocket.common import check_input_path, check_output_path, process_output_fpocket
@@ -151,7 +149,6 @@ class FPocketRun(BiobbObject):
                                self.__class__.__name__)
 
         self.tmp_files.extend([
-            # self.stage_io_dict.get("unique_dir", ""),
             self.tmp_folder
         ])
         self.remove_tmp_files()
@@ -160,37 +157,13 @@ class FPocketRun(BiobbObject):
 
 
 def fpocket_run(input_pdb_path: str, output_pockets_zip: str, output_summary: str, properties: Optional[dict] = None, **kwargs) -> int:
-    """Execute the :class:`FPocketRun <fpocket.fpocket_run.FPocketRun>` class and
+    """Create the :class:`FPocketRun <fpocket.fpocket_run.FPocketRun>` class and
     execute the :meth:`launch() <fpocket.fpocket_run.FPocketRun.launch>` method."""
-
-    return FPocketRun(input_pdb_path=input_pdb_path,
-                      output_pockets_zip=output_pockets_zip,
-                      output_summary=output_summary,
-                      properties=properties, **kwargs).launch()
-
-    fpocket_run.__doc__ = FPocketRun.__doc__
+    return FPocketRun(**dict(locals())).launch()
 
 
-def main():
-    """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(description="Finds the binding site of the input_pdb_path file via the fpocket software", formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
-    parser.add_argument('--config', required=False, help='Configuration file')
-
-    # Specific args of each building block
-    required_args = parser.add_argument_group('required arguments')
-    required_args.add_argument('--input_pdb_path', required=True, help='Path to the PDB structure where the binding site is to be found. Accepted formats: pdb.')
-    required_args.add_argument('--output_pockets_zip', required=True, help='Path to all the pockets found by fpocket in the input_pdb_path structure. Accepted formats: zip.')
-    required_args.add_argument('--output_summary', required=True, help='Path to the JSON summary file. Accepted formats: json.')
-
-    args = parser.parse_args()
-    args.config = args.config or "{}"
-    properties = settings.ConfReader(config=args.config).get_prop_dic()
-
-    # Specific call of each building block
-    fpocket_run(input_pdb_path=args.input_pdb_path,
-                output_pockets_zip=args.output_pockets_zip,
-                output_summary=args.output_summary,
-                properties=properties)
+fpocket_run.__doc__ = FPocketRun.__doc__
+main = FPocketRun.get_main(fpocket_run, "Finds the binding site of the input_pdb_path file via the fpocket software")
 
 
 if __name__ == '__main__':

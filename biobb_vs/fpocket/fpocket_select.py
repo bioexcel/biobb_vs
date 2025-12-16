@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 
 """Module containing the FPocketSelect class and the command line interface."""
-import argparse
 from typing import Optional
 import shutil
 from pathlib import PurePath
 from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
 from biobb_vs.fpocket.common import check_input_path, check_output_path
@@ -110,10 +108,7 @@ class FPocketSelect(BiobbObject):
         # Copy files to host
         self.copy_to_host()
 
-        self.tmp_files.extend([
-            # self.stage_io_dict.get("unique_dir", ""),
-            self.tmp_folder
-        ])
+        self.tmp_files.append(self.tmp_folder)
         self.remove_tmp_files()
 
         self.check_arguments(output_files_created=True, raise_exception=False)
@@ -122,37 +117,13 @@ class FPocketSelect(BiobbObject):
 
 
 def fpocket_select(input_pockets_zip: str, output_pocket_pdb: str, output_pocket_pqr: str, properties: Optional[dict] = None, **kwargs) -> int:
-    """Execute the :class:`FPocketSelect <fpocket.fpocket_select.FPocketSelect>` class and
+    """Create the :class:`FPocketSelect <fpocket.fpocket_select.FPocketSelect>` class and
     execute the :meth:`launch() <fpocket.fpocket_select.FPocketSelect.launch>` method."""
-
-    return FPocketSelect(input_pockets_zip=input_pockets_zip,
-                         output_pocket_pdb=output_pocket_pdb,
-                         output_pocket_pqr=output_pocket_pqr,
-                         properties=properties, **kwargs).launch()
-
-    fpocket_select.__doc__ = FPocketSelect.__doc__
+    return FPocketSelect(**dict(locals())).launch()
 
 
-def main():
-    """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(description="Selects a single pocket in the outputs of the fpocket building block from a given parameter.", formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
-    parser.add_argument('--config', required=False, help='Configuration file')
-
-    # Specific args of each building block
-    required_args = parser.add_argument_group('required arguments')
-    required_args.add_argument('--input_pockets_zip', required=True, help='Path to all the pockets found by fpocket. Accepted formats: zip.')
-    required_args.add_argument('--output_pocket_pdb', required=True, help='Path to the PDB file with the cavity found by fpocket. Accepted formats: pdb.')
-    required_args.add_argument('--output_pocket_pqr', required=True, help='Path to the PQR file with the pocket found by fpocket. Accepted formats: pqr.')
-
-    args = parser.parse_args()
-    args.config = args.config or "{}"
-    properties = settings.ConfReader(config=args.config).get_prop_dic()
-
-    # Specific call of each building block
-    fpocket_select(input_pockets_zip=args.input_pockets_zip,
-                   output_pocket_pdb=args.output_pocket_pdb,
-                   output_pocket_pqr=args.output_pocket_pqr,
-                   properties=properties)
+fpocket_select.__doc__ = FPocketSelect.__doc__
+main = FPocketSelect.get_main(fpocket_select, "Selects a single pocket in the outputs of the fpocket building block from a given parameter.")
 
 
 if __name__ == '__main__':

@@ -1,12 +1,8 @@
 #!/usr/bin/env python3
 
 """Module containing the FPocketFilter class and the command line interface."""
-
-import argparse
 import json
 from typing import Optional
-
-from biobb_common.configuration import settings
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
@@ -223,7 +219,6 @@ class FPocketFilter(BiobbObject):
         self.copy_to_host()
 
         self.tmp_files.extend([
-            # self.stage_io_dict.get("unique_dir", ""),
             self.tmp_folder
         ])
         self.remove_tmp_files()
@@ -240,57 +235,13 @@ def fpocket_filter(
     properties: Optional[dict] = None,
     **kwargs,
 ) -> int:
-    """Execute the :class:`FPocketFilter <fpocket.fpocket_filter.FPocketFilter>` class and
+    """Create the :class:`FPocketFilter <fpocket.fpocket_filter.FPocketFilter>` class and
     execute the :meth:`launch() <fpocket.fpocket_filter.FPocketFilter.launch>` method."""
-
-    return FPocketFilter(
-        input_pockets_zip=input_pockets_zip,
-        input_summary=input_summary,
-        output_filter_pockets_zip=output_filter_pockets_zip,
-        properties=properties,
-        **kwargs,
-    ).launch()
-
-    fpocket_filter.__doc__ = FPocketFilter.__doc__
+    return FPocketFilter(**dict(locals())).launch()
 
 
-def main():
-    """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(
-        description="Finds one or more binding sites in the outputs of the fpocket building block from given parameters.",
-        formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999),
-    )
-    parser.add_argument("--config", required=False, help="Configuration file")
-
-    # Specific args of each building block
-    required_args = parser.add_argument_group("required arguments")
-    required_args.add_argument(
-        "--input_pockets_zip",
-        required=True,
-        help="Path to all the pockets found by fpocket. Accepted formats: zip.",
-    )
-    required_args.add_argument(
-        "--input_summary",
-        required=True,
-        help="Path to the JSON summary file returned by fpocket. Accepted formats: json.",
-    )
-    required_args.add_argument(
-        "--output_filter_pockets_zip",
-        required=True,
-        help="Path to the selected pockets after filtering. Accepted formats: zip.",
-    )
-
-    args = parser.parse_args()
-    args.config = args.config or "{}"
-    properties = settings.ConfReader(config=args.config).get_prop_dic()
-
-    # Specific call of each building block
-    fpocket_filter(
-        input_pockets_zip=args.input_pockets_zip,
-        input_summary=args.input_summary,
-        output_filter_pockets_zip=args.output_filter_pockets_zip,
-        properties=properties,
-    )
+fpocket_filter.__doc__ = FPocketFilter.__doc__
+main = FPocketFilter.get_main(fpocket_filter, "Finds one or more binding sites in the outputs of the fpocket building block from given parameters.")
 
 
 if __name__ == "__main__":

@@ -1,15 +1,11 @@
 #!/usr/bin/env python3
 
 """Module containing the BindingSite class and the command line interface."""
-
-import argparse
 import re
 import warnings
 from pathlib import PurePath
 from typing import Optional
-
 from Bio import BiopythonDeprecationWarning
-from biobb_common.configuration import settings
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
@@ -438,7 +434,6 @@ class BindingSite(BiobbObject):
         self.copy_to_host()
 
         self.tmp_files.extend([
-            # self.stage_io_dict.get("unique_dir", ""),
             str(unique_dir)
         ])
         self.remove_tmp_files()
@@ -455,57 +450,13 @@ def bindingsite(
     properties: Optional[dict] = None,
     **kwargs,
 ) -> int:
-    """Execute the :class:`BindingSite <utils.bindingsite.BindingSite>` class and
+    """Create the :class:`BindingSite <utils.bindingsite.BindingSite>` class and
     execute the :meth:`launch() <utils.bindingsite.BindingSite.launch>` method."""
-
-    return BindingSite(
-        input_pdb_path=input_pdb_path,
-        input_clusters_zip=input_clusters_zip,
-        output_pdb_path=output_pdb_path,
-        properties=properties,
-        **kwargs,
-    ).launch()
-
-    bindingsite.__doc__ = BindingSite.__doc__
+    return BindingSite(**dict(locals())).launch()
 
 
-def main():
-    """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(
-        description="Finds the binding site of the input_pdb file based on the ligands' location of similar structures (members of the sequence identity cluster)",
-        formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999),
-    )
-    parser.add_argument("--config", required=False, help="Configuration file")
-
-    # Specific args of each building block
-    required_args = parser.add_argument_group("required arguments")
-    required_args.add_argument(
-        "--input_pdb_path",
-        required=True,
-        help="Path to the PDB structure where the binding site is to be found. Accepted formats: pdb.",
-    )
-    required_args.add_argument(
-        "--input_clusters_zip",
-        required=True,
-        help="Path to the ZIP file with all the PDB members of the identity cluster. Accepted formats: zip.",
-    )
-    required_args.add_argument(
-        "--output_pdb_path",
-        required=True,
-        help="Path to the PDB containig the residues belonging to the binding site. Accepted formats: pdb.",
-    )
-
-    args = parser.parse_args()
-    args.config = args.config or "{}"
-    properties = settings.ConfReader(config=args.config).get_prop_dic()
-
-    # Specific call of each building block
-    bindingsite(
-        input_pdb_path=args.input_pdb_path,
-        input_clusters_zip=args.input_clusters_zip,
-        output_pdb_path=args.output_pdb_path,
-        properties=properties,
-    )
+bindingsite.__doc__ = BindingSite.__doc__
+main = BindingSite.get_main(bindingsite, "Finds the binding site of the input_pdb file based on the ligands' location of similar structures (members of the sequence identity cluster)")
 
 
 if __name__ == "__main__":

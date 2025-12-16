@@ -13,15 +13,14 @@ Command:
 ```python
 autodock_vina_run -h
 ```
-    usage: autodock_vina_run [-h] [--config CONFIG] --input_ligand_pdbqt_path INPUT_LIGAND_PDBQT_PATH --input_receptor_pdbqt_path INPUT_RECEPTOR_PDBQT_PATH --input_box_path INPUT_BOX_PATH --output_pdbqt_path OUTPUT_PDBQT_PATH [--output_log_path OUTPUT_LOG_PATH]
+    usage: autodock_vina_run [-h] [-c CONFIG] --input_ligand_pdbqt_path INPUT_LIGAND_PDBQT_PATH --input_receptor_pdbqt_path INPUT_RECEPTOR_PDBQT_PATH --input_box_path INPUT_BOX_PATH --output_pdbqt_path OUTPUT_PDBQT_PATH [--output_log_path OUTPUT_LOG_PATH]
     
     Prepares input ligand for an Autodock Vina Virtual Screening.
     
     options:
       -h, --help            show this help message and exit
-      --config CONFIG       Configuration file
-      --output_log_path OUTPUT_LOG_PATH
-                            Path to the log file. Accepted formats: log.
+      -c CONFIG, --config CONFIG
+                            This file can be a YAML file, JSON file or JSON string
     
     required arguments:
       --input_ligand_pdbqt_path INPUT_LIGAND_PDBQT_PATH
@@ -32,6 +31,10 @@ autodock_vina_run -h
                             Path to the PDB containig the residues belonging to the binding site. Accepted formats: pdb.
       --output_pdbqt_path OUTPUT_PDBQT_PATH
                             Path to the output PDBQT file. Accepted formats: pdbqt.
+    
+    optional arguments:
+      --output_log_path OUTPUT_LOG_PATH
+                            Path to the log file. Accepted formats: log.
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -112,20 +115,21 @@ Command:
 ```python
 bindingsite -h
 ```
-    usage: bindingsite [-h] [--config CONFIG] --input_pdb_path INPUT_PDB_PATH --input_clusters_zip INPUT_CLUSTERS_ZIP --output_pdb_path OUTPUT_PDB_PATH
+    usage: bindingsite [-h] [-c CONFIG] --input_pdb_path INPUT_PDB_PATH --input_clusters_zip INPUT_CLUSTERS_ZIP -o OUTPUT_PDB_PATH
     
     Finds the binding site of the input_pdb file based on the ligands' location of similar structures (members of the sequence identity cluster)
     
     options:
       -h, --help            show this help message and exit
-      --config CONFIG       Configuration file
+      -c CONFIG, --config CONFIG
+                            This file can be a YAML file, JSON file or JSON string
     
     required arguments:
       --input_pdb_path INPUT_PDB_PATH
                             Path to the PDB structure where the binding site is to be found. Accepted formats: pdb.
       --input_clusters_zip INPUT_CLUSTERS_ZIP
                             Path to the ZIP file with all the PDB members of the identity cluster. Accepted formats: zip.
-      --output_pdb_path OUTPUT_PDB_PATH
+      -o OUTPUT_PDB_PATH, --output_pdb_path OUTPUT_PDB_PATH
                             Path to the PDB containig the residues belonging to the binding site. Accepted formats: pdb.
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
@@ -189,18 +193,19 @@ Command:
 ```python
 box -h
 ```
-    usage: box [-h] [--config CONFIG] --input_pdb_path INPUT_PDB_PATH --output_pdb_path OUTPUT_PDB_PATH
+    usage: box [-h] [-c CONFIG] -i INPUT_PDB_PATH -o OUTPUT_PDB_PATH
     
     Sets the center and the size of a rectangular parallelepiped box around a set of residues from a given PDB or a pocket from a given PQR.
     
     options:
       -h, --help            show this help message and exit
-      --config CONFIG       Configuration file
+      -c CONFIG, --config CONFIG
+                            This file can be a YAML file, JSON file or JSON string
     
     required arguments:
-      --input_pdb_path INPUT_PDB_PATH
+      -i INPUT_PDB_PATH, --input_pdb_path INPUT_PDB_PATH
                             PDB file containing a selection of residue numbers or PQR file containing the pocket. Accepted formats: pdb, pqr.
-      --output_pdb_path OUTPUT_PDB_PATH
+      -o OUTPUT_PDB_PATH, --output_pdb_path OUTPUT_PDB_PATH
                             PDB including the annotation of the box center and size as REMARKs. Accepted formats: pdb.
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
@@ -251,18 +256,19 @@ Command:
 ```python
 box_residues -h
 ```
-    usage: box_residues [-h] [--config CONFIG] --input_pdb_path INPUT_PDB_PATH --output_pdb_path OUTPUT_PDB_PATH
+    usage: box_residues [-h] [-c CONFIG] -i INPUT_PDB_PATH -o OUTPUT_PDB_PATH
     
     Sets the center and the size of a rectangular parallelepiped box around a selection of residues found in a given PDB.
     
     options:
       -h, --help            show this help message and exit
-      --config CONFIG       Configuration file
+      -c CONFIG, --config CONFIG
+                            This file can be a YAML file, JSON file or JSON string
     
     required arguments:
-      --input_pdb_path INPUT_PDB_PATH
+      -i INPUT_PDB_PATH, --input_pdb_path INPUT_PDB_PATH
                             PDB protein structure for which the box will be build. Its size and center will be set around the 'resid_list' property once mapped against this PDB. Accepted formats: pdb.
-      --output_pdb_path OUTPUT_PDB_PATH
+      -o OUTPUT_PDB_PATH, --output_pdb_path OUTPUT_PDB_PATH
                             PDB including the annotation of the box center and size as REMARKs. Accepted formats: pdb.
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
@@ -340,18 +346,19 @@ Command:
 ```python
 extract_model_pdbqt -h
 ```
-    usage: extract_model_pdbqt [-h] [--config CONFIG] --input_pdbqt_path INPUT_PDBQT_PATH --output_pdbqt_path OUTPUT_PDBQT_PATH
+    usage: extract_model_pdbqt [-h] [-c CONFIG] -i INPUT_PDBQT_PATH -o OUTPUT_PDBQT_PATH
     
     Extracts a model from a PDBQT file with several models.
     
     options:
       -h, --help            show this help message and exit
-      --config CONFIG       Configuration file
+      -c CONFIG, --config CONFIG
+                            This file can be a YAML file, JSON file or JSON string
     
     required arguments:
-      --input_pdbqt_path INPUT_PDBQT_PATH
+      -i INPUT_PDBQT_PATH, --input_pdbqt_path INPUT_PDBQT_PATH
                             Input PDBQT file. Accepted formats: pdbqt.
-      --output_pdbqt_path OUTPUT_PDBQT_PATH
+      -o OUTPUT_PDBQT_PATH, --output_pdbqt_path OUTPUT_PDBQT_PATH
                             Output PDBQT file. Accepted formats: pdbqt.
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
@@ -399,20 +406,21 @@ Command:
 ```python
 fpocket_filter -h
 ```
-    usage: fpocket_filter [-h] [--config CONFIG] --input_pockets_zip INPUT_POCKETS_ZIP --input_summary INPUT_SUMMARY --output_filter_pockets_zip OUTPUT_FILTER_POCKETS_ZIP
+    usage: fpocket_filter [-h] [-c CONFIG] --input_pockets_zip INPUT_POCKETS_ZIP --input_summary INPUT_SUMMARY -o OUTPUT_FILTER_POCKETS_ZIP
     
     Finds one or more binding sites in the outputs of the fpocket building block from given parameters.
     
     options:
       -h, --help            show this help message and exit
-      --config CONFIG       Configuration file
+      -c CONFIG, --config CONFIG
+                            This file can be a YAML file, JSON file or JSON string
     
     required arguments:
       --input_pockets_zip INPUT_POCKETS_ZIP
                             Path to all the pockets found by fpocket. Accepted formats: zip.
       --input_summary INPUT_SUMMARY
                             Path to the JSON summary file returned by fpocket. Accepted formats: json.
-      --output_filter_pockets_zip OUTPUT_FILTER_POCKETS_ZIP
+      -o OUTPUT_FILTER_POCKETS_ZIP, --output_filter_pockets_zip OUTPUT_FILTER_POCKETS_ZIP
                             Path to the selected pockets after filtering. Accepted formats: zip.
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
@@ -482,16 +490,17 @@ Command:
 ```python
 fpocket_run -h
 ```
-    usage: fpocket_run [-h] [--config CONFIG] --input_pdb_path INPUT_PDB_PATH --output_pockets_zip OUTPUT_POCKETS_ZIP --output_summary OUTPUT_SUMMARY
+    usage: fpocket_run [-h] [-c CONFIG] -i INPUT_PDB_PATH --output_pockets_zip OUTPUT_POCKETS_ZIP --output_summary OUTPUT_SUMMARY
     
     Finds the binding site of the input_pdb_path file via the fpocket software
     
     options:
       -h, --help            show this help message and exit
-      --config CONFIG       Configuration file
+      -c CONFIG, --config CONFIG
+                            This file can be a YAML file, JSON file or JSON string
     
     required arguments:
-      --input_pdb_path INPUT_PDB_PATH
+      -i INPUT_PDB_PATH, --input_pdb_path INPUT_PDB_PATH
                             Path to the PDB structure where the binding site is to be found. Accepted formats: pdb.
       --output_pockets_zip OUTPUT_POCKETS_ZIP
                             Path to all the pockets found by fpocket in the input_pdb_path structure. Accepted formats: zip.
@@ -588,17 +597,18 @@ Command:
 ```python
 fpocket_select -h
 ```
-    usage: fpocket_select [-h] [--config CONFIG] --input_pockets_zip INPUT_POCKETS_ZIP --output_pocket_pdb OUTPUT_POCKET_PDB --output_pocket_pqr OUTPUT_POCKET_PQR
+    usage: fpocket_select [-h] [-c CONFIG] -i INPUT_POCKETS_ZIP --output_pocket_pdb OUTPUT_POCKET_PDB --output_pocket_pqr OUTPUT_POCKET_PQR
     
     Selects a single pocket in the outputs of the fpocket building block from a given parameter.
     
     options:
       -h, --help            show this help message and exit
-      --config CONFIG       Configuration file
+      -c CONFIG, --config CONFIG
+                            This file can be a YAML file, JSON file or JSON string
     
     required arguments:
-      --input_pockets_zip INPUT_POCKETS_ZIP
-                            Path to all the pockets found by fpocket. Accepted formats: zip.
+      -i INPUT_POCKETS_ZIP, --input_pockets_zip INPUT_POCKETS_ZIP
+                            Path to the pockets found by fpocket. Accepted formats: zip.
       --output_pocket_pdb OUTPUT_POCKET_PDB
                             Path to the PDB file with the cavity found by fpocket. Accepted formats: pdb.
       --output_pocket_pqr OUTPUT_POCKET_PQR

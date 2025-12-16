@@ -1,15 +1,10 @@
 #!/usr/bin/env python3
 
 """Module containing the AutoDockVinaRun class and the command line interface."""
-
-import argparse
 import os
 from typing import Optional
-
-from biobb_common.configuration import settings
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools.file_utils import launchlogger
-
 from biobb_vs.vina.common import check_input_path, check_output_path
 
 
@@ -226,7 +221,6 @@ class AutoDockVinaRun(BiobbObject):
         self.copy_to_host()
 
         # remove temporary folder(s)
-        # self.tmp_files.extend([self.stage_io_dict.get("unique_dir", "")])
         self.remove_tmp_files()
 
         self.check_arguments(output_files_created=True, raise_exception=False)
@@ -243,71 +237,13 @@ def autodock_vina_run(
     properties: Optional[dict] = None,
     **kwargs,
 ) -> int:
-    """Execute the :class:`AutoDockVinaRun <vina.autodock_vina_run.AutoDockVinaRun>` class and
+    """Create the :class:`AutoDockVinaRun <vina.autodock_vina_run.AutoDockVinaRun>` class and
     execute the :meth:`launch() <vina.autodock_vina_run.AutoDockVinaRun.launch>` method."""
-
-    return AutoDockVinaRun(
-        input_ligand_pdbqt_path=input_ligand_pdbqt_path,
-        input_receptor_pdbqt_path=input_receptor_pdbqt_path,
-        input_box_path=input_box_path,
-        output_pdbqt_path=output_pdbqt_path,
-        output_log_path=output_log_path,
-        properties=properties,
-        **kwargs,
-    ).launch()
-
-    autodock_vina_run.__doc__ = AutoDockVinaRun.__doc__
+    return AutoDockVinaRun(**dict(locals())).launch()
 
 
-def main():
-    """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(
-        description="Prepares input ligand for an Autodock Vina Virtual Screening.",
-        formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999),
-    )
-    parser.add_argument("--config", required=False, help="Configuration file")
-
-    # Specific args of each building block
-    required_args = parser.add_argument_group("required arguments")
-    required_args.add_argument(
-        "--input_ligand_pdbqt_path",
-        required=True,
-        help="Path to the input PDBQT ligand. Accepted formats: pdbqt.",
-    )
-    required_args.add_argument(
-        "--input_receptor_pdbqt_path",
-        required=True,
-        help="Path to the input PDBQT receptor. Accepted formats: pdbqt.",
-    )
-    required_args.add_argument(
-        "--input_box_path",
-        required=True,
-        help="Path to the PDB containig the residues belonging to the binding site. Accepted formats: pdb.",
-    )
-    required_args.add_argument(
-        "--output_pdbqt_path",
-        required=True,
-        help="Path to the output PDBQT file. Accepted formats: pdbqt.",
-    )
-    parser.add_argument(
-        "--output_log_path",
-        required=False,
-        help="Path to the log file. Accepted formats: log.",
-    )
-
-    args = parser.parse_args()
-    args.config = args.config or "{}"
-    properties = settings.ConfReader(config=args.config).get_prop_dic()
-
-    # Specific call of each building block
-    autodock_vina_run(
-        input_ligand_pdbqt_path=args.input_ligand_pdbqt_path,
-        input_receptor_pdbqt_path=args.input_receptor_pdbqt_path,
-        input_box_path=args.input_box_path,
-        output_pdbqt_path=args.output_pdbqt_path,
-        output_log_path=args.output_log_path,
-        properties=properties,
-    )
+autodock_vina_run.__doc__ = AutoDockVinaRun.__doc__
+main = AutoDockVinaRun.get_main(autodock_vina_run, "Prepares input ligand for an Autodock Vina Virtual Screening.")
 
 
 if __name__ == "__main__":

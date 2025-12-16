@@ -1,15 +1,11 @@
 #!/usr/bin/env python3
 
 """Module containing the BoxResidues class and the command line interface."""
-
-import argparse
 import warnings
 from pathlib import PurePath
 from typing import Optional
-
 import numpy as np
 from Bio import BiopythonDeprecationWarning
-from biobb_common.configuration import settings
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
@@ -269,8 +265,6 @@ class BoxResidues(BiobbObject):
 
         # Copy files to host
         self.copy_to_host()
-
-        # self.tmp_files.extend([self.stage_io_dict.get("unique_dir", "")])
         self.remove_tmp_files()
 
         return 0
@@ -282,50 +276,13 @@ def box_residues(
     properties: Optional[dict] = None,
     **kwargs,
 ) -> int:
-    """Execute the :class:`BoxResidues <utils.box_residues.BoxResidues>` class and
+    """Create the :class:`BoxResidues <utils.box_residues.BoxResidues>` class and
     execute the :meth:`launch() <utils.box_residues.BoxResidues.launch>` method."""
-
-    return BoxResidues(
-        input_pdb_path=input_pdb_path,
-        output_pdb_path=output_pdb_path,
-        properties=properties,
-        **kwargs,
-    ).launch()
-
-    box_residues.__doc__ = BoxResidues.__doc__
+    return BoxResidues(**dict(locals())).launch()
 
 
-def main():
-    """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(
-        description="Sets the center and the size of a rectangular parallelepiped box around a selection of residues found in a given PDB.",
-        formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999),
-    )
-    parser.add_argument("--config", required=False, help="Configuration file")
-
-    # Specific args of each building block
-    required_args = parser.add_argument_group("required arguments")
-    required_args.add_argument(
-        "--input_pdb_path",
-        required=True,
-        help="PDB protein structure for which the box will be build. Its size and center will be set around the 'resid_list' property once mapped against this PDB. Accepted formats: pdb.",
-    )
-    required_args.add_argument(
-        "--output_pdb_path",
-        required=True,
-        help="PDB including the annotation of the box center and size as REMARKs. Accepted formats: pdb.",
-    )
-
-    args = parser.parse_args()
-    args.config = args.config or "{}"
-    properties = settings.ConfReader(config=args.config).get_prop_dic()
-
-    # Specific call of each building block
-    box_residues(
-        input_pdb_path=args.input_pdb_path,
-        output_pdb_path=args.output_pdb_path,
-        properties=properties,
-    )
+box_residues.__doc__ = BoxResidues.__doc__
+main = BoxResidues.get_main(box_residues, "Sets the center and the size of a rectangular parallelepiped box around a selection of residues found in a given PDB.")
 
 
 if __name__ == "__main__":

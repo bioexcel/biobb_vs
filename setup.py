@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="biobb_vs",
-    version="5.1.0",
+    version="5.2.0",
     author="Biobb developers",
     author_email="genis.bayarri@irbbarcelona.org",
     description="Biobb_vs is the Biobb module collection to perform virtual screening studies.",
@@ -19,8 +19,8 @@ setuptools.setup(
     },
     packages=setuptools.find_packages(exclude=["docs", "test"]),
     package_data={"biobb_vs": ["py.typed"]},
-    install_requires=["biobb_common==5.1.1"],
-    python_requires=">=3.9",
+    install_requires=["biobb_common==5.2.0"],
+    python_requires=">=3.10",
     entry_points={
         "console_scripts": [
             "fpocket_filter = biobb_vs.fpocket.fpocket_filter:main",
@@ -35,7 +35,7 @@ setuptools.setup(
     },
     classifiers=[
         "Development Status :: 5 - Production/Stable",
-        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: MacOS :: MacOS X",
         "Operating System :: POSIX",

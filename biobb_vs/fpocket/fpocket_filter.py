@@ -203,12 +203,12 @@ class FPocketFilter(BiobbObject):
         fu.log("Found %d matches:%s" % (len(search), str_out), self.out_log)
 
         # create tmp_folder
-        self.tmp_folder = fu.create_unique_dir()
-        fu.log("Creating %s temporary folder" % self.tmp_folder, self.out_log)
+        tmp_folder = fu.create_unique_dir()
+        fu.log("Creating %s temporary folder" % tmp_folder, self.out_log)
 
         process_output_fpocket_filter(
             search,
-            self.tmp_folder,
+            tmp_folder,
             self.io_dict["in"]["input_pockets_zip"],
             self.io_dict["out"]["output_filter_pockets_zip"],
             self.remove_tmp,
@@ -218,9 +218,7 @@ class FPocketFilter(BiobbObject):
         # Copy files to host
         self.copy_to_host()
 
-        self.tmp_files.extend([
-            self.tmp_folder
-        ])
+        self.tmp_files.append(tmp_folder)
         self.remove_tmp_files()
 
         self.check_arguments(output_files_created=True, raise_exception=False)

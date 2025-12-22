@@ -89,11 +89,11 @@ class FPocketSelect(BiobbObject):
         self.stage_files()
 
         # create tmp_folder
-        self.tmp_folder = fu.create_unique_dir()
-        fu.log('Creating %s temporary folder' % self.tmp_folder, self.out_log)
+        tmp_folder = fu.create_unique_dir()
+        fu.log('Creating %s temporary folder' % tmp_folder, self.out_log)
 
         # decompress the input_pockets_zip file to tmp_folder
-        all_pockets = fu.unzip_list(zip_file=self.io_dict["in"]["input_pockets_zip"], dest_dir=self.tmp_folder, out_log=self.out_log)
+        all_pockets = fu.unzip_list(zip_file=self.io_dict["in"]["input_pockets_zip"], dest_dir=tmp_folder, out_log=self.out_log)
 
         pockets_list = [i for i in all_pockets if ('pocket' + str(self.pocket)) in i]
 
@@ -108,7 +108,7 @@ class FPocketSelect(BiobbObject):
         # Copy files to host
         self.copy_to_host()
 
-        self.tmp_files.append(self.tmp_folder)
+        self.tmp_files.append(tmp_folder)
         self.remove_tmp_files()
 
         self.check_arguments(output_files_created=True, raise_exception=False)

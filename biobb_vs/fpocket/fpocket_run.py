@@ -108,12 +108,12 @@ class FPocketRun(BiobbObject):
 
         if self.container_path:
             tmp_input = str(PurePath(self.container_volume_path).joinpath(PurePath(self.io_dict["in"]["input_pdb_path"]).name))
-            self.tmp_folder = self.stage_io_dict['unique_dir']
+            tmp_folder = self.stage_io_dict['unique_dir']
         else:
             # create tmp_folder
-            self.tmp_folder = fu.create_unique_dir()
-            fu.log('Creating %s temporary folder' % self.tmp_folder, self.out_log)
-            tmp_input = str(PurePath(self.tmp_folder).joinpath('input.pdb'))
+            tmp_folder = fu.create_unique_dir()
+            fu.log('Creating %s temporary folder' % tmp_folder, self.out_log)
+            tmp_input = str(PurePath(tmp_folder).joinpath('input.pdb'))
             # copy input_pdb_path to tmp_folder
             shutil.copy(self.io_dict["in"]["input_pdb_path"], tmp_input)
 
@@ -139,7 +139,7 @@ class FPocketRun(BiobbObject):
         # Copy files to host
         self.copy_to_host()
 
-        process_output_fpocket(self.tmp_folder,
+        process_output_fpocket(tmp_folder,
                                self.io_dict["out"]["output_pockets_zip"],
                                self.io_dict["out"]["output_summary"],
                                self.sort_by,
@@ -148,9 +148,7 @@ class FPocketRun(BiobbObject):
                                self.out_log,
                                self.__class__.__name__)
 
-        self.tmp_files.extend([
-            self.tmp_folder
-        ])
+        self.tmp_files.append(tmp_folder)
         self.remove_tmp_files()
 
         return self.return_code

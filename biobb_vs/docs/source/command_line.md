@@ -48,21 +48,21 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **cpu** (*integer*): (1) the number of CPUs to use..
-* **exhaustiveness** (*integer*): (8) exhaustiveness of the global search (roughly proportional to time)..
-* **num_modes** (*integer*): (9) maximum number of binding modes to generate..
-* **min_rmsd** (*integer*): (1) minimum RMSD between output poses..
-* **energy_range** (*integer*): (3) maximum energy difference between the best binding mode and the worst one displayed (kcal/mol)..
-* **binary_path** (*string*): (vina) path to vina in your local computer..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
-* **container_path** (*string*): (None) Container path definition..
-* **container_image** (*string*): (biocontainers/autodock-vina:v1.1.2-5b1-deb_cv1) Container image definition..
-* **container_volume_path** (*string*): (/tmp) Container volume path definition..
-* **container_working_dir** (*string*): (None) Container working directory definition..
-* **container_user_id** (*string*): (None) Container user_id definition..
-* **container_shell_path** (*string*): (/bin/bash) Path to default shell inside the container..
+* **cpu** (*integer*): (1) the number of CPUs to use.
+* **exhaustiveness** (*integer*): (8) exhaustiveness of the global search (roughly proportional to time).
+* **num_modes** (*integer*): (9) maximum number of binding modes to generate.
+* **min_rmsd** (*integer*): (1) minimum RMSD between output poses.
+* **energy_range** (*integer*): (3) maximum energy difference between the best binding mode and the worst one displayed (kcal/mol).
+* **binary_path** (*string*): (vina) path to vina in your local computer.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
+* **container_path** (*string*): (None) Container path definition.
+* **container_image** (*string*): (biocontainers/autodock-vina:v1.1.2-5b1-deb_cv1) Container image definition.
+* **container_volume_path** (*string*): (/tmp) Container volume path definition.
+* **container_working_dir** (*string*): (None) Container working directory definition.
+* **container_user_id** (*string*): (None) Container user_id definition.
+* **container_shell_path** (*string*): (/bin/bash) Path to default shell inside the container.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_autodock_vina_run.yml)
 ```python
@@ -142,15 +142,15 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **ligand** (*string*): (None) Ligand to be found in the protein structure. If no ligand provided, the largest one will be selected, if more than one..
-* **radius** (*number*): (5.0) Cut-off distance (Ångstroms) around ligand atoms to consider a protein atom as a binding site atom..
-* **max_num_ligands** (*integer*): (15) Total number of superimposed ligands to be extracted from the identity cluster. For populated clusters, the restriction avoids to superimpose redundant structures. If 0, all ligands extracted will be considered..
-* **matrix_name** (*string*): (BLOSUM62) Substitution matrices for use in alignments. .
-* **gap_open** (*number*): (-10.0) Gap open penalty..
-* **gap_extend** (*number*): (-0.5) Gap extend penalty..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **ligand** (*string*): (None) Ligand to be found in the protein structure. If no ligand provided, the largest one will be selected, if more than one.
+* **radius** (*number*): (5.0) Cut-off distance (Ångstroms) around ligand atoms to consider a protein atom as a binding site atom.
+* **max_num_ligands** (*integer*): (15) Total number of superimposed ligands to be extracted from the identity cluster. For populated clusters, the restriction avoids to superimpose redundant structures. If 0, all ligands extracted will be considered.
+* **matrix_name** (*string*): (BLOSUM62) Substitution matrices for use in alignments. 
+* **gap_open** (*number*): (-10.0) Gap open penalty.
+* **gap_extend** (*number*): (-0.5) Gap extend penalty.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_bindingsite.yml)
 ```python
@@ -217,11 +217,11 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **offset** (*number*): (2.0) Extra distance (Angstroms) between the last residue atom and the box boundary..
-* **box_coordinates** (*boolean*): (False) Add box coordinates as 8 ATOM records..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **offset** (*number*): (2.0) Extra distance (Angstroms) between the last residue atom and the box boundary.
+* **box_coordinates** (*boolean*): (False) Add box coordinates as 8 ATOM records.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_box.yml)
 ```python
@@ -280,13 +280,13 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **resid_list** (*array*): (None) List with all the residue numbers to form a cavity or binding site. Mandatory property..
-* **offset** (*number*): (2.0) Extra distance (Angstroms) between the last residue atom and the box boundary..
-* **box_coordinates** (*boolean*): (False) Add box coordinates as 8 ATOM records..
-* **residue_offset** (*integer*): (0) Residue id offset..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **resid_list** (*array*): (None) List with all the residue numbers to form a cavity or binding site. Mandatory property.
+* **offset** (*number*): (2.0) Extra distance (Angstroms) between the last residue atom and the box boundary.
+* **box_coordinates** (*boolean*): (False) Add box coordinates as 8 ATOM records.
+* **residue_offset** (*integer*): (0) Residue id offset.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_box_residues.yml)
 ```python
@@ -370,10 +370,10 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **model** (*integer*): (1) Model number to extract from input_pdbqt_path..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **model** (*integer*): (1) Model number to extract from input_pdbqt_path.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_extract_model_pdbqt.yml)
 ```python
@@ -433,12 +433,12 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **score** (*array*): (None) List of two float numbers between 0 and 1 indicating the score range. Indicates the fpocket score after the evaluation of pocket prediction accuracy as defined in the fpocket paper..
-* **druggability_score** (*array*): (None) List of two float numbers between 0 and 1 indicating the druggability_score range. It's a value between 0 and 1, 0 signifying that the pocket is likely to not bind a drug like molecule and 1, that it is very likely to bind the latter..
-* **volume** (*array*): (None) List of two float numbers indicating the volume range. Indicates the pocket volume..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **score** (*array*): (None) List of two float numbers between 0 and 1 indicating the score range. Indicates the fpocket score after the evaluation of pocket prediction accuracy as defined in the fpocket paper.
+* **druggability_score** (*array*): (None) List of two float numbers between 0 and 1 indicating the druggability_score range. It's a value between 0 and 1, 0 signifying that the pocket is likely to not bind a drug like molecule and 1, that it is very likely to bind the latter.
+* **volume** (*array*): (None) List of two float numbers indicating the volume range. Indicates the pocket volume.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_fpocket_filter.yml)
 ```python
@@ -517,20 +517,20 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **min_radius** (*number*): (None) The minimum radius in Ångstroms an alpha sphere might have in a binding pocket..
-* **max_radius** (*number*): (None) The maximum radius in Ångstroms of alpha spheres in a pocket..
-* **num_spheres** (*integer*): (None) Indicates how many alpha spheres a pocket must contain at least in order to figure in the results..
-* **sort_by** (*string*): (druggability_score) From which property the output will be sorted. .
-* **binary_path** (*string*): (fpocket) path to fpocket in your local computer..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
-* **container_path** (*string*): (None) Container path definition..
-* **container_image** (*string*): (fpocket/fpocket:latest) Container image definition..
-* **container_volume_path** (*string*): (/tmp) Container volume path definition..
-* **container_working_dir** (*string*): (None) Container working directory definition..
-* **container_user_id** (*string*): (None) Container user_id definition..
-* **container_shell_path** (*string*): (/bin/bash) Path to default shell inside the container..
+* **min_radius** (*number*): (None) The minimum radius in Ångstroms an alpha sphere might have in a binding pocket.
+* **max_radius** (*number*): (None) The maximum radius in Ångstroms of alpha spheres in a pocket.
+* **num_spheres** (*integer*): (None) Indicates how many alpha spheres a pocket must contain at least in order to figure in the results.
+* **sort_by** (*string*): (druggability_score) From which property the output will be sorted. 
+* **binary_path** (*string*): (fpocket) path to fpocket in your local computer.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
+* **container_path** (*string*): (None) Container path definition.
+* **container_image** (*string*): (fpocket/fpocket:latest) Container image definition.
+* **container_volume_path** (*string*): (/tmp) Container volume path definition.
+* **container_working_dir** (*string*): (None) Container working directory definition.
+* **container_user_id** (*string*): (None) Container user_id definition.
+* **container_shell_path** (*string*): (/bin/bash) Path to default shell inside the container.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_fpocket_run.yml)
 ```python
@@ -624,10 +624,10 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **pocket** (*integer*): (1) Pocket id from the summary json given by the fpocket building block..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **pocket** (*integer*): (1) Pocket id from the summary json given by the fpocket building block.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_fpocket_select.yml)
 ```python

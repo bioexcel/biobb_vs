@@ -107,18 +107,21 @@ class FPocketRun(BiobbObject):
         self.stage_files()
 
         if self.container_path:
-            tmp_input = str(PurePath(self.container_volume_path).joinpath(PurePath(self.io_dict["in"]["input_pdb_path"]).name))
+            working_dir = self.container_volume_path if self.container_volume_path else "/tmp"
+            tmp_input = PurePath(self.stage_io_dict["in"]["input_pdb_path"]).name
             tmp_folder = self.stage_io_dict['unique_dir']
         else:
             # create tmp_folder
             tmp_folder = fu.create_unique_dir()
             fu.log('Creating %s temporary folder' % tmp_folder, self.out_log)
-            tmp_input = str(PurePath(tmp_folder).joinpath('input.pdb'))
+            working_dir = tmp_folder
+            tmp_input = 'input.pdb'
             # copy input_pdb_path to tmp_folder
-            shutil.copy(self.io_dict["in"]["input_pdb_path"], tmp_input)
+            shutil.copy(self.io_dict["in"]["input_pdb_path"], str(PurePath(tmp_folder).joinpath(tmp_input)))
 
         # create cmd
-        self.cmd = [self.binary_path,
+        self.cmd = ["cd", working_dir, ";",
+                    self.binary_path,
                     '-f', tmp_input]
 
         # adding extra properties

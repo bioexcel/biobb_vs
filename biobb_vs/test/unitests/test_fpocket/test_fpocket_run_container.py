@@ -1,7 +1,8 @@
 # type: ignore
-import pytest
 from biobb_common.tools import test_fixtures as fx
 from biobb_vs.fpocket.fpocket_run import fpocket_run
+import pytest
+import sys
 
 
 class TestFPocketRunDocker():
@@ -20,7 +21,7 @@ class TestFPocketRunDocker():
         # assert fx.equal(self.paths['output_summary'], self.paths['ref_output_summary'])
 
 
-@pytest.mark.skip(reason="singularity currently not available")
+@pytest.mark.skipif(sys.platform == 'darwin', reason="singularity not available on macOS")
 class TestFPocketRunSingularity():
     def setup_class(self):
         fx.test_setup(self, 'fpocket_run_singularity')
@@ -29,7 +30,7 @@ class TestFPocketRunSingularity():
         fx.test_teardown(self)
         pass
 
-    def test_fpocket_run_docker(self):
+    def test_fpocket_run_singularity(self):
         fpocket_run(properties=self.properties, **self.paths)
         assert fx.not_empty(self.paths['output_pockets_zip'])
         # assert fx.equal(self.paths['output_pockets_zip'], self.paths['ref_output_pockets_zip'])

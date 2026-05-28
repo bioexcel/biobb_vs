@@ -1,7 +1,8 @@
 # type: ignore
-import pytest
 from biobb_common.tools import test_fixtures as fx
 from biobb_vs.vina.autodock_vina_run import autodock_vina_run
+import pytest
+import sys
 
 
 class TestAutoDockVinaRunDocker():
@@ -18,7 +19,7 @@ class TestAutoDockVinaRunDocker():
         assert fx.not_empty(self.paths['output_log_path'])
 
 
-@pytest.mark.skip(reason="singularity currently not available")
+@pytest.mark.skipif(sys.platform == 'darwin', reason="singularity not available on macOS")
 class TestAutoDockVinaRunSingularity():
     def setup_class(self):
         fx.test_setup(self, 'autodock_vina_run_singularity')

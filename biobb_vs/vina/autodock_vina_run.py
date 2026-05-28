@@ -2,6 +2,7 @@
 
 """Module containing the AutoDockVinaRun class and the command line interface."""
 import os
+from pathlib import PurePath
 from typing import Optional
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools.file_utils import launchlogger
@@ -174,6 +175,11 @@ class AutoDockVinaRun(BiobbObject):
             return 0
         self.stage_files()
 
+        if self.container_path:
+            working_dir = self.container_volume_path if self.container_volume_path else "/tmp"
+        else:
+            working_dir = self.stage_io_dict.get("unique_dir", "")
+
         # calculating box position and size
         x0, y0, z0, sidex, sidey, sidez = self.calculate_box(
             self.io_dict["in"]["input_box_path"]
@@ -185,11 +191,14 @@ class AutoDockVinaRun(BiobbObject):
 
         # create cmd
         self.cmd = [
+            "cd",
+            working_dir,
+            ";",
             self.binary_path,
             "--ligand",
-            self.stage_io_dict["in"]["input_ligand_pdbqt_path"],
+            PurePath(self.stage_io_dict["in"]["input_ligand_pdbqt_path"]).name,
             "--receptor",
-            self.stage_io_dict["in"]["input_receptor_pdbqt_path"],
+            PurePath(self.stage_io_dict["in"]["input_receptor_pdbqt_path"]).name,
             "--center_x=" + x0,
             "--center_y=" + y0,
             "--center_z=" + z0,
@@ -207,11 +216,11 @@ class AutoDockVinaRun(BiobbObject):
             "--energy_range",
             str(self.energy_range),
             "--out",
-            self.stage_io_dict["out"]["output_pdbqt_path"],
+            PurePath(self.stage_io_dict["out"]["output_pdbqt_path"]).name,
             "--verbosity",
             "1",
             ">",
-            self.stage_io_dict["out"]["output_log_path"],
+            PurePath(self.stage_io_dict["out"]["output_log_path"]).name,
         ]
 
         # Run Biobb block

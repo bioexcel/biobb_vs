@@ -73,8 +73,17 @@ properties:
 #### [Docker config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_autodock_vina_run_docker.yml)
 ```python
 properties:
-  container_image: biocontainers/autodock-vina:v1.1.2-5b1-deb_cv1
+  container_image: quay.io/biocontainers/biobb_vs:5.2.1--pyhdfd78af_0
   container_path: docker
+  container_user_id: '1001'
+  container_volume_path: /tmp
+
+```
+#### [Singularity config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_autodock_vina_run_singularity.yml)
+```python
+properties:
+  container_image: https://depot.galaxyproject.org/singularity/biobb_vs:5.2.1--pyhdfd78af_0
+  container_path: singularity
   container_user_id: '1001'
   container_volume_path: /tmp
 
@@ -97,7 +106,18 @@ autodock_vina_run --config config_autodock_vina_run.yml --input_ligand_pdbqt_pat
 {
   "properties": {
     "container_path": "docker",
-    "container_image": "biocontainers/autodock-vina:v1.1.2-5b1-deb_cv1",
+    "container_image": "quay.io/biocontainers/biobb_vs:5.2.1--pyhdfd78af_0",
+    "container_volume_path": "/tmp",
+    "container_user_id": "1001"
+  }
+}
+```
+#### [Singularity config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_autodock_vina_run_singularity.json)
+```python
+{
+  "properties": {
+    "container_path": "singularity",
+    "container_image": "https://depot.galaxyproject.org/singularity/biobb_vs:5.2.1--pyhdfd78af_0",
     "container_volume_path": "/tmp",
     "container_user_id": "1001"
   }
@@ -544,8 +564,21 @@ properties:
 #### [Docker config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_fpocket_run_docker.yml)
 ```python
 properties:
-  container_image: fpocket/fpocket:latest
+  container_image: quay.io/biocontainers/biobb_vs:5.2.1--pyhdfd78af_0
   container_path: docker
+  container_user_id: '1001'
+  container_volume_path: /tmp
+  max_radius: 6
+  min_radius: 3
+  num_spheres: 35
+  sort_by: druggability_score
+
+```
+#### [Singularity config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_fpocket_run_singularity.yml)
+```python
+properties:
+  container_image: https://depot.galaxyproject.org/singularity/biobb_vs:5.2.1--pyhdfd78af_0
+  container_path: singularity
   container_user_id: '1001'
   container_volume_path: /tmp
   max_radius: 6
@@ -579,7 +612,22 @@ fpocket_run --config config_fpocket_run.yml --input_pdb_path fpocket_input.pdb -
     "num_spheres": 35,
     "sort_by": "druggability_score",
     "container_path": "docker",
-    "container_image": "fpocket/fpocket:latest",
+    "container_image": "quay.io/biocontainers/biobb_vs:5.2.1--pyhdfd78af_0",
+    "container_volume_path": "/tmp",
+    "container_user_id": "1001"
+  }
+}
+```
+#### [Singularity config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_fpocket_run_singularity.json)
+```python
+{
+  "properties": {
+    "min_radius": 3,
+    "max_radius": 6,
+    "num_spheres": 35,
+    "sort_by": "druggability_score",
+    "container_path": "singularity",
+    "container_image": "https://depot.galaxyproject.org/singularity/biobb_vs:5.2.1--pyhdfd78af_0",
     "container_volume_path": "/tmp",
     "container_user_id": "1001"
   }

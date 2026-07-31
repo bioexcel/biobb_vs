@@ -237,7 +237,7 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **offset** (*number*): (2.0) Extra distance (Angstroms) between the last residue atom and the box boundary.
+* **offset** (*number*): (2.0) Extra distance (Angstroms) between the last residue atom and the box boundary. The box is centred on the mean of the selected coordinates, so a set of points that is asymmetric about its centre may extend slightly beyond the box faces. Choose an offset large enough to absorb that asymmetry, yet small enough not to enlarge the box past what the binding site needs, since a larger box spreads the same sampling effort over more space.
 * **box_coordinates** (*boolean*): (False) Add box coordinates as 8 ATOM records.
 * **remove_tmp** (*boolean*): (True) Remove temporal files.
 * **restart** (*boolean*): (False) Do not execute if output files exist.
@@ -301,7 +301,7 @@ Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
 * **resid_list** (*array*): (None) List with all the residue numbers to form a cavity or binding site. Mandatory property.
-* **offset** (*number*): (2.0) Extra distance (Angstroms) between the last residue atom and the box boundary.
+* **offset** (*number*): (2.0) Extra distance (Angstroms) between the last residue atom and the box boundary. The box is centred on the mean of the selected coordinates, so a set of points that is asymmetric about its centre may extend slightly beyond the box faces. Choose an offset large enough to absorb that asymmetry, yet small enough not to enlarge the box past what the binding site needs, since a larger box spreads the same sampling effort over more space.
 * **box_coordinates** (*boolean*): (False) Add box coordinates as 8 ATOM records.
 * **residue_offset** (*integer*): (0) Residue id offset.
 * **remove_tmp** (*boolean*): (True) Remove temporal files.

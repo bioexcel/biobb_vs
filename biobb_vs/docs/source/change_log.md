@@ -8,6 +8,7 @@
 * [FEATURE](gnina): New gnina_select_pose building block, extracting a single pose out of the multi record SDF file written by gnina_run.
 * [FIX] box, box_residues: the SIZE field of the `REMARK BOX CENTER` line is now the full box edge length, matching what AutoDock Vina reads from `--size_x/y/z`. It was previously written as a half-extent (centre-to-face distance), so `box` -> `autodock_vina_run` workflows searched a box with half the intended edge in each dimension, i.e. 1/8 of the intended volume.
 * [FIX] autodock_vina_run: raise an error instead of silently using a 0x0x0 box when the input box file has no `REMARK BOX CENTER` line.
+* [FIX](gnina): removed the `box_definition` property from gnina_run. The `SIZE` field of the input box file is now passed to gnina unchanged, exactly as autodock_vina_run does, since box and box_residues write it as the full box edge length. The property only existed to work around the half-extent convention fixed above, and its `half_extent` default would now double an already correct value.
 * [DOCS] box, box_residues: document that the box is centred on the mean of the selected coordinates, so an asymmetric set of points may extend slightly beyond the box faces, and `offset` should be chosen to absorb it.
 
 ## What's new in version [5.3.0](https://github.com/bioexcel/biobb_amber/releases/tag/v5.3.0)?

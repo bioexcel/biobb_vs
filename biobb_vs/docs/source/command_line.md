@@ -749,7 +749,6 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **box_definition** (*string*): (half_extent) How the SIZE field of input_box_path is read.
 * **cpu** (*integer*): (1) Number of CPU cores to use. Keep it lower than or equal to exhaustiveness, and always set it explicitly on a shared machine.
 * **exhaustiveness** (*integer*): (8) Number of independent Monte Carlo search chains. This is the main sampling knob, but it gives diminishing returns past the default for a targeted pocket.
 * **num_modes** (*integer*): (9) Maximum number of binding modes written out.

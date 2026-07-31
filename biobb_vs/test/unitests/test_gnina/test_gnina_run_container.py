@@ -107,27 +107,19 @@ class TestGninaRunBoxCmd():
         fx.test_teardown(self)
         pass
 
-    def test_gnina_run_box_half_extent(self):
-        # the box building blocks write SIZE as half the edge length, so
-        # half_extent doubles it to give gnina the full edge length it expects
-        properties = dict(self.properties, box_definition='half_extent')
-        cmd = build_cmd(properties, self.paths)
+    def test_gnina_run_box_cmd(self):
+        cmd = build_cmd(self.properties, self.paths)
 
         assert flag_value(cmd, '--center_x') == '7.293'
         assert flag_value(cmd, '--center_y') == '7.293'
         assert flag_value(cmd, '--center_z') == '-2.136'
-        assert float(flag_value(cmd, '--size_x')) == 32.638
-        assert float(flag_value(cmd, '--size_y')) == 23.042
-        assert float(flag_value(cmd, '--size_z')) == 26.094
 
-        # the box file is read here, it is never handed to gnina
-        assert '--autobox_ligand' not in cmd
-
-    def test_gnina_run_box_side_length(self):
-        # side_length passes SIZE through untouched, reproducing autodock_vina_run
-        properties = dict(self.properties, box_definition='side_length')
-        cmd = build_cmd(properties, self.paths)
-
+        # SIZE is the full box edge length, which is what gnina reads from
+        # --size_x/y/z, so it reaches gnina untouched just as it does in
+        # autodock_vina_run. These are vina_box.pdb's REMARK values verbatim.
         assert float(flag_value(cmd, '--size_x')) == 16.319
         assert float(flag_value(cmd, '--size_y')) == 11.521
         assert float(flag_value(cmd, '--size_z')) == 13.047
+
+        # the box file is read here, it is never handed to gnina
+        assert '--autobox_ligand' not in cmd

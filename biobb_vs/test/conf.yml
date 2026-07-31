@@ -195,7 +195,6 @@ gnina_run_box:
     cpu: 4
     seed: 42
     no_gpu: true
-    box_definition: half_extent
     timeout: 900
 
 gnina_run_docker:

@@ -191,26 +191,6 @@
         "properties": {
             "type": "object",
             "properties": {
-                "box_definition": {
-                    "type": "string",
-                    "default": "half_extent",
-                    "wf_prop": false,
-                    "description": "How the SIZE field of input_box_path is read.",
-                    "enum": [
-                        "half_extent",
-                        "side_length"
-                    ],
-                    "property_formats": [
-                        {
-                            "name": "half_extent",
-                            "description": "SIZE holds half of the box edge length, which is what the box and box_residues building blocks write, so the values are doubled before reaching gnina"
-                        },
-                        {
-                            "name": "side_length",
-                            "description": "SIZE holds the full box edge length and reaches gnina unchanged, reproducing the behaviour of the autodock_vina_run building block"
-                        }
-                    ]
-                },
                 "cpu": {
                     "type": "integer",
                     "default": 1,

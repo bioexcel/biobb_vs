@@ -26,7 +26,6 @@ class GninaRun(BiobbObject):
         output_summary_path (str) (Optional): Path to the JSON summary file, holding one entry per output pose with the ligand it belongs to and every score gnina assigned to it. File type: output. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/gnina/ref_output_summary.json>`_. Accepted formats: json (edam:format_3464).
         output_log_path (str) (Optional): Path to the log file written by gnina. File type: output. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/gnina/ref_output_gnina.log>`_. Accepted formats: log (edam:format_2330).
         properties (dic - Python dictionary object containing the tool parameters, not input/output files):
-            * **box_definition** (*str*) - ('half_extent') How the SIZE field of input_box_path is read. Values: half_extent (SIZE holds half of the box edge length, which is what the box and box_residues building blocks write, so the values are doubled before reaching gnina), side_length (SIZE holds the full box edge length and reaches gnina unchanged, reproducing the behaviour of the autodock_vina_run building block).
             * **cpu** (*int*) - (1) [1~1000|1] Number of CPU cores to use. Keep it lower than or equal to exhaustiveness, and always set it explicitly on a shared machine.
             * **exhaustiveness** (*int*) - (8) [1~10000|1] Number of independent Monte Carlo search chains. This is the main sampling knob, but it gives diminishing returns past the default for a targeted pocket.
             * **num_modes** (*int*) - (9) [1~1000|1] Maximum number of binding modes written out.
@@ -76,8 +75,8 @@ class GninaRun(BiobbObject):
                       properties=prop)
 
         Instead of a box file, the docking box may be drawn around a reference structure,
-        which is gnina's own idiom and avoids the box size ambiguity altogether. An fpocket
-        pocket works as a reference, and so does the receptor itself for whole protein docking::
+        which is gnina's own idiom and needs no box file at all. An fpocket pocket works as
+        a reference, and so does the receptor itself for whole protein docking::
 
             gnina_run(input_ligand_path='/path/to/myLigand.sdf',
                       input_receptor_path='/path/to/myReceptor.pdbqt',
@@ -124,8 +123,6 @@ class GninaRun(BiobbObject):
         ("--quiet", "quiet"),
     )
 
-    BOX_DEFINITIONS = ("half_extent", "side_length")
-
     def __init__(self, input_ligand_path, input_receptor_path, output_sdf_path,
                  input_box_path=None, input_autobox_path=None,
                  output_summary_path=None, output_log_path=None,
@@ -152,7 +149,6 @@ class GninaRun(BiobbObject):
         }
 
         # Properties specific for BB
-        self.box_definition = properties.get('box_definition', 'half_extent')
         self.cpu = properties.get('cpu', 1)
         self.exhaustiveness = properties.get('exhaustiveness', 8)
         self.num_modes = properties.get('num_modes', 9)
@@ -191,10 +187,6 @@ class GninaRun(BiobbObject):
             fu.log(self.__class__.__name__ + ': Provide exactly one of input_box_path or input_autobox_path to define the docking box, exiting', out_log)
             raise SystemExit(self.__class__.__name__ + ': Provide exactly one of input_box_path or input_autobox_path to define the docking box')
 
-        if self.box_definition not in self.BOX_DEFINITIONS:
-            fu.log(self.__class__.__name__ + ': Unknown box_definition %s, use one of %s, exiting' % (self.box_definition, ', '.join(self.BOX_DEFINITIONS)), out_log)
-            raise SystemExit(self.__class__.__name__ + ': Unknown box_definition %s' % self.box_definition)
-
         if self.io_dict["in"]["input_box_path"]:
             self.io_dict["in"]["input_box_path"] = check_input_path(self.io_dict["in"]["input_box_path"], "input_box_path", out_log, self.__class__.__name__)
             # parse it now so an unusable box file is caught before any work is done
@@ -205,10 +197,9 @@ class GninaRun(BiobbObject):
     def calculate_box(self, box_file_path):
         """ Reads the docking box out of the REMARK line written by the box building blocks
 
-        Returns the box center and its edge lengths, as strings. The box and
-        box_residues building blocks write SIZE as half of the edge length,
-        while gnina reads --size_x/y/z as the full edge length, so the
-        box_definition property selects which of the two readings applies.
+        Returns the box center and its edge lengths, as strings. SIZE is the
+        full edge length of the box, which is what gnina expects in
+        --size_x/y/z, so it is passed through unchanged.
 
         Does not log, as it is called both to validate the box file up front and
         to build the command line.
@@ -219,8 +210,6 @@ class GninaRun(BiobbObject):
                     fields = line.split()
                     center = [float(coord) for coord in fields[3:6]]
                     size = [float(side) for side in fields[-3:]]
-                    if self.box_definition == 'half_extent':
-                        size = [side * 2 for side in size]
                     return [str(coord) for coord in center], [str(side) for side in size]
 
         fu.log(self.__class__.__name__ + ': No REMARK BOX CENTER line found in %s, exiting' % box_file_path, self.out_log)
@@ -260,10 +249,10 @@ class GninaRun(BiobbObject):
         if self.io_dict["in"].get("input_box_path"):
             box_path = self.io_dict["in"]["input_box_path"]
             center, size = self.calculate_box(box_path)
-            fu.log('Docking box center %s and edge lengths %s, read from %s as %s' % (
+            fu.log('Docking box center %s and edge lengths %s, read from %s' % (
                 ' '.join('%.3f' % float(coord) for coord in center),
                 ' '.join('%.3f' % float(side) for side in size),
-                PurePath(box_path).name, self.box_definition), self.out_log)
+                PurePath(box_path).name), self.out_log)
             cmd.extend(["--center_x", center[0], "--center_y", center[1], "--center_z", center[2],
                         "--size_x", size[0], "--size_y", size[1], "--size_z", size[2]])
         else:

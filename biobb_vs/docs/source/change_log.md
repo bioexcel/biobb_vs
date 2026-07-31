@@ -1,5 +1,12 @@
 # Biobb Virtual Screening changelog
 
+## Unreleased
+
+### Changes
+
+* [FEATURE](gnina): New gnina_run building block, wrapping the gnina docking software with optional CNN rescoring. gnina is not bundled with this package, install it separately from its binary release or use its container image.
+* [FEATURE](gnina): New gnina_select_pose building block, extracting a single pose out of the multi record SDF file written by gnina_run.
+
 ## What's new in version [5.3.0](https://github.com/bioexcel/biobb_amber/releases/tag/v5.3.0)?
 
 ### Changes

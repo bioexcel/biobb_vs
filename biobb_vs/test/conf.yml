@@ -157,3 +157,77 @@ fpocket_select:
     ref_output_pocket_pqr: file:test_reference_dir/fpocket/ref_output_pocket.pqr
   properties:
     pocket: 4
+
+# GNINA
+
+gnina_run:
+  paths:
+    input_ligand_path: file:test_data_dir/gnina/gnina_ligand.sdf
+    input_receptor_path: file:test_data_dir/vina/vina_receptor.pdbqt
+    input_autobox_path: file:test_data_dir/gnina/gnina_autobox.pdb
+    output_sdf_path: output_gnina.sdf
+    ref_output_sdf_path: file:test_reference_dir/gnina/ref_output_gnina.sdf
+    output_summary_path: output_summary.json
+    ref_output_summary_path: file:test_reference_dir/gnina/ref_output_summary.json
+    output_log_path: output_gnina.log
+    ref_output_log_path: file:test_reference_dir/gnina/ref_output_gnina.log
+  properties:
+    cnn_scoring: none
+    scoring: vinardo
+    exhaustiveness: 4
+    num_modes: 3
+    cpu: 4
+    seed: 42
+    no_gpu: true
+    timeout: 900
+
+gnina_run_box:
+  paths:
+    input_ligand_path: file:test_data_dir/gnina/gnina_ligand.sdf
+    input_receptor_path: file:test_data_dir/vina/vina_receptor.pdbqt
+    input_box_path: file:test_data_dir/vina/vina_box.pdb
+    output_sdf_path: output_gnina.sdf
+  properties:
+    cnn_scoring: none
+    scoring: vinardo
+    exhaustiveness: 4
+    num_modes: 3
+    cpu: 4
+    seed: 42
+    no_gpu: true
+    box_definition: half_extent
+    timeout: 900
+
+gnina_run_docker:
+  paths:
+    input_ligand_path: file:test_data_dir/gnina/gnina_ligand.sdf
+    input_receptor_path: file:test_data_dir/vina/vina_receptor.pdbqt
+    input_autobox_path: file:test_data_dir/gnina/gnina_autobox.pdb
+    output_sdf_path: output_gnina.sdf
+    output_log_path: output_gnina.log
+  properties:
+    cnn_scoring: none
+    seed: 42
+    cpu: 4
+    container_path: docker
+    container_image: gnina/gnina:latest
+    container_volume_path: /data
+    container_user_id: "1001"
+
+gnina_select_pose:
+  paths:
+    input_sdf_path: file:test_data_dir/gnina/gnina_poses.sdf
+    output_sdf_path: output_pose.sdf
+    ref_output_sdf_path: file:test_reference_dir/gnina/ref_output_pose.sdf
+  properties:
+    pose: 1
+
+gnina_select_pose_sorted:
+  paths:
+    input_sdf_path: file:test_data_dir/gnina/gnina_poses.sdf
+    output_sdf_path: output_pose_sorted.sdf
+    ref_output_sdf_path: file:test_reference_dir/gnina/ref_output_pose_sorted.sdf
+  properties:
+    pose: 2
+    ligand: 2
+    sort_by: minimizedAffinity

@@ -31,6 +31,8 @@ setuptools.setup(
             "box = biobb_vs.utils.box:main",
             "extract_model_pdbqt = biobb_vs.utils.extract_model_pdbqt:main",
             "autodock_vina_run = biobb_vs.vina.autodock_vina_run:main",
+            "gnina_run = biobb_vs.gnina.gnina_run:main",
+            "gnina_select_pose = biobb_vs.gnina.gnina_select_pose:main",
         ]
     },
     classifiers=[

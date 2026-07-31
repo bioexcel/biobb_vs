@@ -1,0 +1,8 @@
+properties:
+  cnn_scoring: none
+  container_image: gnina/gnina:latest
+  container_path: docker
+  container_user_id: '1001'
+  container_volume_path: /data
+  cpu: 4
+  seed: 42

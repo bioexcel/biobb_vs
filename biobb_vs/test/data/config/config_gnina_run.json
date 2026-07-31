@@ -1,0 +1,11 @@
+{
+  "properties": {
+    "cnn_scoring": "none",
+    "scoring": "vinardo",
+    "exhaustiveness": 4,
+    "num_modes": 3,
+    "cpu": 4,
+    "seed": 42,
+    "no_gpu": true
+  }
+}

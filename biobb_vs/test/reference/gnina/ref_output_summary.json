@@ -1,0 +1,20 @@
+{
+    "pose1": {
+        "ligand_name": "aspirin",
+        "ligand_index": 1,
+        "pose": 1,
+        "minimizedAffinity": -6.54337
+    },
+    "pose2": {
+        "ligand_name": "aspirin",
+        "ligand_index": 1,
+        "pose": 2,
+        "minimizedAffinity": -6.45472
+    },
+    "pose3": {
+        "ligand_name": "aspirin",
+        "ligand_index": 1,
+        "pose": 3,
+        "minimizedAffinity": -6.24441
+    }
+}

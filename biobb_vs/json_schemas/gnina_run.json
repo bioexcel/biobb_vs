@@ -1,0 +1,479 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://bioexcel.eu/biobb_vs/json_schemas/1.0/gnina_run",
+    "name": "biobb_vs GninaRun",
+    "title": "Wrapper of the gnina software.",
+    "description": "This class performs docking of a ligand to a receptor, optionally rescoring the poses with a convolutional neural network, via the gnina software.",
+    "type": "object",
+    "info": {
+        "wrapped_software": {
+            "name": "gnina",
+            "version": ">=1.3",
+            "license": "Apache-2.0 and GPL-2.0"
+        },
+        "ontology": {
+            "name": "EDAM",
+            "schema": "http://edamontology.org/EDAM.owl"
+        }
+    },
+    "required": [
+        "input_ligand_path",
+        "input_receptor_path",
+        "output_sdf_path"
+    ],
+    "properties": {
+        "input_ligand_path": {
+            "type": "string",
+            "description": "Path to the input ligand. It may hold several ligands and it must hold genuine 3D coordinates, as gnina samples torsions but never bond lengths, bond angles or ring conformations",
+            "filetype": "input",
+            "sample": "https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/gnina/gnina_ligand.sdf",
+            "enum": [
+                ".*\\.sdf$",
+                ".*\\.mol2$",
+                ".*\\.pdb$",
+                ".*\\.pdbqt$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.sdf$",
+                    "description": "Path to the input ligand. It may hold several ligands and it must hold genuine 3D coordinates, as gnina samples torsions but never bond lengths, bond angles or ring conformations",
+                    "edam": "format_3814"
+                },
+                {
+                    "extension": ".*\\.mol2$",
+                    "description": "Path to the input ligand. It may hold several ligands and it must hold genuine 3D coordinates, as gnina samples torsions but never bond lengths, bond angles or ring conformations",
+                    "edam": "format_3816"
+                },
+                {
+                    "extension": ".*\\.pdb$",
+                    "description": "Path to the input ligand. It may hold several ligands and it must hold genuine 3D coordinates, as gnina samples torsions but never bond lengths, bond angles or ring conformations",
+                    "edam": "format_1476"
+                },
+                {
+                    "extension": ".*\\.pdbqt$",
+                    "description": "Path to the input ligand. It may hold several ligands and it must hold genuine 3D coordinates, as gnina samples torsions but never bond lengths, bond angles or ring conformations",
+                    "edam": "format_1476"
+                }
+            ]
+        },
+        "input_receptor_path": {
+            "type": "string",
+            "description": "Path to the input receptor. Every atom of this file is treated as rigid receptor, so any crystal ligand must be removed beforehand. Provide a PDBQT file for full control over protonation, as PDBQT input is passed to gnina unmodified",
+            "filetype": "input",
+            "sample": "https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/vina/vina_receptor.pdbqt",
+            "enum": [
+                ".*\\.pdb$",
+                ".*\\.pdbqt$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.pdb$",
+                    "description": "Path to the input receptor. Every atom of this file is treated as rigid receptor, so any crystal ligand must be removed beforehand. Provide a PDBQT file for full control over protonation, as PDBQT input is passed to gnina unmodified",
+                    "edam": "format_1476"
+                },
+                {
+                    "extension": ".*\\.pdbqt$",
+                    "description": "Path to the input receptor. Every atom of this file is treated as rigid receptor, so any crystal ligand must be removed beforehand. Provide a PDBQT file for full control over protonation, as PDBQT input is passed to gnina unmodified",
+                    "edam": "format_1476"
+                }
+            ]
+        },
+        "input_box_path": {
+            "type": "string",
+            "description": "Path to the PDB file with the box center and size annotated as a REMARK, as written by the box and box_residues building blocks. Mutually exclusive with input_autobox_path",
+            "filetype": "input",
+            "sample": "https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/vina/vina_box.pdb",
+            "enum": [
+                ".*\\.pdb$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.pdb$",
+                    "description": "Path to the PDB file with the box center and size annotated as a REMARK, as written by the box and box_residues building blocks. Mutually exclusive with input_autobox_path",
+                    "edam": "format_1476"
+                }
+            ]
+        },
+        "input_autobox_path": {
+            "type": "string",
+            "description": "Path to a reference structure whose bounding coordinates define the docking box, for example a crystal ligand, an fpocket pocket or the whole receptor. It only needs atoms with Cartesian coordinates, it does not need to be a real molecule. Mutually exclusive with input_box_path",
+            "filetype": "input",
+            "sample": "https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/gnina/gnina_autobox.pdb",
+            "enum": [
+                ".*\\.sdf$",
+                ".*\\.mol2$",
+                ".*\\.pdb$",
+                ".*\\.pdbqt$",
+                ".*\\.pqr$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.sdf$",
+                    "description": "Path to a reference structure whose bounding coordinates define the docking box, for example a crystal ligand, an fpocket pocket or the whole receptor. It only needs atoms with Cartesian coordinates, it does not need to be a real molecule. Mutually exclusive with input_box_path",
+                    "edam": "format_3814"
+                },
+                {
+                    "extension": ".*\\.mol2$",
+                    "description": "Path to a reference structure whose bounding coordinates define the docking box, for example a crystal ligand, an fpocket pocket or the whole receptor. It only needs atoms with Cartesian coordinates, it does not need to be a real molecule. Mutually exclusive with input_box_path",
+                    "edam": "format_3816"
+                },
+                {
+                    "extension": ".*\\.pdb$",
+                    "description": "Path to a reference structure whose bounding coordinates define the docking box, for example a crystal ligand, an fpocket pocket or the whole receptor. It only needs atoms with Cartesian coordinates, it does not need to be a real molecule. Mutually exclusive with input_box_path",
+                    "edam": "format_1476"
+                },
+                {
+                    "extension": ".*\\.pdbqt$",
+                    "description": "Path to a reference structure whose bounding coordinates define the docking box, for example a crystal ligand, an fpocket pocket or the whole receptor. It only needs atoms with Cartesian coordinates, it does not need to be a real molecule. Mutually exclusive with input_box_path",
+                    "edam": "format_1476"
+                },
+                {
+                    "extension": ".*\\.pqr$",
+                    "description": "Path to a reference structure whose bounding coordinates define the docking box, for example a crystal ligand, an fpocket pocket or the whole receptor. It only needs atoms with Cartesian coordinates, it does not need to be a real molecule. Mutually exclusive with input_box_path",
+                    "edam": "format_1476"
+                }
+            ]
+        },
+        "output_sdf_path": {
+            "type": "string",
+            "description": "Path to the output file with the docked poses and their scores as SD data fields. Use a .sdf.gz extension to obtain gzip compressed output",
+            "filetype": "output",
+            "sample": "https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/gnina/ref_output_gnina.sdf",
+            "enum": [
+                ".*\\.sdf$",
+                ".*\\.gz$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.sdf$",
+                    "description": "Path to the output file with the docked poses and their scores as SD data fields. Use a .sdf.gz extension to obtain gzip compressed output",
+                    "edam": "format_3814"
+                },
+                {
+                    "extension": ".*\\.gz$",
+                    "description": "Path to the output file with the docked poses and their scores as SD data fields. Use a .sdf.gz extension to obtain gzip compressed output",
+                    "edam": "format_3989"
+                }
+            ]
+        },
+        "output_summary_path": {
+            "type": "string",
+            "description": "Path to the JSON summary file, holding one entry per output pose with the ligand it belongs to and every score gnina assigned to it",
+            "filetype": "output",
+            "sample": "https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/gnina/ref_output_summary.json",
+            "enum": [
+                ".*\\.json$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.json$",
+                    "description": "Path to the JSON summary file, holding one entry per output pose with the ligand it belongs to and every score gnina assigned to it",
+                    "edam": "format_3464"
+                }
+            ]
+        },
+        "output_log_path": {
+            "type": "string",
+            "description": "Path to the log file written by gnina",
+            "filetype": "output",
+            "sample": "https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/gnina/ref_output_gnina.log",
+            "enum": [
+                ".*\\.log$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.log$",
+                    "description": "Path to the log file written by gnina",
+                    "edam": "format_2330"
+                }
+            ]
+        },
+        "properties": {
+            "type": "object",
+            "properties": {
+                "cpu": {
+                    "type": "integer",
+                    "default": 1,
+                    "wf_prop": false,
+                    "description": "Number of CPU cores to use. Keep it lower than or equal to exhaustiveness, and always set it explicitly on a shared machine.",
+                    "min": 1,
+                    "max": 1000,
+                    "step": 1
+                },
+                "exhaustiveness": {
+                    "type": "integer",
+                    "default": 8,
+                    "wf_prop": false,
+                    "description": "Number of independent Monte Carlo search chains. This is the main sampling knob, but it gives diminishing returns past the default for a targeted pocket.",
+                    "min": 1,
+                    "max": 10000,
+                    "step": 1
+                },
+                "num_modes": {
+                    "type": "integer",
+                    "default": 9,
+                    "wf_prop": false,
+                    "description": "Maximum number of binding modes written out.",
+                    "min": 1,
+                    "max": 1000,
+                    "step": 1
+                },
+                "min_rmsd_filter": {
+                    "type": "number",
+                    "default": 1.0,
+                    "wf_prop": false,
+                    "description": "RMSD in Angstroms below which a pose is dropped as redundant with a better ranked one.",
+                    "min": 0.0,
+                    "max": 100.0,
+                    "step": 0.1
+                },
+                "num_mc_saved": {
+                    "type": "integer",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Number of top poses retained in each Monte Carlo chain, gnina defaults to 50 when unset.",
+                    "min": 1,
+                    "max": 10000,
+                    "step": 1
+                },
+                "seed": {
+                    "type": "integer",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Explicit random seed. Docking is stochastic, so set it for reproducible runs."
+                },
+                "scoring": {
+                    "type": "string",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Built-in empirical scoring function, gnina uses its own default when unset.",
+                    "enum": [
+                        "default",
+                        "vina",
+                        "vinardo",
+                        "ad4_scoring",
+                        "dkoes_fast",
+                        "dkoes_scoring",
+                        "dkoes_scoring_old"
+                    ],
+                    "property_formats": [
+                        {
+                            "name": "default",
+                            "description": "the gnina default empirical scoring function"
+                        },
+                        {
+                            "name": "vina",
+                            "description": "the AutoDock Vina scoring function"
+                        },
+                        {
+                            "name": "vinardo",
+                            "description": "a reparameterization of the Vina terms that often does better for virtual screening"
+                        },
+                        {
+                            "name": "ad4_scoring",
+                            "description": "the AutoDock4 scoring function"
+                        },
+                        {
+                            "name": "dkoes_fast",
+                            "description": "a fast variant of the dkoes scoring function"
+                        },
+                        {
+                            "name": "dkoes_scoring",
+                            "description": "the dkoes scoring function"
+                        },
+                        {
+                            "name": "dkoes_scoring_old",
+                            "description": "the legacy dkoes scoring function"
+                        }
+                    ]
+                },
+                "cnn_scoring": {
+                    "type": "string",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Where the convolutional neural network is used in the pipeline, gnina defaults to rescore when unset.",
+                    "enum": [
+                        "none",
+                        "rescore",
+                        "refinement",
+                        "metrorescore",
+                        "metrorefine",
+                        "all"
+                    ],
+                    "property_formats": [
+                        {
+                            "name": "none",
+                            "description": "empirical scoring only throughout, by far the fastest"
+                        },
+                        {
+                            "name": "rescore",
+                            "description": "the network only re-ranks the final pool of poses"
+                        },
+                        {
+                            "name": "refinement",
+                            "description": "the network also locally minimizes poses after the Monte Carlo search, around ten times slower"
+                        },
+                        {
+                            "name": "metrorescore",
+                            "description": "network rescoring combined with Metropolis sampling"
+                        },
+                        {
+                            "name": "metrorefine",
+                            "description": "network refinement combined with Metropolis sampling"
+                        },
+                        {
+                            "name": "all",
+                            "description": "the network scores the whole search, very slow"
+                        }
+                    ]
+                },
+                "cnn": {
+                    "type": "string",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Name of a built-in convolutional neural network model, or a name ending in _ensemble to evaluate every built-in model sharing that prefix. gnina defaults to an ensemble of three models when unset."
+                },
+                "pose_sort_order": {
+                    "type": "string",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "How the internal pose pool is sorted before the redundancy filter and the num_modes cutoff are applied, so it can surface a different set of poses and not merely reorder them. gnina defaults to CNNscore when unset.",
+                    "enum": [
+                        "CNNscore",
+                        "CNNaffinity",
+                        "Energy"
+                    ],
+                    "property_formats": [
+                        {
+                            "name": "CNNscore",
+                            "description": "sort by network pose score, which answers whether a pose is right"
+                        },
+                        {
+                            "name": "CNNaffinity",
+                            "description": "sort by predicted affinity, which is what ranks compounds in a screen"
+                        },
+                        {
+                            "name": "Energy",
+                            "description": "sort by empirical energy"
+                        }
+                    ]
+                },
+                "autobox_add": {
+                    "type": "number",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Buffer in Angstroms added on every side of the box derived from input_autobox_path, gnina defaults to 4 when unset. A larger box does not slow gnina down, but it does loosen the constraint on sampling.",
+                    "min": 0.0,
+                    "max": 100.0,
+                    "step": 0.1
+                },
+                "autobox_extend": {
+                    "type": "boolean",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Enlarge the box derived from input_autobox_path when needed so the input ligand can rotate freely inside it, gnina enables this when unset."
+                },
+                "minimize": {
+                    "type": "boolean",
+                    "default": false,
+                    "wf_prop": false,
+                    "description": "Energy minimize the poses given in input_ligand_path instead of searching for new ones."
+                },
+                "score_only": {
+                    "type": "boolean",
+                    "default": false,
+                    "wf_prop": false,
+                    "description": "Score the poses given in input_ligand_path without searching or minimizing."
+                },
+                "local_only": {
+                    "type": "boolean",
+                    "default": false,
+                    "wf_prop": false,
+                    "description": "Restrict the search to a local one inside the box."
+                },
+                "no_gpu": {
+                    "type": "boolean",
+                    "default": false,
+                    "wf_prop": false,
+                    "description": "Disable GPU acceleration even when a GPU is available."
+                },
+                "device": {
+                    "type": "integer",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Index of the GPU device to use.",
+                    "min": 0,
+                    "max": 16,
+                    "step": 1
+                },
+                "quiet": {
+                    "type": "boolean",
+                    "default": false,
+                    "wf_prop": false,
+                    "description": "Suppress the gnina output messages."
+                },
+                "binary_path": {
+                    "type": "string",
+                    "default": "gnina",
+                    "wf_prop": false,
+                    "description": "Path to the gnina executable in your local computer. gnina is not distributed with this package, install it from its binary release or run it through a container."
+                },
+                "remove_tmp": {
+                    "type": "boolean",
+                    "default": true,
+                    "wf_prop": true,
+                    "description": "Remove temporal files."
+                },
+                "restart": {
+                    "type": "boolean",
+                    "default": false,
+                    "wf_prop": true,
+                    "description": "Do not execute if output files exist."
+                },
+                "sandbox_path": {
+                    "type": "string",
+                    "default": "./",
+                    "wf_prop": true,
+                    "description": "Parent path to the sandbox directory."
+                },
+                "container_path": {
+                    "type": "string",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Container path definition."
+                },
+                "container_image": {
+                    "type": "string",
+                    "default": "gnina/gnina:latest",
+                    "wf_prop": false,
+                    "description": "Container image definition."
+                },
+                "container_volume_path": {
+                    "type": "string",
+                    "default": "/data",
+                    "wf_prop": false,
+                    "description": "Container volume path definition."
+                },
+                "container_working_dir": {
+                    "type": "string",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Container working directory definition."
+                },
+                "container_user_id": {
+                    "type": "string",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Container user_id definition."
+                },
+                "container_shell_path": {
+                    "type": "string",
+                    "default": "/bin/bash -c",
+                    "wf_prop": false,
+                    "description": "Path to default shell inside the container."
+                }
+            }
+        }
+    },
+    "additionalProperties": false
+}

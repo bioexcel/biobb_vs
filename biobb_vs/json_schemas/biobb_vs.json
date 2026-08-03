@@ -72,6 +72,22 @@
             "exec": "fpocket_select",
             "docs": "https://biobb-vs.readthedocs.io/en/latest/fpocket.html#module-fpocket.fpocket_select",
             "rest": true
+        },
+        {
+            "block": "GninaRun",
+            "tool": "gnina",
+            "desc": "Wrapper of the gnina software for docking a ligand to a receptor with CNN rescoring.",
+            "exec": "gnina_run",
+            "docs": "https://biobb-vs.readthedocs.io/en/latest/gnina.html#module-gnina.gnina_run",
+            "rest": false
+        },
+        {
+            "block": "GninaSelectPose",
+            "tool": "in house",
+            "desc": "Selects a single pose in the output of the gnina_run building block.",
+            "exec": "gnina_select_pose",
+            "docs": "https://biobb-vs.readthedocs.io/en/latest/gnina.html#module-gnina.gnina_select_pose",
+            "rest": true
         }
     ],
     "dep_pypi": [
@@ -88,6 +104,8 @@
         "virtual screening",
         "autodock",
         "vina",
+        "gnina",
+        "cnn scoring",
         "fpocket",
         "binding site"
     ]

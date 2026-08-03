@@ -1,0 +1,135 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://bioexcel.eu/biobb_vs/json_schemas/1.0/gnina_select_pose",
+    "name": "biobb_vs GninaSelectPose",
+    "title": "Selects a single pose in the output of the gnina_run building block.",
+    "description": "Extracts one pose out of the multi record SDF file written by the gnina_run building block, copying the record verbatim.",
+    "type": "object",
+    "info": {
+        "wrapped_software": {
+            "name": "In house",
+            "license": "Apache-2.0"
+        },
+        "ontology": {
+            "name": "EDAM",
+            "schema": "http://edamontology.org/EDAM.owl"
+        }
+    },
+    "required": [
+        "input_sdf_path",
+        "output_sdf_path"
+    ],
+    "properties": {
+        "input_sdf_path": {
+            "type": "string",
+            "description": "Path to the SDF file with the docked poses written by the gnina_run building block",
+            "filetype": "input",
+            "sample": "https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/gnina/gnina_poses.sdf",
+            "enum": [
+                ".*\\.sdf$",
+                ".*\\.gz$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.sdf$",
+                    "description": "Path to the SDF file with the docked poses written by the gnina_run building block",
+                    "edam": "format_3814"
+                },
+                {
+                    "extension": ".*\\.gz$",
+                    "description": "Path to the SDF file with the docked poses written by the gnina_run building block",
+                    "edam": "format_3989"
+                }
+            ]
+        },
+        "output_sdf_path": {
+            "type": "string",
+            "description": "Path to the output SDF file with the selected pose",
+            "filetype": "output",
+            "sample": "https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/gnina/ref_output_pose.sdf",
+            "enum": [
+                ".*\\.sdf$",
+                ".*\\.gz$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.sdf$",
+                    "description": "Path to the output SDF file with the selected pose",
+                    "edam": "format_3814"
+                },
+                {
+                    "extension": ".*\\.gz$",
+                    "description": "Path to the output SDF file with the selected pose",
+                    "edam": "format_3989"
+                }
+            ]
+        },
+        "properties": {
+            "type": "object",
+            "properties": {
+                "pose": {
+                    "type": "integer",
+                    "default": 1,
+                    "wf_prop": false,
+                    "description": "Rank of the pose to extract, counted over the poses left after ligand has been applied and sort_by has been honoured.",
+                    "min": 1,
+                    "max": 10000,
+                    "step": 1
+                },
+                "ligand": {
+                    "type": "integer",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Index of the ligand whose poses are considered, following the order of the ligands in the file gnina docked. All poses in the file are considered when unset.",
+                    "min": 1,
+                    "max": 1000000,
+                    "step": 1
+                },
+                "sort_by": {
+                    "type": "string",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Score to reorder the poses by before one is picked. The poses are taken in the order gnina wrote them when unset, which is already gnina's own ranking. Note that this reorders only the poses present in the file, so it is not equivalent to the pose_sort_order property of gnina_run, which reorders the whole internal pool before the redundancy filter and the num_modes cutoff discard poses.",
+                    "enum": [
+                        "CNNscore",
+                        "CNNaffinity",
+                        "minimizedAffinity"
+                    ],
+                    "property_formats": [
+                        {
+                            "name": "CNNscore",
+                            "description": "network pose score, highest first"
+                        },
+                        {
+                            "name": "CNNaffinity",
+                            "description": "network predicted affinity, highest first"
+                        },
+                        {
+                            "name": "minimizedAffinity",
+                            "description": "empirical affinity in kcal/mol, lowest first"
+                        }
+                    ]
+                },
+                "remove_tmp": {
+                    "type": "boolean",
+                    "default": true,
+                    "wf_prop": true,
+                    "description": "Remove temporal files."
+                },
+                "restart": {
+                    "type": "boolean",
+                    "default": false,
+                    "wf_prop": true,
+                    "description": "Do not execute if output files exist."
+                },
+                "sandbox_path": {
+                    "type": "string",
+                    "default": "./",
+                    "wf_prop": true,
+                    "description": "Parent path to the sandbox directory."
+                }
+            }
+        }
+    },
+    "additionalProperties": false
+}

@@ -1,0 +1,8 @@
+properties:
+  cnn_scoring: none
+  cpu: 4
+  exhaustiveness: 4
+  no_gpu: true
+  num_modes: 3
+  scoring: vinardo
+  seed: 42

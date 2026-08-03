@@ -5,5 +5,6 @@ biobb_vs
    :maxdepth: 4
 
    fpocket
+   gnina
    utils
    vina

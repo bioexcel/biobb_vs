@@ -141,6 +141,11 @@ class AutoDockVinaRun(BiobbObject):
         )
 
     def calculate_box(self, box_file_path):
+        """Read the box center and the box edge lengths from the REMARK line of a box PDB file.
+
+        The SIZE field is the full edge length of the box, matching what AutoDock Vina
+        expects in --size_x/y/z.
+        """
         with open(box_file_path, "r") as box_file:
             for line in box_file:
                 line = line.rstrip(os.linesep)
@@ -161,7 +166,10 @@ class AutoDockVinaRun(BiobbObject):
                             ],
                         )
                     )
-            return list(map(str, [0, 0, 0, 0, 0, 0]))
+        raise SystemExit(
+            "No 'REMARK BOX CENTER' line found in the input box file: %s"
+            % (box_file_path)
+        )
 
     @launchlogger
     def launch(self) -> int:

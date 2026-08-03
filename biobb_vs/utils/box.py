@@ -25,7 +25,7 @@ class Box(BiobbObject):
         input_pdb_path (str): PDB file containing a selection of residue numbers or PQR file containing the pocket. File type: input.  `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/input_box.pqr>`_. Accepted formats: pdb (edam:format_1476), pqr (edam:format_1476).
         output_pdb_path (str): PDB including the annotation of the box center and size as REMARKs. File type: output. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/utils/ref_output_box.pdb>`_. Accepted formats: pdb (edam:format_1476).
         properties (dic - Python dictionary object containing the tool parameters, not input/output files):
-            * **offset** (*float*) - (2.0) [0.1~1000|0.1] Extra distance (Angstroms) between the last residue atom and the box boundary.
+            * **offset** (*float*) - (2.0) [0.1~1000|0.1] Extra distance (Angstroms) between the last residue atom and the box boundary. The box is centred on the mean of the selected coordinates, so a set of points that is asymmetric about its centre may extend slightly beyond the box faces. Choose an offset large enough to absorb that asymmetry, yet small enough not to enlarge the box past what the binding site needs, since a larger box spreads the same sampling effort over more space.
             * **box_coordinates** (*bool*) - (False) Add box coordinates as 8 ATOM records.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
@@ -166,9 +166,14 @@ class Box(BiobbObject):
                 self.global_log,
             )
             selection_box_size = [c + self.offset for c in selection_box_size]
+
+        # SIZE is written as the full edge length, which is what Vina reads from
+        # --size_x/y/z. selection_box_size stays a half-extent because that is
+        # what the corner coordinates and the volume are computed from.
+        selection_box_edge = [2 * side for side in selection_box_size]
         fu.log(
-            "Binding site size (Angstroms):   %10.3f%10.3f%10.3f"
-            % (selection_box_size[0], selection_box_size[1], selection_box_size[2]),
+            "Binding site box edge lengths (Angstroms): %10.3f%10.3f%10.3f"
+            % (selection_box_edge[0], selection_box_edge[1], selection_box_edge[2]),
             self.out_log,
             self.global_log,
         )
@@ -184,9 +189,9 @@ class Box(BiobbObject):
             selection_box_center[2],
         )
         remarks += " SIZE:%10.3f%10.3f%10.3f" % (
-            selection_box_size[0],
-            selection_box_size[1],
-            selection_box_size[2],
+            selection_box_edge[0],
+            selection_box_edge[1],
+            selection_box_edge[2],
         )
 
         selection_box_coords_txt = ""

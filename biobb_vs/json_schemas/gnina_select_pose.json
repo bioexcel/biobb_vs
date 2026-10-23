@@ -89,24 +89,39 @@
                     "type": "string",
                     "default": null,
                     "wf_prop": false,
-                    "description": "Score to reorder the poses by before one is picked. The poses are taken in the order gnina wrote them when unset, which is already gnina's own ranking. Note that this reorders only the poses present in the file, so it is not equivalent to the pose_sort_order property of gnina_run, which reorders the whole internal pool before the redundancy filter and the num_modes cutoff discard poses.",
+                    "description": "Score to reorder the poses by before one is picked. The poses are taken in the order gnina wrote them when unset, which is already gnina's own ranking. Note that this reorders only the poses present in the file, so it is not equivalent to the pose_sort_order property of gnina_run, which reorders the whole internal pool before the redundancy filter and the num_modes cutoff discard poses. ",
                     "enum": [
                         "CNNscore",
+                        "highest first",
                         "CNNaffinity",
-                        "minimizedAffinity"
+                        "highest first",
+                        "minimizedAffinity",
+                        "lowest first"
                     ],
                     "property_formats": [
                         {
                             "name": "CNNscore",
-                            "description": "network pose score, highest first"
+                            "description": null
+                        },
+                        {
+                            "name": "highest first",
+                            "description": null
                         },
                         {
                             "name": "CNNaffinity",
-                            "description": "network predicted affinity, highest first"
+                            "description": null
+                        },
+                        {
+                            "name": "highest first",
+                            "description": null
                         },
                         {
                             "name": "minimizedAffinity",
-                            "description": "empirical affinity in kcal/mol, lowest first"
+                            "description": null
+                        },
+                        {
+                            "name": "lowest first",
+                            "description": null
                         }
                     ]
                 },

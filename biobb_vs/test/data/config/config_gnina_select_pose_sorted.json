@@ -1,0 +1,7 @@
+{
+  "properties": {
+    "pose": 2,
+    "ligand": 2,
+    "sort_by": "minimizedAffinity"
+  }
+}

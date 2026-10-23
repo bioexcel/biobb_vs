@@ -58,7 +58,7 @@
         },
         "input_receptor_path": {
             "type": "string",
-            "description": "Path to the input receptor. Every atom of this file is treated as rigid receptor, so any crystal ligand must be removed beforehand. Provide a PDBQT file for full control over protonation, as PDBQT input is passed to gnina unmodified",
+            "description": "Path to the input receptor. Every atom of this file is treated as rigid receptor, so any crystal ligand must be removed beforehand. Provide a PDBQT file for full control over protonation, as PDBQT input is passed to gnina unmodified. Charges are not taken into account, just hydrogen donor/acceptor character which depends on the protonation state",
             "filetype": "input",
             "sample": "https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/vina/vina_receptor.pdbqt",
             "enum": [
@@ -68,12 +68,12 @@
             "file_formats": [
                 {
                     "extension": ".*\\.pdb$",
-                    "description": "Path to the input receptor. Every atom of this file is treated as rigid receptor, so any crystal ligand must be removed beforehand. Provide a PDBQT file for full control over protonation, as PDBQT input is passed to gnina unmodified",
+                    "description": "Path to the input receptor. Every atom of this file is treated as rigid receptor, so any crystal ligand must be removed beforehand. Provide a PDBQT file for full control over protonation, as PDBQT input is passed to gnina unmodified. Charges are not taken into account, just hydrogen donor/acceptor character which depends on the protonation state",
                     "edam": "format_1476"
                 },
                 {
                     "extension": ".*\\.pdbqt$",
-                    "description": "Path to the input receptor. Every atom of this file is treated as rigid receptor, so any crystal ligand must be removed beforehand. Provide a PDBQT file for full control over protonation, as PDBQT input is passed to gnina unmodified",
+                    "description": "Path to the input receptor. Every atom of this file is treated as rigid receptor, so any crystal ligand must be removed beforehand. Provide a PDBQT file for full control over protonation, as PDBQT input is passed to gnina unmodified. Charges are not taken into account, just hydrogen donor/acceptor character which depends on the protonation state",
                     "edam": "format_1476"
                 }
             ]
@@ -246,7 +246,7 @@
                     "type": "string",
                     "default": null,
                     "wf_prop": false,
-                    "description": "Built-in empirical scoring function, gnina uses its own default when unset.",
+                    "description": "Built-in empirical scoring function, gnina uses its own default when unset. ",
                     "enum": [
                         "default",
                         "vina",
@@ -291,19 +291,26 @@
                     "type": "string",
                     "default": null,
                     "wf_prop": false,
-                    "description": "Where the convolutional neural network is used in the pipeline, gnina defaults to rescore when unset.",
+                    "description": "Where the convolutional neural network is used in the pipeline, gnina defaults to rescore when unset. ",
                     "enum": [
                         "none",
+                        "by far the fastest",
                         "rescore",
                         "refinement",
+                        "around ten times slower",
                         "metrorescore",
                         "metrorefine",
-                        "all"
+                        "all",
+                        "very slow"
                     ],
                     "property_formats": [
                         {
                             "name": "none",
-                            "description": "empirical scoring only throughout, by far the fastest"
+                            "description": null
+                        },
+                        {
+                            "name": "by far the fastest",
+                            "description": null
                         },
                         {
                             "name": "rescore",
@@ -311,7 +318,11 @@
                         },
                         {
                             "name": "refinement",
-                            "description": "the network also locally minimizes poses after the Monte Carlo search, around ten times slower"
+                            "description": null
+                        },
+                        {
+                            "name": "around ten times slower",
+                            "description": null
                         },
                         {
                             "name": "metrorescore",
@@ -323,7 +334,11 @@
                         },
                         {
                             "name": "all",
-                            "description": "the network scores the whole search, very slow"
+                            "description": null
+                        },
+                        {
+                            "name": "very slow",
+                            "description": null
                         }
                     ]
                 },
@@ -337,20 +352,30 @@
                     "type": "string",
                     "default": null,
                     "wf_prop": false,
-                    "description": "How the internal pose pool is sorted before the redundancy filter and the num_modes cutoff are applied, so it can surface a different set of poses and not merely reorder them. gnina defaults to CNNscore when unset.",
+                    "description": "How the internal pose pool is sorted before the redundancy filter and the num_modes cutoff are applied, so it can surface a different set of poses and not merely reorder them. gnina defaults to CNNscore when unset. ",
                     "enum": [
                         "CNNscore",
+                        "which answers whether a pose is right",
                         "CNNaffinity",
+                        "which is what ranks compounds in a screen",
                         "Energy"
                     ],
                     "property_formats": [
                         {
                             "name": "CNNscore",
-                            "description": "sort by network pose score, which answers whether a pose is right"
+                            "description": null
+                        },
+                        {
+                            "name": "which answers whether a pose is right",
+                            "description": null
                         },
                         {
                             "name": "CNNaffinity",
-                            "description": "sort by predicted affinity, which is what ranks compounds in a screen"
+                            "description": null
+                        },
+                        {
+                            "name": "which is what ranks compounds in a screen",
+                            "description": null
                         },
                         {
                             "name": "Energy",

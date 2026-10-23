@@ -6,6 +6,7 @@
     "num_modes": 3,
     "cpu": 4,
     "seed": 42,
-    "no_gpu": true
+    "no_gpu": true,
+    "timeout": 900
   }
 }

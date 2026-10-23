@@ -1,8 +1,8 @@
 {
   "properties": {
     "cnn_scoring": "none",
-    "cpu": 4,
     "seed": 42,
+    "cpu": 4,
     "container_path": "docker",
     "container_image": "gnina/gnina:latest",
     "container_volume_path": "/data",

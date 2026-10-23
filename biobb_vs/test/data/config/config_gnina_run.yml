@@ -6,3 +6,4 @@ properties:
   num_modes: 3
   scoring: vinardo
   seed: 42
+  timeout: 900

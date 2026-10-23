@@ -721,7 +721,7 @@ gnina_run -h
       --input_ligand_path INPUT_LIGAND_PATH
                             Path to the input ligand. It may hold several ligands and it must hold genuine 3D coordinates, as gnina samples torsions but never bond lengths, bond angles or ring conformations. Accepted formats: sdf, mol2, pdb, pdbqt.
       --input_receptor_path INPUT_RECEPTOR_PATH
-                            Path to the input receptor. Every atom of this file is treated as rigid receptor, so any crystal ligand must be removed beforehand.  Provide a PDBQT file for full control over protonation, as PDBQT input is passed to gnina unmodified. Charges are not taken into account, just hydrogen donor/acceptor character which depends on the protonation state. Accepted formats: pdb, pdbqt.
+                            Path to the input receptor. Every atom of this file is treated as rigid receptor, so any crystal ligand must be removed beforehand. Provide a PDBQT file for full control over protonation, as PDBQT input is passed to gnina unmodified. Charges are not taken into account, just hydrogen donor/acceptor character which depends on the protonation state. Accepted formats: pdb, pdbqt.
       --output_sdf_path OUTPUT_SDF_PATH
                             Path to the output file with the docked poses and their scores as SD data fields. Use a .sdf.gz extension to obtain gzip compressed output. Accepted formats: sdf, gz.
     
@@ -739,7 +739,7 @@ Syntax: input_argument (datatype) : Definition
 
 Config input / output arguments for this building block:
 * **input_ligand_path** (*string*): Path to the input ligand. It may hold several ligands and it must hold genuine 3D coordinates, as gnina samples torsions but never bond lengths, bond angles or ring conformations. File type: input. [Sample file](https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/gnina/gnina_ligand.sdf). Accepted formats: SDF, MOL2, PDB, PDBQT
-* **input_receptor_path** (*string*): Path to the input receptor. Every atom of this file is treated as rigid receptor, so any crystal ligand must be removed beforehand. Provide a PDBQT file for full control over protonation, as PDBQT input is passed to gnina unmodified. File type: input. [Sample file](https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/vina/vina_receptor.pdbqt). Accepted formats: PDB, PDBQT
+* **input_receptor_path** (*string*): Path to the input receptor. Every atom of this file is treated as rigid receptor, so any crystal ligand must be removed beforehand. Provide a PDBQT file for full control over protonation, as PDBQT input is passed to gnina unmodified. Charges are not taken into account, just hydrogen donor/acceptor character which depends on the protonation state. File type: input. [Sample file](https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/vina/vina_receptor.pdbqt). Accepted formats: PDB, PDBQT
 * **input_box_path** (*string*): Path to the PDB file with the box center and size annotated as a REMARK, as written by the box and box_residues building blocks. Mutually exclusive with input_autobox_path. File type: input. [Sample file](https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/vina/vina_box.pdb). Accepted formats: PDB
 * **input_autobox_path** (*string*): Path to a reference structure whose bounding coordinates define the docking box, for example a crystal ligand, an fpocket pocket or the whole receptor. It only needs atoms with Cartesian coordinates, it does not need to be a real molecule. Mutually exclusive with input_box_path. File type: input. [Sample file](https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/gnina/gnina_autobox.pdb). Accepted formats: SDF, MOL2, PDB, PDBQT, PQR
 * **output_sdf_path** (*string*): Path to the output file with the docked poses and their scores as SD data fields. Use a .sdf.gz extension to obtain gzip compressed output. File type: output. [Sample file](https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/gnina/ref_output_gnina.sdf). Accepted formats: SDF, GZ
@@ -755,10 +755,10 @@ Config parameters for this building block:
 * **min_rmsd_filter** (*number*): (1.0) RMSD in Angstroms below which a pose is dropped as redundant with a better ranked one.
 * **num_mc_saved** (*integer*): (None) Number of top poses retained in each Monte Carlo chain, gnina defaults to 50 when unset.
 * **seed** (*integer*): (None) Explicit random seed. Docking is stochastic, so set it for reproducible runs.
-* **scoring** (*string*): (None) Built-in empirical scoring function, gnina uses its own default when unset.
-* **cnn_scoring** (*string*): (None) Where the convolutional neural network is used in the pipeline, gnina defaults to rescore when unset.
+* **scoring** (*string*): (None) Built-in empirical scoring function, gnina uses its own default when unset. 
+* **cnn_scoring** (*string*): (None) Where the convolutional neural network is used in the pipeline, gnina defaults to rescore when unset. 
 * **cnn** (*string*): (None) Name of a built-in convolutional neural network model, or a name ending in _ensemble to evaluate every built-in model sharing that prefix. gnina defaults to an ensemble of three models when unset.
-* **pose_sort_order** (*string*): (None) How the internal pose pool is sorted before the redundancy filter and the num_modes cutoff are applied, so it can surface a different set of poses and not merely reorder them. gnina defaults to CNNscore when unset.
+* **pose_sort_order** (*string*): (None) How the internal pose pool is sorted before the redundancy filter and the num_modes cutoff are applied, so it can surface a different set of poses and not merely reorder them. gnina defaults to CNNscore when unset. 
 * **autobox_add** (*number*): (None) Buffer in Angstroms added on every side of the box derived from input_autobox_path, gnina defaults to 4 when unset. A larger box does not slow gnina down, but it does loosen the constraint on sampling.
 * **autobox_extend** (*boolean*): (None) Enlarge the box derived from input_autobox_path when needed so the input ligand can rotate freely inside it, gnina enables this when unset.
 * **minimize** (*boolean*): (False) Energy minimize the poses given in input_ligand_path instead of searching for new ones.
@@ -788,6 +788,7 @@ properties:
   num_modes: 3
   scoring: vinardo
   seed: 42
+  timeout: 900
 
 ```
 #### [Docker config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_gnina_run_docker.yml)
@@ -804,7 +805,7 @@ properties:
 ```
 #### Command line
 ```python
-gnina_run --config config_gnina_run.yml --input_ligand_path gnina_ligand.sdf --input_receptor_path vina_receptor.pdbqt --input_box_path vina_box.pdb --output_sdf_path ref_output_gnina.sdf --output_summary_path ref_output_summary.json --output_log_path ref_output_gnina.log
+gnina_run --config config_gnina_run.yml --input_ligand_path gnina_ligand.sdf --input_receptor_path vina_receptor.pdbqt --input_box_path vina_box.pdb --input_autobox_path gnina_autobox.pdb --output_sdf_path ref_output_gnina.sdf --output_summary_path ref_output_summary.json --output_log_path ref_output_gnina.log
 ```
 ### JSON
 #### [Common config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_gnina_run.json)
@@ -817,29 +818,28 @@ gnina_run --config config_gnina_run.yml --input_ligand_path gnina_ligand.sdf --i
     "num_modes": 3,
     "cpu": 4,
     "seed": 42,
-    "no_gpu": true
+    "no_gpu": true,
+    "timeout": 900
   }
 }
-
 ```
 #### [Docker config file](https://github.com/bioexcel/biobb_vs/blob/master/biobb_vs/test/data/config/config_gnina_run_docker.json)
 ```python
 {
   "properties": {
     "cnn_scoring": "none",
-    "cpu": 4,
     "seed": 42,
+    "cpu": 4,
     "container_path": "docker",
     "container_image": "gnina/gnina:latest",
     "container_volume_path": "/data",
     "container_user_id": "1001"
   }
 }
-
 ```
 #### Command line
 ```python
-gnina_run --config config_gnina_run.json --input_ligand_path gnina_ligand.sdf --input_receptor_path vina_receptor.pdbqt --input_box_path vina_box.pdb --output_sdf_path ref_output_gnina.sdf --output_summary_path ref_output_summary.json --output_log_path ref_output_gnina.log
+gnina_run --config config_gnina_run.json --input_ligand_path gnina_ligand.sdf --input_receptor_path vina_receptor.pdbqt --input_box_path vina_box.pdb --input_autobox_path gnina_autobox.pdb --output_sdf_path ref_output_gnina.sdf --output_summary_path ref_output_summary.json --output_log_path ref_output_gnina.log
 ```
 
 ## Gnina_select_pose
@@ -875,7 +875,7 @@ Syntax: input_parameter (datatype) - (default_value) Definition
 Config parameters for this building block:
 * **pose** (*integer*): (1) Rank of the pose to extract, counted over the poses left after ligand has been applied and sort_by has been honoured.
 * **ligand** (*integer*): (None) Index of the ligand whose poses are considered, following the order of the ligands in the file gnina docked. All poses in the file are considered when unset.
-* **sort_by** (*string*): (None) Score to reorder the poses by before one is picked. The poses are taken in the order gnina wrote them when unset, which is already gnina's own ranking. Note that this reorders only the poses present in the file, so it is not equivalent to the pose_sort_order property of gnina_run, which reorders the whole internal pool before the redundancy filter and the num_modes cutoff discard poses.
+* **sort_by** (*string*): (None) Score to reorder the poses by before one is picked. The poses are taken in the order gnina wrote them when unset, which is already gnina's own ranking. Note that this reorders only the poses present in the file, so it is not equivalent to the pose_sort_order property of gnina_run, which reorders the whole internal pool before the redundancy filter and the num_modes cutoff discard poses. 
 * **remove_tmp** (*boolean*): (True) Remove temporal files.
 * **restart** (*boolean*): (False) Do not execute if output files exist.
 * **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
@@ -898,7 +898,6 @@ gnina_select_pose --config config_gnina_select_pose.yml --input_sdf_path gnina_p
     "pose": 1
   }
 }
-
 ```
 #### Command line
 ```python

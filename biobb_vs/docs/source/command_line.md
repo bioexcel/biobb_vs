@@ -146,7 +146,7 @@ bindingsite -h
     
     required arguments:
       --input_pdb_path INPUT_PDB_PATH
-                            Path to the PDB structure where the binding site is to be found. Accepted formats: pdb.
+                            Path to the PDB structure where the binding site is to be found. Accepted formats: pdb, pqr.
       --input_clusters_zip INPUT_CLUSTERS_ZIP
                             Path to the ZIP file with all the PDB members of the identity cluster. Accepted formats: zip.
       -o OUTPUT_PDB_PATH, --output_pdb_path OUTPUT_PDB_PATH
@@ -155,7 +155,7 @@ bindingsite -h
 Syntax: input_argument (datatype) : Definition
 
 Config input / output arguments for this building block:
-* **input_pdb_path** (*string*): Path to the PDB structure where the binding site is to be found. File type: input. [Sample file](https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/bindingsite.pdb). Accepted formats: PDB
+* **input_pdb_path** (*string*): Path to the PDB structure where the binding site is to be found. File type: input. [Sample file](https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/bindingsite.pdb). Accepted formats: PDB, PQR
 * **input_clusters_zip** (*string*): Path to the ZIP file with all the PDB members of the identity cluster. File type: input. [Sample file](https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/bindingsite.zip). Accepted formats: ZIP
 * **output_pdb_path** (*string*): Path to the PDB containig the residues belonging to the binding site. File type: output. [Sample file](https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/utils/ref_output_bindingsite.pdb). Accepted formats: PDB
 ### Config
@@ -287,14 +287,14 @@ box_residues -h
     
     required arguments:
       -i INPUT_PDB_PATH, --input_pdb_path INPUT_PDB_PATH
-                            PDB protein structure for which the box will be build. Its size and center will be set around the 'resid_list' property once mapped against this PDB. Accepted formats: pdb.
+                            PDB protein structure for which the box will be build. Its size and center will be set around the 'resid_list' property once mapped against this PDB. Accepted formats: pdb, pqr.
       -o OUTPUT_PDB_PATH, --output_pdb_path OUTPUT_PDB_PATH
                             PDB including the annotation of the box center and size as REMARKs. Accepted formats: pdb.
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
 Config input / output arguments for this building block:
-* **input_pdb_path** (*string*): PDB protein structure for which the box will be build. Its size and center will be set around the 'resid_list' property once mapped against this PDB. File type: input. [Sample file](https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/input_box_residues.pdb). Accepted formats: PDB
+* **input_pdb_path** (*string*): PDB protein structure for which the box will be build. Its size and center will be set around the 'resid_list' property once mapped against this PDB. File type: input. [Sample file](https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/input_box_residues.pdb). Accepted formats: PDB, PQR
 * **output_pdb_path** (*string*): PDB including the annotation of the box center and size as REMARKs. File type: output. [Sample file](https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/utils/ref_output_box_residues.pdb). Accepted formats: PDB
 ### Config
 Syntax: input_parameter (datatype) - (default_value) Definition

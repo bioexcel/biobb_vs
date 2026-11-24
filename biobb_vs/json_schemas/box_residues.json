@@ -27,11 +27,17 @@
             "filetype": "input",
             "sample": "https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/input_box_residues.pdb",
             "enum": [
-                ".*\\.pdb$"
+                ".*\\.pdb$",
+                ".*\\.pqr$"
             ],
             "file_formats": [
                 {
                     "extension": ".*\\.pdb$",
+                    "description": "PDB protein structure for which the box will be build. Its size and center will be set around the 'resid_list' property once mapped against this PDB",
+                    "edam": "format_1476"
+                },
+                {
+                    "extension": ".*\\.pqr$",
                     "description": "PDB protein structure for which the box will be build. Its size and center will be set around the 'resid_list' property once mapped against this PDB",
                     "edam": "format_1476"
                 }

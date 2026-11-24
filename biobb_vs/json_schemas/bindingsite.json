@@ -28,11 +28,17 @@
             "filetype": "input",
             "sample": "https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/bindingsite.pdb",
             "enum": [
-                ".*\\.pdb$"
+                ".*\\.pdb$",
+                ".*\\.pqr$"
             ],
             "file_formats": [
                 {
                     "extension": ".*\\.pdb$",
+                    "description": "Path to the PDB structure where the binding site is to be found",
+                    "edam": "format_1476"
+                },
+                {
+                    "extension": ".*\\.pqr$",
                     "description": "Path to the PDB structure where the binding site is to be found",
                     "edam": "format_1476"
                 }

@@ -34,7 +34,7 @@ class BoxResidues(BiobbObject):
     | Sets the center and the size of a rectangular parallelepiped box around a selection of residues found in a given PDB. The residue identifiers that compose the selection (i.e. binding site) are provided by a property list.
 
     Args:
-        input_pdb_path (str): PDB protein structure for which the box will be build. Its size and center will be set around the 'resid_list' property once mapped against this PDB. File type: input. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/input_box_residues.pdb>`_. Accepted formats: pdb (edam:format_1476).
+        input_pdb_path (str): PDB protein structure for which the box will be build. Its size and center will be set around the 'resid_list' property once mapped against this PDB. File type: input. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/data/utils/input_box_residues.pdb>`_. Accepted formats: pdb (edam:format_1476), pqr (edam:format_1476).
         output_pdb_path (str): PDB including the annotation of the box center and size as REMARKs. File type: output. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/utils/ref_output_box_residues.pdb>`_. Accepted formats: pdb (edam:format_1476).
         properties (dic - Python dictionary object containing the tool parameters, not input/output files):
             * **resid_list** (*list*) - (None) List with all the residue numbers to form a cavity or binding site. Mandatory property.

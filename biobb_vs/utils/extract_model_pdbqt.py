@@ -7,9 +7,7 @@ from typing import Optional
 from Bio import BiopythonDeprecationWarning
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
 
-from biobb_vs.utils.common import check_input_path, check_output_path
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", BiopythonDeprecationWarning)
@@ -77,37 +75,8 @@ class ExtractModelPDBQT(BiobbObject):
         self.model = properties.get("model", 1)
         self.properties = properties
 
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    def check_data_params(self, out_log, err_log):
-        """Checks all the input/output paths and parameters"""
-        self.io_dict["in"]["input_pdbqt_path"] = check_input_path(
-            self.io_dict["in"]["input_pdbqt_path"],
-            "input_pdbqt_path",
-            out_log,
-            self.__class__.__name__,
-        )
-        self.io_dict["out"]["output_pdbqt_path"] = check_output_path(
-            self.io_dict["out"]["output_pdbqt_path"],
-            "output_pdbqt_path",
-            False,
-            out_log,
-            self.__class__.__name__,
-        )
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> int:
         """Execute the :class:`ExtractModelPDBQT <utils.extract_model_pdbqt.ExtractModelPDBQT>` utils.extract_model_pdbqt.ExtractModelPDBQT object."""
-
-        # check input/output paths and parameters
-        self.check_data_params(self.out_log, self.err_log)
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         if self.restart:
             output_file_list = [self.io_dict["out"]["output_pdbqt_path"]]

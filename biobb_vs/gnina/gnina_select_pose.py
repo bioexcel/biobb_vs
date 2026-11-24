@@ -5,9 +5,8 @@ from typing import Optional
 
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
 
-from biobb_vs.gnina.common import check_input_path, check_output_path, open_sdf, read_sdf_records, to_number
+from biobb_vs.gnina.common import check_gzip_extension, open_sdf, read_sdf_records, to_number
 
 
 class GninaSelectPose(BiobbObject):
@@ -76,17 +75,14 @@ class GninaSelectPose(BiobbObject):
         self.sort_by = properties.get('sort_by', None)
         self.properties = properties
 
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    def check_data_params(self, out_log, err_log):
+    def prepare(self):
         """ Checks all the input/output paths and parameters """
-        self.io_dict["in"]["input_sdf_path"] = check_input_path(self.io_dict["in"]["input_sdf_path"], "input_sdf_path", out_log, self.__class__.__name__)
-        self.io_dict["out"]["output_sdf_path"] = check_output_path(self.io_dict["out"]["output_sdf_path"], "output_sdf_path", False, out_log, self.__class__.__name__)
+        # a gzip compressed SDF file must be named .sdf.gz
+        check_gzip_extension(self.io_dict["in"]["input_sdf_path"], "input_sdf_path", self.out_log, self.__class__.__name__)
+        check_gzip_extension(self.io_dict["out"]["output_sdf_path"], "output_sdf_path", self.out_log, self.__class__.__name__)
 
         if self.sort_by is not None and self.sort_by not in self.SORT_ORDERS:
-            fu.log(self.__class__.__name__ + ': Unknown sort_by %s, use one of %s, exiting' % (self.sort_by, ', '.join(self.SORT_ORDERS)), out_log)
+            fu.log(self.__class__.__name__ + ': Unknown sort_by %s, use one of %s, exiting' % (self.sort_by, ', '.join(self.SORT_ORDERS)), self.out_log)
             raise SystemExit(self.__class__.__name__ + ': Unknown sort_by %s' % self.sort_by)
 
     def select_record(self, records):
@@ -115,17 +111,8 @@ class GninaSelectPose(BiobbObject):
 
         return records[self.pose - 1]
 
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> int:
         """Execute the :class:`GninaSelectPose <gnina.gnina_select_pose.GninaSelectPose>` gnina.gnina_select_pose.GninaSelectPose object."""
-
-        # check input/output paths and parameters
-        self.check_data_params(self.out_log, self.err_log)
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         records = read_sdf_records(self.io_dict["in"]["input_sdf_path"])
         fu.log('%d pose(s) read from %s' % (len(records), self.io_dict["in"]["input_sdf_path"]), self.out_log)

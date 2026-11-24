@@ -5,8 +5,6 @@ import os
 from pathlib import PurePath
 from typing import Optional
 from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.tools.file_utils import launchlogger
-from biobb_vs.vina.common import check_input_path, check_output_path
 
 
 class AutoDockVinaRun(BiobbObject):
@@ -101,45 +99,6 @@ class AutoDockVinaRun(BiobbObject):
         self.binary_path = properties.get("binary_path", "vina")
         self.properties = properties
 
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    def check_data_params(self, out_log, err_log):
-        """Checks all the input/output paths and parameters"""
-        self.io_dict["in"]["input_ligand_pdbqt_path"] = check_input_path(
-            self.io_dict["in"]["input_ligand_pdbqt_path"],
-            "input_ligand_pdbqt_path",
-            self.out_log,
-            self.__class__.__name__,
-        )
-        self.io_dict["in"]["input_receptor_pdbqt_path"] = check_input_path(
-            self.io_dict["in"]["input_receptor_pdbqt_path"],
-            "input_receptor_pdbqt_path",
-            self.out_log,
-            self.__class__.__name__,
-        )
-        self.io_dict["in"]["input_box_path"] = check_input_path(
-            self.io_dict["in"]["input_box_path"],
-            "input_box_path",
-            self.out_log,
-            self.__class__.__name__,
-        )
-        self.io_dict["out"]["output_pdbqt_path"] = check_output_path(
-            self.io_dict["out"]["output_pdbqt_path"],
-            "output_pdbqt_path",
-            False,
-            self.out_log,
-            self.__class__.__name__,
-        )
-        self.io_dict["out"]["output_log_path"] = check_output_path(
-            self.io_dict["out"]["output_log_path"],
-            "output_log_path",
-            True,
-            self.out_log,
-            self.__class__.__name__,
-        )
-
     def calculate_box(self, box_file_path):
         """Read the box center and the box edge lengths from the REMARK line of a box PDB file.
 
@@ -171,17 +130,8 @@ class AutoDockVinaRun(BiobbObject):
             % (box_file_path)
         )
 
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> int:
         """Execute the :class:`AutoDockVinaRun_run <vina.autodock_vina_run.AutoDockVinaRun_run>` vina.autodock_vina_run.AutoDockVinaRun_run object."""
-
-        # check input/output paths and parameters
-        self.check_data_params(self.out_log, self.err_log)
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         if self.container_path:
             working_dir = self.container_volume_path if self.container_volume_path else "/tmp"

@@ -6,8 +6,6 @@ import shutil
 from pathlib import PurePath
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
-from biobb_vs.fpocket.common import check_input_path, check_output_path
 
 
 class FPocketSelect(BiobbObject):
@@ -66,27 +64,8 @@ class FPocketSelect(BiobbObject):
         self.pocket = properties.get('pocket', None)
         self.properties = properties
 
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    def check_data_params(self, out_log, err_log):
-        """ Checks all the input/output paths and parameters """
-        self.io_dict["in"]["input_pockets_zip"] = check_input_path(self.io_dict["in"]["input_pockets_zip"], "input_pockets_zip", out_log, self.__class__.__name__)
-        self.io_dict["out"]["output_pocket_pdb"] = check_output_path(self.io_dict["out"]["output_pocket_pdb"], "output_pocket_pdb", False, out_log, self.__class__.__name__)
-        self.io_dict["out"]["output_pocket_pqr"] = check_output_path(self.io_dict["out"]["output_pocket_pqr"], "output_pocket_pqr", True, out_log, self.__class__.__name__)
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> int:
         """Execute the :class:`FPocketSelect <fpocket.fpocket_select.FPocketSelect>` fpocket.fpocket_select.FPocketSelect object."""
-
-        # check input/output paths and parameters
-        self.check_data_params(self.out_log, self.err_log)
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         # create tmp_folder
         tmp_folder = fu.create_unique_dir()

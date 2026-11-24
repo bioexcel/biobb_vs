@@ -8,12 +8,9 @@ import numpy as np
 from Bio import BiopythonDeprecationWarning
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
 
 from biobb_vs.utils.common import (
     _from_string_to_list,
-    check_input_path,
-    check_output_path,
     get_box_coordinates,
 )
 
@@ -91,37 +88,8 @@ class BoxResidues(BiobbObject):
         self.residue_offset = properties.get("residue_offset", 0)
         self.properties = properties
 
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    def check_data_params(self, out_log, err_log):
-        """Checks all the input/output paths and parameters"""
-        self.io_dict["in"]["input_pdb_path"] = check_input_path(
-            self.io_dict["in"]["input_pdb_path"],
-            "input_pdb_path",
-            self.out_log,
-            self.__class__.__name__,
-        )
-        self.io_dict["out"]["output_pdb_path"] = check_output_path(
-            self.io_dict["out"]["output_pdb_path"],
-            "output_pdb_path",
-            False,
-            self.out_log,
-            self.__class__.__name__,
-        )
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> int:
         """Execute the :class:`BoxResidues <utils.box_residues.BoxResidues>` utils.box_residues.BoxResidues object."""
-
-        # check input/output paths and parameters
-        self.check_data_params(self.out_log, self.err_log)
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         # Parse structure
         fu.log(

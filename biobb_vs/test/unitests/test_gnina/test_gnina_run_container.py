@@ -16,7 +16,7 @@ from biobb_vs.gnina.gnina_run import GninaRun
 def build_cmd(properties, paths):
     """Stages the inputs and returns the command line, running nothing"""
     obj = GninaRun(properties=properties, **paths)
-    obj.check_data_params(obj.out_log, obj.err_log)
+    obj.prepare()
     obj.stage_files()
     try:
         return obj.build_cmd()

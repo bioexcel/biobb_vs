@@ -5,11 +5,8 @@ import json
 from typing import Optional
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
 
 from biobb_vs.fpocket.common import (
-    check_input_path,
-    check_output_path,
     check_range,
     process_output_fpocket_filter,
 )
@@ -95,33 +92,6 @@ class FPocketFilter(BiobbObject):
         ]
         self.properties = properties
 
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    def check_data_params(self, out_log, err_log):
-        """Checks all the input/output paths and parameters"""
-        self.io_dict["in"]["input_pockets_zip"] = check_input_path(
-            self.io_dict["in"]["input_pockets_zip"],
-            "input_pockets_zip",
-            out_log,
-            self.__class__.__name__,
-        )
-        self.io_dict["in"]["input_summary"] = check_output_path(
-            self.io_dict["in"]["input_summary"],
-            "input_summary",
-            False,
-            out_log,
-            self.__class__.__name__,
-        )
-        self.io_dict["out"]["output_filter_pockets_zip"] = check_output_path(
-            self.io_dict["out"]["output_filter_pockets_zip"],
-            "output_filter_pockets_zip",
-            True,
-            out_log,
-            self.__class__.__name__,
-        )
-
     def score_matcher(self, score):
         return lambda d: d["score"] > score[0] and d["score"] <= score[1]
 
@@ -133,17 +103,8 @@ class FPocketFilter(BiobbObject):
     def volume_matcher(self, volume):
         return lambda d: d["volume"] > volume[0] and d["volume"] <= volume[1]
 
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> int:
         """Execute the :class:`FPocketFilter <fpocket.fpocket_filter.FPocketFilter>` fpocket.fpocket_filter.FPocketFilter object."""
-
-        # check input/output paths and parameters
-        self.check_data_params(self.out_log, self.err_log)
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         # load input_summary into a dictionary
         with open(self.io_dict["in"]["input_summary"]) as json_file:

@@ -6,9 +6,8 @@ from typing import Optional
 
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
 
-from biobb_vs.gnina.common import check_input_path, check_output_path, process_output_gnina
+from biobb_vs.gnina.common import check_gzip_extension, process_output_gnina
 
 
 class GninaRun(BiobbObject):
@@ -170,29 +169,19 @@ class GninaRun(BiobbObject):
         self.binary_path = properties.get('binary_path', 'gnina')
         self.properties = properties
 
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    def check_data_params(self, out_log, err_log):
+    def prepare(self):
         """ Checks all the input/output paths and parameters """
-        self.io_dict["in"]["input_ligand_path"] = check_input_path(self.io_dict["in"]["input_ligand_path"], "input_ligand_path", out_log, self.__class__.__name__)
-        self.io_dict["in"]["input_receptor_path"] = check_input_path(self.io_dict["in"]["input_receptor_path"], "input_receptor_path", out_log, self.__class__.__name__)
-        self.io_dict["out"]["output_sdf_path"] = check_output_path(self.io_dict["out"]["output_sdf_path"], "output_sdf_path", False, out_log, self.__class__.__name__)
-        self.io_dict["out"]["output_summary_path"] = check_output_path(self.io_dict["out"]["output_summary_path"], "output_summary_path", True, out_log, self.__class__.__name__)
-        self.io_dict["out"]["output_log_path"] = check_output_path(self.io_dict["out"]["output_log_path"], "output_log_path", True, out_log, self.__class__.__name__)
+        # a gzip compressed SDF file must be named .sdf.gz
+        check_gzip_extension(self.io_dict["out"]["output_sdf_path"], "output_sdf_path", self.out_log, self.__class__.__name__)
 
         # gnina needs a search space, given either as a box file or as a reference structure
         if bool(self.io_dict["in"]["input_box_path"]) == bool(self.io_dict["in"]["input_autobox_path"]):
-            fu.log(self.__class__.__name__ + ': Provide exactly one of input_box_path or input_autobox_path to define the docking box, exiting', out_log)
+            fu.log(self.__class__.__name__ + ': Provide exactly one of input_box_path or input_autobox_path to define the docking box, exiting', self.out_log)
             raise SystemExit(self.__class__.__name__ + ': Provide exactly one of input_box_path or input_autobox_path to define the docking box')
 
         if self.io_dict["in"]["input_box_path"]:
-            self.io_dict["in"]["input_box_path"] = check_input_path(self.io_dict["in"]["input_box_path"], "input_box_path", out_log, self.__class__.__name__)
             # parse it now so an unusable box file is caught before any work is done
             self.calculate_box(self.io_dict["in"]["input_box_path"])
-        else:
-            self.io_dict["in"]["input_autobox_path"] = check_input_path(self.io_dict["in"]["input_autobox_path"], "input_autobox_path", out_log, self.__class__.__name__)
 
     def calculate_box(self, box_file_path):
         """ Reads the docking box out of the REMARK line written by the box building blocks
@@ -278,17 +267,8 @@ class GninaRun(BiobbObject):
 
         return cmd
 
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> int:
         """Execute the :class:`GninaRun <gnina.gnina_run.GninaRun>` gnina.gnina_run.GninaRun object."""
-
-        # check input/output paths and parameters
-        self.check_data_params(self.out_log, self.err_log)
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         # create cmd
         self.cmd = self.build_cmd()

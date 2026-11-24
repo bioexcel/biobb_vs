@@ -6,8 +6,7 @@ import shutil
 from pathlib import PurePath
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
-from biobb_vs.fpocket.common import check_input_path, check_output_path, process_output_fpocket
+from biobb_vs.fpocket.common import process_output_fpocket
 
 
 class FPocketRun(BiobbObject):
@@ -84,27 +83,8 @@ class FPocketRun(BiobbObject):
         self.sort_by = properties.get('sort_by', 'druggability_score')
         self.properties = properties
 
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    def check_data_params(self, out_log, err_log):
-        """ Checks all the input/output paths and parameters """
-        self.io_dict["in"]["input_pdb_path"] = check_input_path(self.io_dict["in"]["input_pdb_path"], "input_pdb_path", out_log, self.__class__.__name__)
-        self.io_dict["out"]["output_pockets_zip"] = check_output_path(self.io_dict["out"]["output_pockets_zip"], "output_pockets_zip", False, out_log, self.__class__.__name__)
-        self.io_dict["out"]["output_summary"] = check_output_path(self.io_dict["out"]["output_summary"], "output_summary", True, out_log, self.__class__.__name__)
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> int:
         """Execute the :class:`FPocketRun <fpocket.fpocket_run.FPocketRun>` fpocket.fpocket_run.FPocketRun object."""
-
-        # check input/output paths and parameters
-        self.check_data_params(self.out_log, self.err_log)
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         if self.container_path:
             working_dir = self.container_volume_path if self.container_volume_path else "/tmp"

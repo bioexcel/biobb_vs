@@ -88,8 +88,11 @@ class FPocketRun(BiobbObject):
 
         if self.container_path:
             working_dir = self.container_volume_path if self.container_volume_path else "/tmp"
-            tmp_input = PurePath(self.stage_io_dict["in"]["input_pdb_path"]).name
+            # process_output_fpocket looks for the outputs of fpocket_input.pdb
+            tmp_input = 'fpocket_input.pdb'
             tmp_folder = self.stage_io_dict['unique_dir']
+            if PurePath(self.stage_io_dict["in"]["input_pdb_path"]).name != tmp_input:
+                shutil.copy(self.io_dict["in"]["input_pdb_path"], str(PurePath(tmp_folder).joinpath(tmp_input)))
         else:
             # create tmp_folder
             tmp_folder = fu.create_unique_dir()

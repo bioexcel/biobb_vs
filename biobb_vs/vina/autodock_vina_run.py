@@ -177,9 +177,9 @@ class AutoDockVinaRun(BiobbObject):
             PurePath(self.stage_io_dict["out"]["output_pdbqt_path"]).name,
             "--verbosity",
             "1",
-            ">",
-            PurePath(self.stage_io_dict["out"]["output_log_path"]).name,
         ]
+        if self.stage_io_dict["out"].get("output_log_path"):
+            self.cmd.extend([">", PurePath(self.stage_io_dict["out"]["output_log_path"]).name])
 
         # Run Biobb block
         self.run_biobb()

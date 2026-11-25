@@ -98,9 +98,9 @@ class Box(BiobbObject):
         with open(self.io_dict["in"]["input_pdb_path"]) as infile:
             for line in infile:
                 if line.startswith("HETATM") or line.startswith("ATOM"):
-                    x_coordslist.append(float(line[31:38].strip()))
-                    y_coordslist.append(float(line[39:46].strip()))
-                    z_coordslist.append(float(line[47:54].strip()))
+                    x_coordslist.append(float(line[30:38].strip()))
+                    y_coordslist.append(float(line[38:46].strip()))
+                    z_coordslist.append(float(line[46:54].strip()))
                     selection_atoms_num = selection_atoms_num + 1
 
         # Compute binding site box size

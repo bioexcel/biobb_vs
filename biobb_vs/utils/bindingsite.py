@@ -161,10 +161,7 @@ class BindingSite(BiobbObject):
             )
 
         # create temporary folder for decompressing the input_clusters_zip file
-        unique_dir = PurePath(self.create_tmp_dir())
-        fu.log(
-            "Creating %s temporary folder" % unique_dir, self.out_log, self.global_log
-        )
+        unique_dir = PurePath(self.create_tmp_dir(log=True))
 
         # decompress the input_clusters_zip file
         cluster_list = fu.unzip_list(

@@ -71,8 +71,7 @@ class FPocketSelect(BiobbObject):
         """Execute the :class:`FPocketSelect <fpocket.fpocket_select.FPocketSelect>` fpocket.fpocket_select.FPocketSelect object."""
 
         # create tmp_folder
-        tmp_folder = self.create_tmp_dir()
-        fu.log('Creating %s temporary folder' % tmp_folder, self.out_log)
+        tmp_folder = self.create_tmp_dir(log=True)
 
         # decompress the input_pockets_zip file to tmp_folder
         all_pockets = fu.unzip_list(zip_file=self.io_dict["in"]["input_pockets_zip"], dest_dir=tmp_folder, out_log=self.out_log)

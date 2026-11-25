@@ -95,8 +95,7 @@ class FPocketRun(BiobbObject):
                 shutil.copy(self.io_dict["in"]["input_pdb_path"], str(PurePath(tmp_folder).joinpath(tmp_input)))
         else:
             # create tmp_folder
-            tmp_folder = self.create_tmp_dir()
-            fu.log('Creating %s temporary folder' % tmp_folder, self.out_log)
+            tmp_folder = self.create_tmp_dir(log=True)
             working_dir = tmp_folder
             tmp_input = 'input.pdb'
             # copy input_pdb_path to tmp_folder

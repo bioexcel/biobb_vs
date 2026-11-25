@@ -278,12 +278,11 @@ class GninaRun(BiobbObject):
         # Run Biobb block
         self.run_biobb()
 
-    def process_outputs(self) -> None:
-        """Write the output summary from the poses of the output sdf file."""
+        # Write the output summary from the poses of the output sdf file.
         if self.return_code == 0:
             if self.io_dict["out"].get("output_summary_path"):
-                process_output_gnina(self.io_dict["out"]["output_sdf_path"],
-                                     self.io_dict["out"]["output_summary_path"],
+                process_output_gnina(self.sandbox_file("output_sdf_path"),
+                                     self.sandbox_file("output_summary_path"),
                                      self.out_log,
                                      self.__class__.__name__)
         else:

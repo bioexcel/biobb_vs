@@ -64,6 +64,9 @@ class FPocketSelect(BiobbObject):
         self.pocket = properties.get('pocket', None)
         self.properties = properties
 
+    def stage_files(self) -> None:
+        """The block does not use the sandbox: there are no files to stage."""
+
     def run(self) -> None:
         """Execute the :class:`FPocketSelect <fpocket.fpocket_select.FPocketSelect>` fpocket.fpocket_select.FPocketSelect object."""
 

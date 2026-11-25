@@ -108,6 +108,9 @@ class BindingSite(BiobbObject):
         self.gap_extend = properties.get("gap_extend", -0.5)
         self.properties = properties
 
+    def stage_files(self) -> None:
+        """The block does not use the sandbox: there are no files to stage."""
+
     def run(self) -> None:
         """Execute the :class:`BindingSite <utils.bindingsite.BindingSite>` utils.bindingsite.BindingSite object."""
 

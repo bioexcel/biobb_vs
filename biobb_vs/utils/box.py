@@ -70,6 +70,9 @@ class Box(BiobbObject):
         self.box_coordinates = float(properties.get("box_coordinates", False))
         self.properties = properties
 
+    def stage_files(self) -> None:
+        """The block does not use the sandbox: there are no files to stage."""
+
     def run(self) -> None:
         """Execute the :class:`Box <utils.box.Box>` utils.box.Box object."""
 

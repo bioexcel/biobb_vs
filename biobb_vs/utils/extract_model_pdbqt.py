@@ -75,6 +75,9 @@ class ExtractModelPDBQT(BiobbObject):
         self.model = properties.get("model", 1)
         self.properties = properties
 
+    def stage_files(self) -> None:
+        """The block does not use the sandbox: there are no files to stage."""
+
     def run(self) -> None:
         """Execute the :class:`ExtractModelPDBQT <utils.extract_model_pdbqt.ExtractModelPDBQT>` utils.extract_model_pdbqt.ExtractModelPDBQT object."""
 

@@ -103,6 +103,9 @@ class FPocketFilter(BiobbObject):
     def volume_matcher(self, volume):
         return lambda d: d["volume"] > volume[0] and d["volume"] <= volume[1]
 
+    def stage_files(self) -> None:
+        """The block does not use the sandbox: there are no files to stage."""
+
     def run(self) -> None:
         """Execute the :class:`FPocketFilter <fpocket.fpocket_filter.FPocketFilter>` fpocket.fpocket_filter.FPocketFilter object."""
 

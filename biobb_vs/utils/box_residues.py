@@ -88,6 +88,9 @@ class BoxResidues(BiobbObject):
         self.residue_offset = properties.get("residue_offset", 0)
         self.properties = properties
 
+    def stage_files(self) -> None:
+        """The block does not use the sandbox: there are no files to stage."""
+
     def run(self) -> None:
         """Execute the :class:`BoxResidues <utils.box_residues.BoxResidues>` utils.box_residues.BoxResidues object."""
 

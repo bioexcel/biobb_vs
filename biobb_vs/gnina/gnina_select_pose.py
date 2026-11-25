@@ -111,6 +111,9 @@ class GninaSelectPose(BiobbObject):
 
         return records[self.pose - 1]
 
+    def stage_files(self) -> None:
+        """The block does not use the sandbox: there are no files to stage."""
+
     def run(self) -> None:
         """Execute the :class:`GninaSelectPose <gnina.gnina_select_pose.GninaSelectPose>` gnina.gnina_select_pose.GninaSelectPose object."""
 

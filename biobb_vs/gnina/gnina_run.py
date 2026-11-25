@@ -126,48 +126,7 @@ class GninaRun(BiobbObject):
                  input_box_path=None, input_autobox_path=None,
                  output_summary_path=None, output_log_path=None,
                  properties=None, **kwargs) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {
-                "input_ligand_path": input_ligand_path,
-                "input_receptor_path": input_receptor_path,
-                "input_box_path": input_box_path,
-                "input_autobox_path": input_autobox_path
-            },
-            "out": {
-                "output_sdf_path": output_sdf_path,
-                "output_summary_path": output_summary_path,
-                "output_log_path": output_log_path
-            }
-        }
-
-        # Properties specific for BB
-        self.cpu = properties.get('cpu', 1)
-        self.exhaustiveness = properties.get('exhaustiveness', 8)
-        self.num_modes = properties.get('num_modes', 9)
-        self.min_rmsd_filter = properties.get('min_rmsd_filter', 1.0)
-        self.num_mc_saved = properties.get('num_mc_saved', None)
-        self.seed = properties.get('seed', None)
-        self.scoring = properties.get('scoring', None)
-        self.cnn_scoring = properties.get('cnn_scoring', None)
-        self.cnn = properties.get('cnn', None)
-        self.pose_sort_order = properties.get('pose_sort_order', None)
-        self.autobox_add = properties.get('autobox_add', None)
-        self.autobox_extend = properties.get('autobox_extend', None)
-        self.minimize = properties.get('minimize', False)
-        self.score_only = properties.get('score_only', False)
-        self.local_only = properties.get('local_only', False)
-        self.no_gpu = properties.get('no_gpu', False)
-        self.device = properties.get('device', None)
-        self.quiet = properties.get('quiet', False)
-        self.binary_path = properties.get('binary_path', 'gnina')
-        self.properties = properties
+        super().__init__(**locals())
 
     def prepare(self):
         """ Checks all the input/output paths and parameters """

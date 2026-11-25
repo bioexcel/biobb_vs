@@ -59,21 +59,7 @@ class ExtractModelPDBQT(BiobbObject):
     def __init__(
         self, input_pdbqt_path, output_pdbqt_path, properties=None, **kwargs
     ) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {"input_pdbqt_path": input_pdbqt_path},
-            "out": {"output_pdbqt_path": output_pdbqt_path},
-        }
-
-        # Properties specific for BB
-        self.model = properties.get("model", 1)
-        self.properties = properties
+        super().__init__(**locals())
 
     def stage_files(self) -> None:
         """The block does not use the sandbox: there are no files to stage."""

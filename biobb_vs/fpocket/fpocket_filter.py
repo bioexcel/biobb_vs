@@ -63,34 +63,20 @@ class FPocketFilter(BiobbObject):
         properties=None,
         **kwargs,
     ) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {
-                "input_pockets_zip": input_pockets_zip,
-                "input_summary": input_summary,
-            },
-            "out": {"output_filter_pockets_zip": output_filter_pockets_zip},
-        }
+        super().__init__(**locals())
 
         # Properties specific for BB
         self.score = [
-            float(elem) for elem in _from_string_to_list(properties.get("score", None))
+            float(elem) for elem in _from_string_to_list(self.score)
         ]
         self.druggability_score = [
             float(elem)
-            for elem in _from_string_to_list(properties.get("druggability_score", None))
+            for elem in _from_string_to_list(self.druggability_score)
         ]
 
         self.volume = [
-            float(elem) for elem in _from_string_to_list(properties.get("volume", None))
+            float(elem) for elem in _from_string_to_list(self.volume)
         ]
-        self.properties = properties
 
     def score_matcher(self, score):
         return lambda d: d["score"] > score[0] and d["score"] <= score[1]

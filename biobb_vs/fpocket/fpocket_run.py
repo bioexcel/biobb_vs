@@ -63,25 +63,7 @@ class FPocketRun(BiobbObject):
 
     def __init__(self, input_pdb_path, output_pockets_zip, output_summary,
                  properties=None, **kwargs) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {"input_pdb_path": input_pdb_path},
-            "out": {"output_pockets_zip": output_pockets_zip, "output_summary": output_summary}
-        }
-
-        # Properties specific for BB
-        self.binary_path = properties.get('binary_path', 'fpocket')
-        self.min_radius = properties.get('min_radius', None)
-        self.max_radius = properties.get('max_radius', None)
-        self.num_spheres = properties.get('num_spheres', None)
-        self.sort_by = properties.get('sort_by', 'druggability_score')
-        self.properties = properties
+        super().__init__(**locals())
 
     def run(self) -> None:
         """Execute the :class:`FPocketRun <fpocket.fpocket_run.FPocketRun>` fpocket.fpocket_run.FPocketRun object."""

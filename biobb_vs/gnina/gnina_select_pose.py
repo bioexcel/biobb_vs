@@ -57,23 +57,7 @@ class GninaSelectPose(BiobbObject):
 
     def __init__(self, input_sdf_path, output_sdf_path,
                  properties=None, **kwargs) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {"input_sdf_path": input_sdf_path},
-            "out": {"output_sdf_path": output_sdf_path}
-        }
-
-        # Properties specific for BB
-        self.pose = properties.get('pose', 1)
-        self.ligand = properties.get('ligand', None)
-        self.sort_by = properties.get('sort_by', None)
-        self.properties = properties
+        super().__init__(**locals())
 
     def prepare(self):
         """ Checks all the input/output paths and parameters """

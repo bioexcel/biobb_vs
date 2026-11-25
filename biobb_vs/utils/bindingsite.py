@@ -84,29 +84,10 @@ class BindingSite(BiobbObject):
         properties=None,
         **kwargs,
     ) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {
-                "input_pdb_path": input_pdb_path,
-                "input_clusters_zip": input_clusters_zip,
-            },
-            "out": {"output_pdb_path": output_pdb_path},
-        }
+        super().__init__(**locals())
 
         # Properties specific for BB
-        self.ligand = properties.get("ligand", None)
-        self.radius = float(properties.get("radius", 5.0))
-        self.max_num_ligands = properties.get("max_num_ligands", 15)
-        self.matrix_name = properties.get("matrix_name", "BLOSUM62")
-        self.gap_open = properties.get("gap_open", -10.0)
-        self.gap_extend = properties.get("gap_extend", -0.5)
-        self.properties = properties
+        self.radius = float(self.radius)
 
     def stage_files(self) -> None:
         """The block does not use the sandbox: there are no files to stage."""

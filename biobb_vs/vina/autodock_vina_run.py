@@ -71,33 +71,7 @@ class AutoDockVinaRun(BiobbObject):
         properties=None,
         **kwargs,
     ) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {
-                "input_ligand_pdbqt_path": input_ligand_pdbqt_path,
-                "input_receptor_pdbqt_path": input_receptor_pdbqt_path,
-                "input_box_path": input_box_path,
-            },
-            "out": {
-                "output_pdbqt_path": output_pdbqt_path,
-                "output_log_path": output_log_path,
-            },
-        }
-
-        # Properties specific for BB
-        self.cpu = properties.get("cpu", 1)
-        self.exhaustiveness = properties.get("exhaustiveness", 8)
-        self.num_modes = properties.get("num_modes", 9)
-        self.min_rmsd = properties.get("min_rmsd", 1)
-        self.energy_range = properties.get("energy_range", 3)
-        self.binary_path = properties.get("binary_path", "vina")
-        self.properties = properties
+        super().__init__(**locals())
 
     def calculate_box(self, box_file_path):
         """Read the box center and the box edge lengths from the REMARK line of a box PDB file.

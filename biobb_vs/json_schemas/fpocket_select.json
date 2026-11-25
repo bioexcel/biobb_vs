@@ -74,7 +74,7 @@
             "properties": {
                 "pocket": {
                     "type": "integer",
-                    "default": 1,
+                    "default": null,
                     "wf_prop": false,
                     "description": "Pocket id from the summary json given by the fpocket building block.",
                     "min": 1,

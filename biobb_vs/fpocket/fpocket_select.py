@@ -19,7 +19,7 @@ class FPocketSelect(BiobbObject):
         output_pocket_pdb (str): Path to the PDB file with the cavity found by fpocket. File type: output. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/fpocket/ref_output_pocket.pdb>`_. Accepted formats: pdb (edam:format_1476).
         output_pocket_pqr (str): Path to the PQR file with the pocket found by fpocket. File type: output. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/fpocket/ref_output_pocket.pqr>`_. Accepted formats: pqr (edam:format_1476).
         properties (dic - Python dictionary object containing the tool parameters, not input/output files):
-            * **pocket** (*int*) - (1) [1~1000|1] Pocket id from the summary json given by the fpocket building block.
+            * **pocket** (*int*) - (None) [1~1000|1] Pocket id from the summary json given by the fpocket building block.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
             * **sandbox_path** (*str*) - ("./") [WF property] Parent path to the sandbox directory.
@@ -48,21 +48,7 @@ class FPocketSelect(BiobbObject):
 
     def __init__(self, input_pockets_zip, output_pocket_pdb, output_pocket_pqr,
                  properties=None, **kwargs) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {"input_pockets_zip": input_pockets_zip},
-            "out": {"output_pocket_pdb": output_pocket_pdb, "output_pocket_pqr": output_pocket_pqr}
-        }
-
-        # Properties specific for BB
-        self.pocket = properties.get('pocket', None)
-        self.properties = properties
+        super().__init__(**locals())
 
     def stage_files(self) -> None:
         """The block does not use the sandbox: there are no files to stage."""

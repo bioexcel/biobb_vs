@@ -69,24 +69,12 @@ class BoxResidues(BiobbObject):
     def __init__(
         self, input_pdb_path, output_pdb_path, properties=None, **kwargs
     ) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {"input_pdb_path": input_pdb_path},
-            "out": {"output_pdb_path": output_pdb_path},
-        }
+        super().__init__(**locals())
 
         # Properties specific for BB
-        self.resid_list = _from_string_to_list(properties.get("resid_list", []))
-        self.offset = float(properties.get("offset", 2.0))
-        self.box_coordinates = float(properties.get("box_coordinates", False))
-        self.residue_offset = properties.get("residue_offset", 0)
-        self.properties = properties
+        self.resid_list = _from_string_to_list(self.resid_list)
+        self.offset = float(self.offset)
+        self.box_coordinates = float(self.box_coordinates)
 
     def stage_files(self) -> None:
         """The block does not use the sandbox: there are no files to stage."""

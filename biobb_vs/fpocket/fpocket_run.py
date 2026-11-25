@@ -83,24 +83,24 @@ class FPocketRun(BiobbObject):
         self.sort_by = properties.get('sort_by', 'druggability_score')
         self.properties = properties
 
-    def run(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`FPocketRun <fpocket.fpocket_run.FPocketRun>` fpocket.fpocket_run.FPocketRun object."""
 
         if self.container_path:
             working_dir = self.container_volume_path if self.container_volume_path else "/tmp"
             # process_output_fpocket looks for the outputs of fpocket_input.pdb
             tmp_input = 'fpocket_input.pdb'
-            tmp_folder = self.stage_io_dict['unique_dir']
+            self.tmp_folder = self.stage_io_dict['unique_dir']
             if PurePath(self.stage_io_dict["in"]["input_pdb_path"]).name != tmp_input:
-                shutil.copy(self.io_dict["in"]["input_pdb_path"], str(PurePath(tmp_folder).joinpath(tmp_input)))
+                shutil.copy(self.io_dict["in"]["input_pdb_path"], str(PurePath(self.tmp_folder).joinpath(tmp_input)))
         else:
             # create tmp_folder
-            tmp_folder = fu.create_unique_dir()
-            fu.log('Creating %s temporary folder' % tmp_folder, self.out_log)
-            working_dir = tmp_folder
+            self.tmp_folder = fu.create_unique_dir()
+            fu.log('Creating %s temporary folder' % self.tmp_folder, self.out_log)
+            working_dir = self.tmp_folder
             tmp_input = 'input.pdb'
             # copy input_pdb_path to tmp_folder
-            shutil.copy(self.io_dict["in"]["input_pdb_path"], str(PurePath(tmp_folder).joinpath(tmp_input)))
+            shutil.copy(self.io_dict["in"]["input_pdb_path"], str(PurePath(self.tmp_folder).joinpath(tmp_input)))
 
         # create cmd
         self.cmd = ["cd", working_dir, ";",
@@ -122,10 +122,11 @@ class FPocketRun(BiobbObject):
         # Run Biobb block
         self.run_biobb()
 
-        # Copy files to host
-        self.copy_to_host()
+        self.tmp_files.append(self.tmp_folder)
 
-        process_output_fpocket(tmp_folder,
+    def process_outputs(self) -> None:
+        """Write the output pockets zip and the output summary from the folder written by fpocket."""
+        process_output_fpocket(self.tmp_folder,
                                self.io_dict["out"]["output_pockets_zip"],
                                self.io_dict["out"]["output_summary"],
                                self.sort_by,
@@ -133,11 +134,6 @@ class FPocketRun(BiobbObject):
                                self.container_path,
                                self.out_log,
                                self.__class__.__name__)
-
-        self.tmp_files.append(tmp_folder)
-        self.remove_tmp_files()
-
-        return self.return_code
 
 
 def fpocket_run(input_pdb_path: str, output_pockets_zip: str, output_summary: str, properties: Optional[dict] = None, **kwargs) -> int:

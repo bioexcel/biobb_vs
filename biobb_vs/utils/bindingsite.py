@@ -108,7 +108,7 @@ class BindingSite(BiobbObject):
         self.gap_extend = properties.get("gap_extend", -0.5)
         self.properties = properties
 
-    def run(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`BindingSite <utils.bindingsite.BindingSite>` utils.bindingsite.BindingSite object."""
 
         # Parse structure
@@ -392,15 +392,7 @@ class BindingSite(BiobbObject):
         io.set_structure(structPDB)
         io.save(self.io_dict["out"]["output_pdb_path"])
 
-        # Copy files to host
-        self.copy_to_host()
-
         self.tmp_files.append(str(unique_dir))
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return 0
 
 
 def bindingsite(

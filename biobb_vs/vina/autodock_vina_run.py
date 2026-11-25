@@ -130,7 +130,7 @@ class AutoDockVinaRun(BiobbObject):
             % (box_file_path)
         )
 
-    def run(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`AutoDockVinaRun_run <vina.autodock_vina_run.AutoDockVinaRun_run>` vina.autodock_vina_run.AutoDockVinaRun_run object."""
 
         if self.container_path:
@@ -183,16 +183,6 @@ class AutoDockVinaRun(BiobbObject):
 
         # Run Biobb block
         self.run_biobb()
-
-        # Copy files to host
-        self.copy_to_host()
-
-        # remove temporary folder(s)
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return self.return_code
 
 
 def autodock_vina_run(

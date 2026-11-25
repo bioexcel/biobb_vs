@@ -64,7 +64,7 @@ class FPocketSelect(BiobbObject):
         self.pocket = properties.get('pocket', None)
         self.properties = properties
 
-    def run(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`FPocketSelect <fpocket.fpocket_select.FPocketSelect>` fpocket.fpocket_select.FPocketSelect object."""
 
         # create tmp_folder
@@ -84,15 +84,7 @@ class FPocketSelect(BiobbObject):
                 fu.log('Saving %s file' % self.io_dict["out"]["output_pocket_pqr"], self.out_log)
                 shutil.copy(p, self.io_dict["out"]["output_pocket_pqr"])
 
-        # Copy files to host
-        self.copy_to_host()
-
         self.tmp_files.append(tmp_folder)
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return 0
 
 
 def fpocket_select(input_pockets_zip: str, output_pocket_pdb: str, output_pocket_pqr: str, properties: Optional[dict] = None, **kwargs) -> int:

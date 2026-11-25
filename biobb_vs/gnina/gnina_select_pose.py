@@ -111,7 +111,7 @@ class GninaSelectPose(BiobbObject):
 
         return records[self.pose - 1]
 
-    def run(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`GninaSelectPose <gnina.gnina_select_pose.GninaSelectPose>` gnina.gnina_select_pose.GninaSelectPose object."""
 
         records = read_sdf_records(self.io_dict["in"]["input_sdf_path"])
@@ -126,15 +126,6 @@ class GninaSelectPose(BiobbObject):
         # the record is copied as it stands, scores included
         with open_sdf(self.io_dict["out"]["output_sdf_path"], 'wt') as output_file:
             output_file.write(record['text'])
-
-        # Copy files to host
-        self.copy_to_host()
-
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return 0
 
 
 def gnina_select_pose(input_sdf_path: str, output_sdf_path: str, properties: Optional[dict] = None, **kwargs) -> int:

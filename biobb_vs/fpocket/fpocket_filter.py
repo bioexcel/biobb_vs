@@ -103,7 +103,7 @@ class FPocketFilter(BiobbObject):
     def volume_matcher(self, volume):
         return lambda d: d["volume"] > volume[0] and d["volume"] <= volume[1]
 
-    def run(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`FPocketFilter <fpocket.fpocket_filter.FPocketFilter>` fpocket.fpocket_filter.FPocketFilter object."""
 
         # load input_summary into a dictionary
@@ -147,7 +147,7 @@ class FPocketFilter(BiobbObject):
 
         if len(search) == 0:
             fu.log("No matches found", self.out_log)
-            return 0
+            return
 
         str_out = ""
         for s in search:
@@ -176,15 +176,7 @@ class FPocketFilter(BiobbObject):
             self.out_log,
         )
 
-        # Copy files to host
-        self.copy_to_host()
-
         self.tmp_files.append(tmp_folder)
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return 0
 
 
 def fpocket_filter(

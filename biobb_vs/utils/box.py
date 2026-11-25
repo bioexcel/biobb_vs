@@ -70,7 +70,7 @@ class Box(BiobbObject):
         self.box_coordinates = float(properties.get("box_coordinates", False))
         self.properties = properties
 
-    def run(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`Box <utils.box.Box>` utils.box.Box object."""
 
         # check if cavity (pdb) or pocket (pqr)
@@ -180,14 +180,6 @@ class Box(BiobbObject):
             self.out_log,
             self.global_log,
         )
-
-        # Copy files to host
-        self.copy_to_host()
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return 0
 
 
 def box(

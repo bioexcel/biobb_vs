@@ -88,7 +88,7 @@ class BoxResidues(BiobbObject):
         self.residue_offset = properties.get("residue_offset", 0)
         self.properties = properties
 
-    def run(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`BoxResidues <utils.box_residues.BoxResidues>` utils.box_residues.BoxResidues object."""
 
         # Parse structure
@@ -235,12 +235,6 @@ class BoxResidues(BiobbObject):
             self.out_log,
             self.global_log,
         )
-
-        # Copy files to host
-        self.copy_to_host()
-        self.remove_tmp_files()
-
-        return 0
 
 
 def box_residues(

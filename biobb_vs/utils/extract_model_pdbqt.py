@@ -75,18 +75,8 @@ class ExtractModelPDBQT(BiobbObject):
         self.model = properties.get("model", 1)
         self.properties = properties
 
-    def run(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`ExtractModelPDBQT <utils.extract_model_pdbqt.ExtractModelPDBQT>` utils.extract_model_pdbqt.ExtractModelPDBQT object."""
-
-        if self.restart:
-            output_file_list = [self.io_dict["out"]["output_pdbqt_path"]]
-            if fu.check_complete_files(output_file_list):
-                fu.log(
-                    "Restart is enabled, this step: %s will the skipped" % self.step,
-                    self.out_log,
-                    self.global_log,
-                )
-                return 0
 
         structure_name = PurePath(self.io_dict["in"]["input_pdbqt_path"]).name
         parser = Bio.PDB.PDBParser(QUIET=True)
@@ -128,15 +118,6 @@ class ExtractModelPDBQT(BiobbObject):
             % (self.model, self.io_dict["out"]["output_pdbqt_path"]),
             self.out_log,
         )
-
-        # Copy files to host
-        self.copy_to_host()
-        # Remove temporal files
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return 0
 
 
 def extract_model_pdbqt(

@@ -267,7 +267,7 @@ class GninaRun(BiobbObject):
 
         return cmd
 
-    def run(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`GninaRun <gnina.gnina_run.GninaRun>` gnina.gnina_run.GninaRun object."""
 
         # create cmd
@@ -278,12 +278,8 @@ class GninaRun(BiobbObject):
         # Run Biobb block
         self.run_biobb()
 
-        # Copy files to host
-        self.copy_to_host()
-
-        # remove temporary folder(s)
-        self.remove_tmp_files()
-
+    def process_outputs(self) -> None:
+        """Write the output summary from the poses of the output sdf file."""
         if self.return_code == 0:
             if self.io_dict["out"].get("output_summary_path"):
                 process_output_gnina(self.io_dict["out"]["output_sdf_path"],
@@ -292,10 +288,6 @@ class GninaRun(BiobbObject):
                                      self.__class__.__name__)
         else:
             fu.log('gnina ended with return code %s, no summary was generated' % self.return_code, self.out_log, self.global_log)
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return self.return_code
 
 
 def gnina_run(input_ligand_path: str, input_receptor_path: str, output_sdf_path: str,

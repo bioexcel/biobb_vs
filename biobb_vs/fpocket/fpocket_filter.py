@@ -164,7 +164,7 @@ class FPocketFilter(BiobbObject):
         fu.log("Found %d matches:%s" % (len(search), str_out), self.out_log)
 
         # create tmp_folder
-        tmp_folder = fu.create_unique_dir()
+        tmp_folder = self.create_tmp_dir()
         fu.log("Creating %s temporary folder" % tmp_folder, self.out_log)
 
         process_output_fpocket_filter(
@@ -175,8 +175,6 @@ class FPocketFilter(BiobbObject):
             self.remove_tmp,
             self.out_log,
         )
-
-        self.tmp_files.append(tmp_folder)
 
 
 def fpocket_filter(

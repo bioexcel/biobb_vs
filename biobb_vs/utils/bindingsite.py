@@ -158,7 +158,7 @@ class BindingSite(BiobbObject):
             )
 
         # create temporary folder for decompressing the input_clusters_zip file
-        unique_dir = PurePath(fu.create_unique_dir())
+        unique_dir = PurePath(self.create_tmp_dir())
         fu.log(
             "Creating %s temporary folder" % unique_dir, self.out_log, self.global_log
         )
@@ -391,8 +391,6 @@ class BindingSite(BiobbObject):
         # write PDB file
         io.set_structure(structPDB)
         io.save(self.io_dict["out"]["output_pdb_path"])
-
-        self.tmp_files.append(str(unique_dir))
 
 
 def bindingsite(

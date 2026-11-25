@@ -95,7 +95,7 @@ class FPocketRun(BiobbObject):
                 shutil.copy(self.io_dict["in"]["input_pdb_path"], str(PurePath(tmp_folder).joinpath(tmp_input)))
         else:
             # create tmp_folder
-            tmp_folder = fu.create_unique_dir()
+            tmp_folder = self.create_tmp_dir()
             fu.log('Creating %s temporary folder' % tmp_folder, self.out_log)
             working_dir = tmp_folder
             tmp_input = 'input.pdb'
@@ -121,8 +121,6 @@ class FPocketRun(BiobbObject):
 
         # Run Biobb block
         self.run_biobb()
-
-        self.tmp_files.append(tmp_folder)
 
         # Write the output pockets zip and the output summary from the folder written by fpocket.
         process_output_fpocket(tmp_folder,

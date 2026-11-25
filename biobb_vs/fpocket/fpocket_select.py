@@ -68,7 +68,7 @@ class FPocketSelect(BiobbObject):
         """Execute the :class:`FPocketSelect <fpocket.fpocket_select.FPocketSelect>` fpocket.fpocket_select.FPocketSelect object."""
 
         # create tmp_folder
-        tmp_folder = fu.create_unique_dir()
+        tmp_folder = self.create_tmp_dir()
         fu.log('Creating %s temporary folder' % tmp_folder, self.out_log)
 
         # decompress the input_pockets_zip file to tmp_folder
@@ -83,8 +83,6 @@ class FPocketSelect(BiobbObject):
             else:
                 fu.log('Saving %s file' % self.io_dict["out"]["output_pocket_pqr"], self.out_log)
                 shutil.copy(p, self.io_dict["out"]["output_pocket_pqr"])
-
-        self.tmp_files.append(tmp_folder)
 
 
 def fpocket_select(input_pockets_zip: str, output_pocket_pdb: str, output_pocket_pqr: str, properties: Optional[dict] = None, **kwargs) -> int:

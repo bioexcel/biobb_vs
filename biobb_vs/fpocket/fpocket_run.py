@@ -31,7 +31,6 @@ class FPocketRun(BiobbObject):
             * **container_path** (*str*) - (None) Container path definition.
             * **container_image** (*str*) - ('fpocket/fpocket:latest') Container image definition.
             * **container_volume_path** (*str*) - ('/tmp') Container volume path definition.
-            * **container_working_dir** (*str*) - (None) Container working directory definition.
             * **container_user_id** (*str*) - (None) Container user_id definition.
             * **container_shell_path** (*str*) - ('/bin/bash') Path to default shell inside the container.
 
@@ -68,25 +67,14 @@ class FPocketRun(BiobbObject):
     def run(self) -> None:
         """Execute the :class:`FPocketRun <fpocket.fpocket_run.FPocketRun>` fpocket.fpocket_run.FPocketRun object."""
 
-        if self.container_path:
-            working_dir = self.container_volume_path if self.container_volume_path else "/tmp"
-            # process_output_fpocket looks for the outputs of fpocket_input.pdb
-            tmp_input = 'fpocket_input.pdb'
-            tmp_folder = self.stage_io_dict['unique_dir']
-            if PurePath(self.stage_io_dict["in"]["input_pdb_path"]).name != tmp_input:
-                shutil.copy(self.io_dict["in"]["input_pdb_path"], str(PurePath(tmp_folder).joinpath(tmp_input)))
-        else:
-            # create tmp_folder
-            tmp_folder = self.create_tmp_dir(log=True)
-            working_dir = tmp_folder
-            tmp_input = 'input.pdb'
-            # copy input_pdb_path to tmp_folder
-            shutil.copy(self.io_dict["in"]["input_pdb_path"], str(PurePath(tmp_folder).joinpath(tmp_input)))
+        # fpocket writes its outputs in input_out, next to its input: a folder of the sandbox
+        tmp_folder = self.create_tmp_dir(log=True)
+        tmp_input = str(PurePath(tmp_folder).joinpath('input.pdb'))
+        shutil.copy(self.sandbox_file("input_pdb_path"), tmp_input)
 
         # create cmd
-        self.cmd = ["cd", working_dir, ";",
-                    self.binary_path,
-                    '-f', tmp_input]
+        self.cmd = [self.binary_path,
+                    '-f', self.staged_path(tmp_input)]
 
         # adding extra properties
         if self.min_radius:
@@ -109,7 +97,6 @@ class FPocketRun(BiobbObject):
                                self.sandbox_file("output_summary"),
                                self.sort_by,
                                self.remove_tmp,
-                               self.container_path,
                                self.out_log,
                                self.__class__.__name__)
 

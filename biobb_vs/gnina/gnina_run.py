@@ -50,7 +50,6 @@ class GninaRun(BiobbObject):
             * **container_path** (*str*) - (None) Container path definition.
             * **container_image** (*str*) - ('gnina/gnina:latest') Container image definition.
             * **container_volume_path** (*str*) - ('/data') Container volume path definition.
-            * **container_working_dir** (*str*) - (None) Container working directory definition.
             * **container_user_id** (*str*) - (None) Container user_id definition.
             * **container_shell_path** (*str*) - ('/bin/bash -c') Path to default shell inside the container.
 
@@ -163,34 +162,17 @@ class GninaRun(BiobbObject):
         fu.log(self.__class__.__name__ + ': No REMARK BOX CENTER line found in %s, exiting' % box_file_path, self.out_log)
         raise SystemExit(self.__class__.__name__ + ': No REMARK BOX CENTER line found in %s' % box_file_path)
 
-    def cmd_path(self, path):
-        """ Renders a staged path the way gnina will see it
-
-        Inside a container every staged file sits in the mounted volume, so a
-        bare name is enough once the command has moved there. Locally the staged
-        paths are already usable as they stand, which also keeps them correct
-        when the sandbox is disabled or already the working directory.
-        """
-        if self.container_path:
-            return str(PurePath(path).name)
-        return str(path)
-
     def build_cmd(self) -> list:
         """ Builds the gnina command line out of the staged files and the properties
 
         Kept apart from :meth:`launch` so the command can be inspected without
         running gnina. Must be called after ``stage_files``.
         """
-        if self.container_path:
-            working_dir = self.container_volume_path if self.container_volume_path else "/data"
-        else:
-            working_dir = self.stage_io_dict.get("unique_dir", ".")
 
-        cmd = ["cd", working_dir, ";",
-               self.binary_path,
-               "--receptor", self.cmd_path(self.stage_io_dict["in"]["input_receptor_path"]),
-               "--ligand", self.cmd_path(self.stage_io_dict["in"]["input_ligand_path"]),
-               "--out", self.cmd_path(self.stage_io_dict["out"]["output_sdf_path"])]
+        cmd = [self.binary_path,
+               "--receptor", self.stage_io_dict["in"]["input_receptor_path"],
+               "--ligand", self.stage_io_dict["in"]["input_ligand_path"],
+               "--out", self.stage_io_dict["out"]["output_sdf_path"]]
 
         # the box file is read here and never handed to gnina, so it is taken
         # from io_dict and not from the staged copy
@@ -205,7 +187,7 @@ class GninaRun(BiobbObject):
                         "--size_x", size[0], "--size_y", size[1], "--size_z", size[2]])
         else:
             # gnina opens the reference structure, so this one must be the staged copy
-            cmd.extend(["--autobox_ligand", self.cmd_path(self.stage_io_dict["in"]["input_autobox_path"])])
+            cmd.extend(["--autobox_ligand", self.stage_io_dict["in"]["input_autobox_path"]])
             if self.autobox_add is not None:
                 cmd.extend(["--autobox_add", str(self.autobox_add)])
             if self.autobox_extend is not None:
@@ -213,7 +195,7 @@ class GninaRun(BiobbObject):
 
         # optional outputs are absent from stage_io_dict when they were not requested
         if self.stage_io_dict["out"].get("output_log_path"):
-            cmd.extend(["--log", self.cmd_path(self.stage_io_dict["out"]["output_log_path"])])
+            cmd.extend(["--log", self.stage_io_dict["out"]["output_log_path"]])
 
         for flag, prop in self.VALUE_FLAGS:
             value = getattr(self, prop)

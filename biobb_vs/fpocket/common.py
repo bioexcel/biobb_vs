@@ -23,13 +23,10 @@ def check_range(name, property, values, out_log, classname):
 
 # PROCESS OUTPUTS
 
-def process_output_fpocket(tmp_folder, output_pockets_zip, output_summary, sort_by, remove_tmp, container_path, out_log, classname):
-    """ Creates the output_pockets_zip and generates the  output_summary """
+def process_output_fpocket(tmp_folder, output_pockets_zip, output_summary, sort_by, remove_tmp, out_log, classname):
+    """ Creates the output_pockets_zip and generates the  output_summary from the outputs of tmp_folder/input.pdb """
 
-    if container_path:
-        path = str(PurePath(tmp_folder).joinpath('fpocket_input_out'))
-    else:
-        path = str(PurePath(tmp_folder).joinpath('input_out'))
+    path = str(PurePath(tmp_folder).joinpath('input_out'))
 
     if not Path(path).is_dir():
         if remove_tmp:
@@ -42,10 +39,7 @@ def process_output_fpocket(tmp_folder, output_pockets_zip, output_summary, sort_
 
     # summary
     # read input_info.txt file
-    if container_path:
-        info = PurePath(path).joinpath('fpocket_input_info.txt')
-    else:
-        info = PurePath(path).joinpath('input_info.txt')
+    info = PurePath(path).joinpath('input_info.txt')
     with open(info, 'r') as info_text:
         lines = info_text.readlines()
         lines = [x for x in lines if x != '\n']

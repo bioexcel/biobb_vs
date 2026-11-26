@@ -255,9 +255,10 @@ class BindingSite(BiobbObject):
             cluster_atoms = []
 
             for struct_res in residue_map:
+                # look both up before adding either, so that the two lists stay paired
                 try:
-                    cluster_atoms.append(clusterPDB[residue_map[struct_res]]["CA"])
-                    struct_atoms.append(get_residue_by_id(structPDB, struct_res)["CA"])
+                    cluster_atom = clusterPDB[residue_map[struct_res]]["CA"]
+                    struct_atom = get_residue_by_id(structPDB, struct_res)["CA"]
                 except KeyError:
                     fu.log(
                         "Cannot find CA atom for residue %s  (input PDB  %s)"
@@ -267,7 +268,9 @@ class BindingSite(BiobbObject):
                         ),
                         self.out_log,
                     )
-                    pass
+                else:
+                    cluster_atoms.append(cluster_atom)
+                    struct_atoms.append(struct_atom)
 
             if len(cluster_atoms) == 0:
                 fu.log(

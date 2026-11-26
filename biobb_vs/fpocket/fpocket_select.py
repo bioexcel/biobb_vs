@@ -19,7 +19,7 @@ class FPocketSelect(BiobbObject):
         output_pocket_pdb (str): Path to the PDB file with the cavity found by fpocket. File type: output. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/fpocket/ref_output_pocket.pdb>`_. Accepted formats: pdb (edam:format_1476).
         output_pocket_pqr (str): Path to the PQR file with the pocket found by fpocket. File type: output. `Sample file <https://github.com/bioexcel/biobb_vs/raw/master/biobb_vs/test/reference/fpocket/ref_output_pocket.pqr>`_. Accepted formats: pqr (edam:format_1476).
         properties (dic - Python dictionary object containing the tool parameters, not input/output files):
-            * **pocket** (*int*) - (None) [1~1000|1] Pocket id from the summary json given by the fpocket building block.
+            * **pocket** (*int*) - (1) [1~1000|1] Pocket id from the summary json given by the fpocket building block.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
             * **sandbox_path** (*str*) - ("./") [WF property] Parent path to the sandbox directory.
@@ -62,7 +62,12 @@ class FPocketSelect(BiobbObject):
         # decompress the input_pockets_zip file to tmp_folder
         all_pockets = fu.unzip_list(zip_file=self.io_dict["in"]["input_pockets_zip"], dest_dir=tmp_folder, out_log=self.out_log)
 
-        pockets_list = [i for i in all_pockets if ('pocket' + str(self.pocket)) in i]
+        # fpocket names the files of pocket N pocketN_atm.pdb and pocketN_vert.pqr
+        pockets_list = [i for i in all_pockets if PurePath(i).name.startswith('pocket%s_' % self.pocket)]
+        if not pockets_list:
+            msg = self.__class__.__name__ + ': Pocket %s not found in %s' % (self.pocket, self.io_dict["in"]["input_pockets_zip"])
+            fu.log(msg, self.out_log)
+            raise SystemExit(msg)
 
         for p in pockets_list:
             if PurePath(p).suffix == '.pdb':

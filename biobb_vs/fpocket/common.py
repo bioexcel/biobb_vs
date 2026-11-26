@@ -90,8 +90,8 @@ def process_output_fpocket_filter(search_list, tmp_folder, input_pockets_zip, ou
     # list all files of tmp_folder
     pockets_list = [str(i) for i in Path(tmp_folder).iterdir()]
 
-    # select search_list items from pockets_list
-    sel_pockets_list = [p for p in pockets_list for s in search_list if s + '_' in p]
+    # select search_list items from pockets_list: fpocket names the files of pocket N pocketN_*
+    sel_pockets_list = [p for p in pockets_list for s in search_list if PurePath(p).name.startswith(s + '_')]
 
     fu.log('Creating %s output file' % output_filter_pockets_zip, out_log)
 

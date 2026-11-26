@@ -3,7 +3,7 @@
 """Module containing the FPocketFilter class and the command line interface."""
 import json
 from typing import Optional
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
 
 from biobb_vs.fpocket.common import (
@@ -57,10 +57,10 @@ class FPocketFilter(BiobbObject):
 
     def __init__(
         self,
-        input_pockets_zip,
-        input_summary,
-        output_filter_pockets_zip,
-        properties=None,
+        input_pockets_zip: str,
+        input_summary: str,
+        output_filter_pockets_zip: str,
+        properties: Optional[dict] = None,
         **kwargs,
     ) -> None:
         super().__init__(**locals())
@@ -165,21 +165,8 @@ class FPocketFilter(BiobbObject):
         )
 
 
-def fpocket_filter(
-    input_pockets_zip: str,
-    input_summary: str,
-    output_filter_pockets_zip: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create the :class:`FPocketFilter <fpocket.fpocket_filter.FPocketFilter>` class and
-    execute the :meth:`launch() <fpocket.fpocket_filter.FPocketFilter.launch>` method."""
-    return FPocketFilter(**dict(locals())).launch()
-
-
-fpocket_filter.__doc__ = FPocketFilter.__doc__
-main = FPocketFilter.get_main(fpocket_filter, "Finds one or more binding sites in the outputs of the fpocket building block from given parameters.")
+fpocket_filter = launcher(FPocketFilter)
 
 
 if __name__ == "__main__":
-    main()
+    FPocketFilter.main()

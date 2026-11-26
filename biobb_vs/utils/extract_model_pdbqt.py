@@ -5,7 +5,7 @@ import warnings
 from pathlib import PurePath
 from typing import Optional
 from Bio import BiopythonDeprecationWarning
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
 
 
@@ -57,7 +57,7 @@ class ExtractModelPDBQT(BiobbObject):
     """
 
     def __init__(
-        self, input_pdbqt_path, output_pdbqt_path, properties=None, **kwargs
+        self, input_pdbqt_path: str, output_pdbqt_path: str, properties: Optional[dict] = None, **kwargs
     ) -> None:
         super().__init__(**locals())
 
@@ -109,20 +109,8 @@ class ExtractModelPDBQT(BiobbObject):
         )
 
 
-def extract_model_pdbqt(
-    input_pdbqt_path: str,
-    output_pdbqt_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create the :class:`ExtractModelPDBQT <utils.extract_model_pdbqt.ExtractModelPDBQT>` class and
-    execute the :meth:`launch() <utils.extract_model_pdbqt.ExtractModelPDBQT.launch>` method."""
-    return ExtractModelPDBQT(**dict(locals())).launch()
-
-
-extract_model_pdbqt.__doc__ = ExtractModelPDBQT.__doc__
-main = ExtractModelPDBQT.get_main(extract_model_pdbqt, "Extracts a model from a PDBQT file with several models.")
+extract_model_pdbqt = launcher(ExtractModelPDBQT)
 
 
 if __name__ == "__main__":
-    main()
+    ExtractModelPDBQT.main()

@@ -6,7 +6,7 @@ import warnings
 from pathlib import PurePath
 from typing import Optional
 from Bio import BiopythonDeprecationWarning
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
 
 from biobb_vs.utils.common import (
@@ -78,10 +78,10 @@ class BindingSite(BiobbObject):
 
     def __init__(
         self,
-        input_pdb_path,
-        input_clusters_zip,
-        output_pdb_path,
-        properties=None,
+        input_pdb_path: str,
+        input_clusters_zip: str,
+        output_pdb_path: str,
+        properties: Optional[dict] = None,
         **kwargs,
     ) -> None:
         super().__init__(**locals())
@@ -374,21 +374,8 @@ class BindingSite(BiobbObject):
         io.save(self.io_dict["out"]["output_pdb_path"])
 
 
-def bindingsite(
-    input_pdb_path: str,
-    input_clusters_zip: str,
-    output_pdb_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create the :class:`BindingSite <utils.bindingsite.BindingSite>` class and
-    execute the :meth:`launch() <utils.bindingsite.BindingSite.launch>` method."""
-    return BindingSite(**dict(locals())).launch()
-
-
-bindingsite.__doc__ = BindingSite.__doc__
-main = BindingSite.get_main(bindingsite, "Finds the binding site of the input_pdb file based on the ligands' location of similar structures (members of the sequence identity cluster)")
+bindingsite = launcher(BindingSite)
 
 
 if __name__ == "__main__":
-    main()
+    BindingSite.main()

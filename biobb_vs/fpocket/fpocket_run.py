@@ -4,7 +4,7 @@
 from typing import Optional
 import shutil
 from pathlib import PurePath
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
 from biobb_vs.fpocket.common import process_output_fpocket
 
@@ -61,8 +61,8 @@ class FPocketRun(BiobbObject):
 
     """
 
-    def __init__(self, input_pdb_path, output_pockets_zip, output_summary,
-                 properties=None, **kwargs) -> None:
+    def __init__(self, input_pdb_path: str, output_pockets_zip: str, output_summary: str,
+                 properties: Optional[dict] = None, **kwargs) -> None:
         super().__init__(**locals())
 
     def run(self) -> None:
@@ -114,15 +114,8 @@ class FPocketRun(BiobbObject):
                                self.__class__.__name__)
 
 
-def fpocket_run(input_pdb_path: str, output_pockets_zip: str, output_summary: str, properties: Optional[dict] = None, **kwargs) -> int:
-    """Create the :class:`FPocketRun <fpocket.fpocket_run.FPocketRun>` class and
-    execute the :meth:`launch() <fpocket.fpocket_run.FPocketRun.launch>` method."""
-    return FPocketRun(**dict(locals())).launch()
-
-
-fpocket_run.__doc__ = FPocketRun.__doc__
-main = FPocketRun.get_main(fpocket_run, "Finds the binding site of the input_pdb_path file via the fpocket software")
+fpocket_run = launcher(FPocketRun)
 
 
 if __name__ == '__main__':
-    main()
+    FPocketRun.main()

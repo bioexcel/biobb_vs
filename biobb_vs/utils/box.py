@@ -4,7 +4,7 @@
 from pathlib import PurePath
 from typing import Optional
 import numpy as np
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
 
 from biobb_vs.utils.common import (
@@ -51,7 +51,7 @@ class Box(BiobbObject):
     """
 
     def __init__(
-        self, input_pdb_path, output_pdb_path, properties=None, **kwargs
+        self, input_pdb_path: str, output_pdb_path: str, properties: Optional[dict] = None, **kwargs
     ) -> None:
         super().__init__(**locals())
 
@@ -174,20 +174,8 @@ class Box(BiobbObject):
         )
 
 
-def box(
-    input_pdb_path: str,
-    output_pdb_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create the :class:`Box <utils.box.Box>` class and
-    execute the :meth:`launch() <utils.box.Box.launch>` method."""
-    return Box(**dict(locals())).launch()
-
-
-box.__doc__ = Box.__doc__
-main = Box.get_main(box, "Sets the center and the size of a rectangular parallelepiped box around a set of residues from a given PDB or a pocket from a given PQR.")
+box = launcher(Box)
 
 
 if __name__ == "__main__":
-    main()
+    Box.main()

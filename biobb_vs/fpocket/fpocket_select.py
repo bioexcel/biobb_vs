@@ -4,7 +4,7 @@
 from typing import Optional
 import shutil
 from pathlib import PurePath
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
 
 
@@ -46,8 +46,8 @@ class FPocketSelect(BiobbObject):
 
     """
 
-    def __init__(self, input_pockets_zip, output_pocket_pdb, output_pocket_pqr,
-                 properties=None, **kwargs) -> None:
+    def __init__(self, input_pockets_zip: str, output_pocket_pdb: str, output_pocket_pqr: str,
+                 properties: Optional[dict] = None, **kwargs) -> None:
         super().__init__(**locals())
 
     def stage_files(self) -> None:
@@ -73,15 +73,8 @@ class FPocketSelect(BiobbObject):
                 shutil.copy(p, self.io_dict["out"]["output_pocket_pqr"])
 
 
-def fpocket_select(input_pockets_zip: str, output_pocket_pdb: str, output_pocket_pqr: str, properties: Optional[dict] = None, **kwargs) -> int:
-    """Create the :class:`FPocketSelect <fpocket.fpocket_select.FPocketSelect>` class and
-    execute the :meth:`launch() <fpocket.fpocket_select.FPocketSelect.launch>` method."""
-    return FPocketSelect(**dict(locals())).launch()
-
-
-fpocket_select.__doc__ = FPocketSelect.__doc__
-main = FPocketSelect.get_main(fpocket_select, "Selects a single pocket in the outputs of the fpocket building block from a given parameter.")
+fpocket_select = launcher(FPocketSelect)
 
 
 if __name__ == '__main__':
-    main()
+    FPocketSelect.main()

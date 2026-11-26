@@ -3,7 +3,7 @@
 """Module containing the GninaSelectPose class and the command line interface."""
 from typing import Optional
 
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
 
 from biobb_vs.gnina.common import check_gzip_extension, open_sdf, read_sdf_records, to_number
@@ -55,8 +55,8 @@ class GninaSelectPose(BiobbObject):
         'minimizedAffinity': False
     }
 
-    def __init__(self, input_sdf_path, output_sdf_path,
-                 properties=None, **kwargs) -> None:
+    def __init__(self, input_sdf_path: str, output_sdf_path: str,
+                 properties: Optional[dict] = None, **kwargs) -> None:
         super().__init__(**locals())
 
     def prepare(self):
@@ -115,15 +115,8 @@ class GninaSelectPose(BiobbObject):
             output_file.write(record['text'])
 
 
-def gnina_select_pose(input_sdf_path: str, output_sdf_path: str, properties: Optional[dict] = None, **kwargs) -> int:
-    """Create the :class:`GninaSelectPose <gnina.gnina_select_pose.GninaSelectPose>` class and
-    execute the :meth:`launch() <gnina.gnina_select_pose.GninaSelectPose.launch>` method."""
-    return GninaSelectPose(**dict(locals())).launch()
-
-
-gnina_select_pose.__doc__ = GninaSelectPose.__doc__
-main = GninaSelectPose.get_main(gnina_select_pose, "Selects a single pose in the output of the gnina_run building block.")
+gnina_select_pose = launcher(GninaSelectPose)
 
 
 if __name__ == '__main__':
-    main()
+    GninaSelectPose.main()

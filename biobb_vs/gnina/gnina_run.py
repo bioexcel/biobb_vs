@@ -4,7 +4,7 @@
 from pathlib import PurePath
 from typing import Optional
 
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
 
 from biobb_vs.gnina.common import check_gzip_extension, process_output_gnina
@@ -122,10 +122,10 @@ class GninaRun(BiobbObject):
         ("--quiet", "quiet"),
     )
 
-    def __init__(self, input_ligand_path, input_receptor_path, output_sdf_path,
-                 input_box_path=None, input_autobox_path=None,
-                 output_summary_path=None, output_log_path=None,
-                 properties=None, **kwargs) -> None:
+    def __init__(self, input_ligand_path: str, input_receptor_path: str, output_sdf_path: str,
+                 input_box_path: Optional[str] = None, input_autobox_path: Optional[str] = None,
+                 output_summary_path: Optional[str] = None, output_log_path: Optional[str] = None,
+                 properties: Optional[dict] = None, **kwargs) -> None:
         super().__init__(**locals())
 
     def prepare(self):
@@ -248,18 +248,8 @@ class GninaRun(BiobbObject):
             fu.log('gnina ended with return code %s, no summary was generated' % self.return_code, self.out_log, self.global_log)
 
 
-def gnina_run(input_ligand_path: str, input_receptor_path: str, output_sdf_path: str,
-              input_box_path: Optional[str] = None, input_autobox_path: Optional[str] = None,
-              output_summary_path: Optional[str] = None, output_log_path: Optional[str] = None,
-              properties: Optional[dict] = None, **kwargs) -> int:
-    """Create the :class:`GninaRun <gnina.gnina_run.GninaRun>` class and
-    execute the :meth:`launch() <gnina.gnina_run.GninaRun.launch>` method."""
-    return GninaRun(**dict(locals())).launch()
-
-
-gnina_run.__doc__ = GninaRun.__doc__
-main = GninaRun.get_main(gnina_run, "Performs docking of a ligand to a receptor with CNN rescoring via the gnina software.")
+gnina_run = launcher(GninaRun)
 
 
 if __name__ == '__main__':
-    main()
+    GninaRun.main()

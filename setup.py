@@ -23,16 +23,16 @@ setuptools.setup(
     python_requires=">=3.10",
     entry_points={
         "console_scripts": [
-            "fpocket_filter = biobb_vs.fpocket.fpocket_filter:main",
-            "fpocket_run = biobb_vs.fpocket.fpocket_run:main",
-            "fpocket_select = biobb_vs.fpocket.fpocket_select:main",
-            "bindingsite = biobb_vs.utils.bindingsite:main",
-            "box_residues = biobb_vs.utils.box_residues:main",
-            "box = biobb_vs.utils.box:main",
-            "extract_model_pdbqt = biobb_vs.utils.extract_model_pdbqt:main",
-            "autodock_vina_run = biobb_vs.vina.autodock_vina_run:main",
-            "gnina_run = biobb_vs.gnina.gnina_run:main",
-            "gnina_select_pose = biobb_vs.gnina.gnina_select_pose:main",
+            "fpocket_filter = biobb_vs.fpocket.fpocket_filter:FPocketFilter.main",
+            "fpocket_run = biobb_vs.fpocket.fpocket_run:FPocketRun.main",
+            "fpocket_select = biobb_vs.fpocket.fpocket_select:FPocketSelect.main",
+            "bindingsite = biobb_vs.utils.bindingsite:BindingSite.main",
+            "box_residues = biobb_vs.utils.box_residues:BoxResidues.main",
+            "box = biobb_vs.utils.box:Box.main",
+            "extract_model_pdbqt = biobb_vs.utils.extract_model_pdbqt:ExtractModelPDBQT.main",
+            "autodock_vina_run = biobb_vs.vina.autodock_vina_run:AutoDockVinaRun.main",
+            "gnina_run = biobb_vs.gnina.gnina_run:GninaRun.main",
+            "gnina_select_pose = biobb_vs.gnina.gnina_select_pose:GninaSelectPose.main",
         ]
     },
     classifiers=[

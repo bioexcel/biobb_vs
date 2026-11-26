@@ -4,6 +4,7 @@
 import os
 from typing import Optional
 from biobb_common.generic.biobb_object import BiobbObject, launcher
+from biobb_common.tools import file_utils as fu
 
 
 class AutoDockVinaRun(BiobbObject):
@@ -97,10 +98,9 @@ class AutoDockVinaRun(BiobbObject):
                             ],
                         )
                     )
-        raise SystemExit(
-            "No 'REMARK BOX CENTER' line found in the input box file: %s"
-            % (box_file_path)
-        )
+        msg = self.__class__.__name__ + ": No 'REMARK BOX CENTER' line found in the input box file: %s" % box_file_path
+        fu.log(msg, self.out_log)
+        raise SystemExit(msg)
 
     def run(self) -> None:
         """Execute the :class:`AutoDockVinaRun_run <vina.autodock_vina_run.AutoDockVinaRun_run>` vina.autodock_vina_run.AutoDockVinaRun_run object."""

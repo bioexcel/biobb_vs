@@ -119,8 +119,7 @@ class BindingSite(BiobbObject):
                 self.global_log,
             )
             # get first chain in case there is more than one chain
-            for struct_chain in structPDB.get_chains():
-                structPDB = struct_chain
+            structPDB = next(structPDB.get_chains())
 
         # Get AA sequence
         structPDB_seq = get_pdb_sequence(structPDB)
@@ -169,8 +168,7 @@ class BindingSite(BiobbObject):
             clusterPDB = parser.get_structure(cluster_name, cluster_path)[0]
 
             # Use only the first chain
-            for cluster_chain in clusterPDB.get_chains():  # type: ignore
-                clusterPDB = cluster_chain
+            clusterPDB = next(clusterPDB.get_chains())  # type: ignore
 
             # Looking for ligands
             clusterPDB_ligands = get_ligand_residues(clusterPDB)

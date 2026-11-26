@@ -44,13 +44,6 @@ def get_pdb_sequence(structure):
     return seq
 
 
-def get_sequence_nucs(structure):
-    seq = []
-    for nuc in structure:
-        seq.append(nuc)
-    return seq
-
-
 def align_sequences(
     seqA, seqB, matrix_name="BLOSUM62", gap_open=-10.0, gap_extend=-0.5
 ):

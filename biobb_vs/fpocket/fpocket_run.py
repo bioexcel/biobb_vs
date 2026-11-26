@@ -96,7 +96,6 @@ class FPocketRun(BiobbObject):
                                self.sandbox_file("output_pockets_zip"),
                                self.sandbox_file("output_summary"),
                                self.sort_by,
-                               self.remove_tmp,
                                self.out_log,
                                self.__class__.__name__)
 

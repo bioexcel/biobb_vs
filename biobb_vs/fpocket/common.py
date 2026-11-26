@@ -23,17 +23,12 @@ def check_range(name, property, values, out_log, classname):
 
 # PROCESS OUTPUTS
 
-def process_output_fpocket(tmp_folder, output_pockets_zip, output_summary, sort_by, remove_tmp, out_log, classname):
+def process_output_fpocket(tmp_folder, output_pockets_zip, output_summary, sort_by, out_log, classname):
     """ Creates the output_pockets_zip and generates the  output_summary from the outputs of tmp_folder/input.pdb """
 
     path = str(PurePath(tmp_folder).joinpath('input_out'))
 
     if not Path(path).is_dir():
-        if remove_tmp:
-            # remove temporary folder
-            fu.rm(tmp_folder)
-            fu.log('Removing temporary folder: %s' % tmp_folder, out_log)
-
         fu.log(classname + ': Error executing fpocket, please check your properties', out_log)
         raise SystemExit(classname + ': Error executing fpocket, please check your properties')
 

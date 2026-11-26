@@ -10,7 +10,6 @@ from biobb_vs.fpocket.common import (
     check_range,
     process_output_fpocket_filter,
 )
-from biobb_vs.utils.common import _from_string_to_list
 
 
 class FPocketFilter(BiobbObject):
@@ -66,17 +65,10 @@ class FPocketFilter(BiobbObject):
         super().__init__(**locals())
 
         # Properties specific for BB
-        self.score = [
-            float(elem) for elem in _from_string_to_list(self.score)
-        ]
-        self.druggability_score = [
-            float(elem)
-            for elem in _from_string_to_list(self.druggability_score)
-        ]
+        self.score = fu.str_to_list(self.score, float)
+        self.druggability_score = fu.str_to_list(self.druggability_score, float)
 
-        self.volume = [
-            float(elem) for elem in _from_string_to_list(self.volume)
-        ]
+        self.volume = fu.str_to_list(self.volume, float)
 
     def score_matcher(self, score):
         return lambda d: d["score"] > score[0] and d["score"] <= score[1]

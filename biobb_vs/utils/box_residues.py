@@ -10,7 +10,6 @@ from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
 
 from biobb_vs.utils.common import (
-    _from_string_to_list,
     get_box_coordinates,
 )
 
@@ -72,7 +71,7 @@ class BoxResidues(BiobbObject):
         super().__init__(**locals())
 
         # Properties specific for BB
-        self.resid_list = _from_string_to_list(self.resid_list)
+        self.resid_list = fu.str_to_list(self.resid_list)
         self.offset = float(self.offset)
         self.box_coordinates = float(self.box_coordinates)
 

@@ -4,11 +4,10 @@
 from pathlib import PurePath
 from typing import Optional
 
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
 
-from biobb_vs.gnina.common import check_input_path, check_output_path, process_output_gnina
+from biobb_vs.gnina.common import check_gzip_extension, process_output_gnina
 
 
 class GninaRun(BiobbObject):
@@ -51,7 +50,6 @@ class GninaRun(BiobbObject):
             * **container_path** (*str*) - (None) Container path definition.
             * **container_image** (*str*) - ('gnina/gnina:latest') Container image definition.
             * **container_volume_path** (*str*) - ('/data') Container volume path definition.
-            * **container_working_dir** (*str*) - (None) Container working directory definition.
             * **container_user_id** (*str*) - (None) Container user_id definition.
             * **container_shell_path** (*str*) - ('/bin/bash -c') Path to default shell inside the container.
 
@@ -123,76 +121,25 @@ class GninaRun(BiobbObject):
         ("--quiet", "quiet"),
     )
 
-    def __init__(self, input_ligand_path, input_receptor_path, output_sdf_path,
-                 input_box_path=None, input_autobox_path=None,
-                 output_summary_path=None, output_log_path=None,
-                 properties=None, **kwargs) -> None:
-        properties = properties or {}
+    def __init__(self, input_ligand_path: str, input_receptor_path: str, output_sdf_path: str,
+                 input_box_path: Optional[str] = None, input_autobox_path: Optional[str] = None,
+                 output_summary_path: Optional[str] = None, output_log_path: Optional[str] = None,
+                 properties: Optional[dict] = None, **kwargs) -> None:
+        super().__init__(**locals())
 
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {
-                "input_ligand_path": input_ligand_path,
-                "input_receptor_path": input_receptor_path,
-                "input_box_path": input_box_path,
-                "input_autobox_path": input_autobox_path
-            },
-            "out": {
-                "output_sdf_path": output_sdf_path,
-                "output_summary_path": output_summary_path,
-                "output_log_path": output_log_path
-            }
-        }
-
-        # Properties specific for BB
-        self.cpu = properties.get('cpu', 1)
-        self.exhaustiveness = properties.get('exhaustiveness', 8)
-        self.num_modes = properties.get('num_modes', 9)
-        self.min_rmsd_filter = properties.get('min_rmsd_filter', 1.0)
-        self.num_mc_saved = properties.get('num_mc_saved', None)
-        self.seed = properties.get('seed', None)
-        self.scoring = properties.get('scoring', None)
-        self.cnn_scoring = properties.get('cnn_scoring', None)
-        self.cnn = properties.get('cnn', None)
-        self.pose_sort_order = properties.get('pose_sort_order', None)
-        self.autobox_add = properties.get('autobox_add', None)
-        self.autobox_extend = properties.get('autobox_extend', None)
-        self.minimize = properties.get('minimize', False)
-        self.score_only = properties.get('score_only', False)
-        self.local_only = properties.get('local_only', False)
-        self.no_gpu = properties.get('no_gpu', False)
-        self.device = properties.get('device', None)
-        self.quiet = properties.get('quiet', False)
-        self.binary_path = properties.get('binary_path', 'gnina')
-        self.properties = properties
-
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    def check_data_params(self, out_log, err_log):
+    def prepare(self):
         """ Checks all the input/output paths and parameters """
-        self.io_dict["in"]["input_ligand_path"] = check_input_path(self.io_dict["in"]["input_ligand_path"], "input_ligand_path", out_log, self.__class__.__name__)
-        self.io_dict["in"]["input_receptor_path"] = check_input_path(self.io_dict["in"]["input_receptor_path"], "input_receptor_path", out_log, self.__class__.__name__)
-        self.io_dict["out"]["output_sdf_path"] = check_output_path(self.io_dict["out"]["output_sdf_path"], "output_sdf_path", False, out_log, self.__class__.__name__)
-        self.io_dict["out"]["output_summary_path"] = check_output_path(self.io_dict["out"]["output_summary_path"], "output_summary_path", True, out_log, self.__class__.__name__)
-        self.io_dict["out"]["output_log_path"] = check_output_path(self.io_dict["out"]["output_log_path"], "output_log_path", True, out_log, self.__class__.__name__)
+        # a gzip compressed SDF file must be named .sdf.gz
+        check_gzip_extension(self.io_dict["out"]["output_sdf_path"], "output_sdf_path", self.out_log, self.__class__.__name__)
 
         # gnina needs a search space, given either as a box file or as a reference structure
         if bool(self.io_dict["in"]["input_box_path"]) == bool(self.io_dict["in"]["input_autobox_path"]):
-            fu.log(self.__class__.__name__ + ': Provide exactly one of input_box_path or input_autobox_path to define the docking box, exiting', out_log)
+            fu.log(self.__class__.__name__ + ': Provide exactly one of input_box_path or input_autobox_path to define the docking box, exiting', self.out_log)
             raise SystemExit(self.__class__.__name__ + ': Provide exactly one of input_box_path or input_autobox_path to define the docking box')
 
         if self.io_dict["in"]["input_box_path"]:
-            self.io_dict["in"]["input_box_path"] = check_input_path(self.io_dict["in"]["input_box_path"], "input_box_path", out_log, self.__class__.__name__)
             # parse it now so an unusable box file is caught before any work is done
             self.calculate_box(self.io_dict["in"]["input_box_path"])
-        else:
-            self.io_dict["in"]["input_autobox_path"] = check_input_path(self.io_dict["in"]["input_autobox_path"], "input_autobox_path", out_log, self.__class__.__name__)
 
     def calculate_box(self, box_file_path):
         """ Reads the docking box out of the REMARK line written by the box building blocks
@@ -215,34 +162,17 @@ class GninaRun(BiobbObject):
         fu.log(self.__class__.__name__ + ': No REMARK BOX CENTER line found in %s, exiting' % box_file_path, self.out_log)
         raise SystemExit(self.__class__.__name__ + ': No REMARK BOX CENTER line found in %s' % box_file_path)
 
-    def cmd_path(self, path):
-        """ Renders a staged path the way gnina will see it
-
-        Inside a container every staged file sits in the mounted volume, so a
-        bare name is enough once the command has moved there. Locally the staged
-        paths are already usable as they stand, which also keeps them correct
-        when the sandbox is disabled or already the working directory.
-        """
-        if self.container_path:
-            return str(PurePath(path).name)
-        return str(path)
-
     def build_cmd(self) -> list:
         """ Builds the gnina command line out of the staged files and the properties
 
         Kept apart from :meth:`launch` so the command can be inspected without
         running gnina. Must be called after ``stage_files``.
         """
-        if self.container_path:
-            working_dir = self.container_volume_path if self.container_volume_path else "/data"
-        else:
-            working_dir = self.stage_io_dict.get("unique_dir", ".")
 
-        cmd = ["cd", working_dir, ";",
-               self.binary_path,
-               "--receptor", self.cmd_path(self.stage_io_dict["in"]["input_receptor_path"]),
-               "--ligand", self.cmd_path(self.stage_io_dict["in"]["input_ligand_path"]),
-               "--out", self.cmd_path(self.stage_io_dict["out"]["output_sdf_path"])]
+        cmd = [self.binary_path,
+               "--receptor", self.stage_io_dict["in"]["input_receptor_path"],
+               "--ligand", self.stage_io_dict["in"]["input_ligand_path"],
+               "--out", self.stage_io_dict["out"]["output_sdf_path"]]
 
         # the box file is read here and never handed to gnina, so it is taken
         # from io_dict and not from the staged copy
@@ -257,7 +187,7 @@ class GninaRun(BiobbObject):
                         "--size_x", size[0], "--size_y", size[1], "--size_z", size[2]])
         else:
             # gnina opens the reference structure, so this one must be the staged copy
-            cmd.extend(["--autobox_ligand", self.cmd_path(self.stage_io_dict["in"]["input_autobox_path"])])
+            cmd.extend(["--autobox_ligand", self.stage_io_dict["in"]["input_autobox_path"]])
             if self.autobox_add is not None:
                 cmd.extend(["--autobox_add", str(self.autobox_add)])
             if self.autobox_extend is not None:
@@ -265,7 +195,7 @@ class GninaRun(BiobbObject):
 
         # optional outputs are absent from stage_io_dict when they were not requested
         if self.stage_io_dict["out"].get("output_log_path"):
-            cmd.extend(["--log", self.cmd_path(self.stage_io_dict["out"]["output_log_path"])])
+            cmd.extend(["--log", self.stage_io_dict["out"]["output_log_path"]])
 
         for flag, prop in self.VALUE_FLAGS:
             value = getattr(self, prop)
@@ -278,17 +208,8 @@ class GninaRun(BiobbObject):
 
         return cmd
 
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`GninaRun <gnina.gnina_run.GninaRun>` gnina.gnina_run.GninaRun object."""
-
-        # check input/output paths and parameters
-        self.check_data_params(self.out_log, self.err_log)
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         # create cmd
         self.cmd = self.build_cmd()
@@ -298,38 +219,19 @@ class GninaRun(BiobbObject):
         # Run Biobb block
         self.run_biobb()
 
-        # Copy files to host
-        self.copy_to_host()
-
-        # remove temporary folder(s)
-        self.remove_tmp_files()
-
+        # Write the output summary from the poses of the output sdf file.
         if self.return_code == 0:
             if self.io_dict["out"].get("output_summary_path"):
-                process_output_gnina(self.io_dict["out"]["output_sdf_path"],
-                                     self.io_dict["out"]["output_summary_path"],
+                process_output_gnina(self.sandbox_file("output_sdf_path"),
+                                     self.sandbox_file("output_summary_path"),
                                      self.out_log,
                                      self.__class__.__name__)
         else:
             fu.log('gnina ended with return code %s, no summary was generated' % self.return_code, self.out_log, self.global_log)
 
-        self.check_arguments(output_files_created=True, raise_exception=False)
 
-        return self.return_code
-
-
-def gnina_run(input_ligand_path: str, input_receptor_path: str, output_sdf_path: str,
-              input_box_path: Optional[str] = None, input_autobox_path: Optional[str] = None,
-              output_summary_path: Optional[str] = None, output_log_path: Optional[str] = None,
-              properties: Optional[dict] = None, **kwargs) -> int:
-    """Create the :class:`GninaRun <gnina.gnina_run.GninaRun>` class and
-    execute the :meth:`launch() <gnina.gnina_run.GninaRun.launch>` method."""
-    return GninaRun(**dict(locals())).launch()
-
-
-gnina_run.__doc__ = GninaRun.__doc__
-main = GninaRun.get_main(gnina_run, "Performs docking of a ligand to a receptor with CNN rescoring via the gnina software.")
+gnina_run = launcher(GninaRun)
 
 
 if __name__ == '__main__':
-    main()
+    GninaRun.main()

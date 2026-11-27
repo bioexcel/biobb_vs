@@ -1,11 +1,8 @@
 """Common functions for package biobb_vs.utils"""
 
 import warnings
-from pathlib import Path, PurePath
-from typing import Optional, Union
 
 from Bio import BiopythonDeprecationWarning
-from biobb_common.tools import file_utils as fu
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", BiopythonDeprecationWarning)
@@ -18,62 +15,6 @@ with warnings.catch_warnings():
         import Bio.Align.substitution_matrices
     # from Bio.Data.SCOPData import protein_letters_3to1 as prot_one_letter
     from Bio.Data.PDBData import protein_letters_3to1 as prot_one_letter
-
-
-# CHECK PARAMETERS
-
-
-def check_input_path(path, argument, out_log, classname):
-    """Checks input file"""
-    if not Path(path).exists():
-        fu.log(classname + ": Unexisting %s file, exiting" % argument, out_log)
-        raise SystemExit(classname + ": Unexisting %s file" % argument)
-    file_extension = PurePath(path).suffix
-    if not is_valid_file(file_extension[1:], argument):
-        fu.log(
-            classname + ": Format %s in %s file is not compatible"
-            % (file_extension[1:], argument),
-            out_log,
-        )
-        raise SystemExit(
-            classname + ": Format %s in %s file is not compatible"
-            % (file_extension[1:], argument)
-        )
-    return path
-
-
-def check_output_path(path, argument, optional, out_log, classname):
-    """Checks output file"""
-    if optional and not path:
-        return None
-    if PurePath(path).parent and not Path(PurePath(path).parent).exists():
-        fu.log(classname + ": Unexisting  %s folder, exiting" % argument, out_log)
-        raise SystemExit(classname + ": Unexisting  %s folder" % argument)
-    file_extension = PurePath(path).suffix
-    if not is_valid_file(file_extension[1:], argument):
-        fu.log(
-            classname + ": Format %s in  %s file is not compatible"
-            % (file_extension[1:], argument),
-            out_log,
-        )
-        raise SystemExit(
-            classname + ": Format %s in  %s file is not compatible"
-            % (file_extension[1:], argument)
-        )
-    return path
-
-
-def is_valid_file(ext, argument):
-    """Checks if file format is compatible"""
-    formats = {
-        "input_pdb_path": ["pdb", "pqr"],
-        "input_clusters_zip": ["zip"],
-        "resid_pdb_path": ["pdb"],
-        "input_pdbqt_path": ["pdbqt"],
-        "output_pdb_path": ["pdb"],
-        "output_pdbqt_path": ["pdbqt"],
-    }
-    return ext in formats[argument]
 
 
 # UTILS FUNCTIONS
@@ -100,13 +41,6 @@ def get_pdb_sequence(structure):
     for r in structure.get_residues():
         if Bio.PDB.Polypeptide.is_aa(r):
             seq.append(aa(r))
-    return seq
-
-
-def get_sequence_nucs(structure):
-    seq = []
-    for nuc in structure:
-        seq.append(nuc)
     return seq
 
 
@@ -981,29 +915,3 @@ def __modres():
 
 
 # TODO: Move this function to biobb_common.tools.file_utils
-def _from_string_to_list(input_data: Optional[Union[str, list[str]]]) -> list[str]:
-    """
-    Converts a string to a list, splitting by commas or spaces. If the input is already a list, returns it as is.
-    Returns an empty list if input_data is None.
-
-    Parameters:
-        input_data (str, list, or None): The string, list, or None value to convert.
-
-    Returns:
-        list: A list of string elements or an empty list if input_data is None.
-    """
-    if input_data is None:
-        return []
-
-    if isinstance(input_data, list):
-        # If input is already a list, return it
-        return input_data
-
-    # If input is a string, determine the delimiter based on presence of commas
-    delimiter = "," if "," in input_data else " "
-    items = input_data.split(delimiter)
-
-    # Remove whitespace from each item and ignore empty strings
-    processed_items = [item.strip() for item in items if item.strip()]
-
-    return processed_items

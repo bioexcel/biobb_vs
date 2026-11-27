@@ -5,49 +5,6 @@ import re
 from biobb_common.tools import file_utils as fu
 
 
-# CHECK PARAMETERS
-
-def check_input_path(path, argument, out_log, classname):
-    """ Checks input file """
-    if not Path(path).exists():
-        fu.log(classname + ': Unexisting %s file, exiting' % argument, out_log)
-        raise SystemExit(classname + ': Unexisting %s file' % argument)
-    file_extension = PurePath(path).suffix
-    if not is_valid_file(file_extension[1:], argument):
-        fu.log(classname + ': Format %s in %s file is not compatible' % (file_extension[1:], argument), out_log)
-        raise SystemExit(classname + ': Format %s in %s file is not compatible' % (file_extension[1:], argument))
-    return path
-
-
-def check_output_path(path, argument, optional, out_log, classname):
-    """ Checks output file """
-    if optional and not path:
-        return None
-    if PurePath(path).parent and not Path(PurePath(path).parent).exists():
-        fu.log(classname + ': Unexisting  %s folder, exiting' % argument, out_log)
-        raise SystemExit(classname + ': Unexisting  %s folder' % argument)
-    file_extension = PurePath(path).suffix
-    if not is_valid_file(file_extension[1:], argument):
-        fu.log(classname + ': Format %s in  %s file is not compatible' % (file_extension[1:], argument), out_log)
-        raise SystemExit(classname + ': Format %s in  %s file is not compatible' % (file_extension[1:], argument))
-    return path
-
-
-def is_valid_file(ext, argument):
-    """ Checks if file format is compatible """
-    formats = {
-        'input_pdb_path': ['pdb'],
-        'output_pockets_zip': ['zip'],
-        'output_summary': ['json'],
-        'input_pockets_zip': ['zip'],
-        'input_summary': ['json'],
-        'output_filter_pockets_zip': ['zip'],
-        'output_pocket_pdb': ['pdb'],
-        'output_pocket_pqr': ['pqr']
-    }
-    return ext in formats[argument]
-
-
 # CHECK PROPERTIES
 
 def check_range(name, property, values, out_log, classname):
@@ -66,29 +23,18 @@ def check_range(name, property, values, out_log, classname):
 
 # PROCESS OUTPUTS
 
-def process_output_fpocket(tmp_folder, output_pockets_zip, output_summary, sort_by, remove_tmp, container_path, out_log, classname):
-    """ Creates the output_pockets_zip and generates the  output_summary """
+def process_output_fpocket(tmp_folder, output_pockets_zip, output_summary, sort_by, out_log, classname):
+    """ Creates the output_pockets_zip and generates the  output_summary from the outputs of tmp_folder/input.pdb """
 
-    if container_path:
-        path = str(PurePath(tmp_folder).joinpath('fpocket_input_out'))
-    else:
-        path = str(PurePath(tmp_folder).joinpath('input_out'))
+    path = str(PurePath(tmp_folder).joinpath('input_out'))
 
     if not Path(path).is_dir():
-        if remove_tmp:
-            # remove temporary folder
-            fu.rm(tmp_folder)
-            fu.log('Removing temporary folder: %s' % tmp_folder, out_log)
-
         fu.log(classname + ': Error executing fpocket, please check your properties', out_log)
         raise SystemExit(classname + ': Error executing fpocket, please check your properties')
 
     # summary
     # read input_info.txt file
-    if container_path:
-        info = PurePath(path).joinpath('fpocket_input_info.txt')
-    else:
-        info = PurePath(path).joinpath('input_info.txt')
+    info = PurePath(path).joinpath('input_info.txt')
     with open(info, 'r') as info_text:
         lines = info_text.readlines()
         lines = [x for x in lines if x != '\n']
@@ -144,8 +90,8 @@ def process_output_fpocket_filter(search_list, tmp_folder, input_pockets_zip, ou
     # list all files of tmp_folder
     pockets_list = [str(i) for i in Path(tmp_folder).iterdir()]
 
-    # select search_list items from pockets_list
-    sel_pockets_list = [p for p in pockets_list for s in search_list if s + '_' in p]
+    # select search_list items from pockets_list: fpocket names the files of pocket N pocketN_*
+    sel_pockets_list = [p for p in pockets_list for s in search_list if PurePath(p).name.startswith(s + '_')]
 
     fu.log('Creating %s output file' % output_filter_pockets_zip, out_log)
 

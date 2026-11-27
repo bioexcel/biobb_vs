@@ -4,9 +4,8 @@
 gnina ships neither in the biobb_vs container nor in conda, and its official
 image is tens of gigabytes, so a container test that actually executes gnina
 cannot run anywhere. These tests instead drive ``build_cmd`` directly, which
-needs no gnina and no container runtime, and pin down the parts of the command
-that only the container code path exercises: the working directory, and the fact
-that staged files are addressed by bare name inside the container volume.
+needs no gnina and no container runtime, and pin down that the staged files are
+addressed by bare name: the command runs in the sandbox (the mounted volume in a container).
 """
 from biobb_common.tools import test_fixtures as fx
 
@@ -16,7 +15,7 @@ from biobb_vs.gnina.gnina_run import GninaRun
 def build_cmd(properties, paths):
     """Stages the inputs and returns the command line, running nothing"""
     obj = GninaRun(properties=properties, **paths)
-    obj.check_data_params(obj.out_log, obj.err_log)
+    obj.prepare()
     obj.stage_files()
     try:
         return obj.build_cmd()
@@ -40,9 +39,8 @@ class TestGninaRunDockerCmd():
     def test_gnina_run_docker_cmd(self):
         cmd = build_cmd(self.properties, self.paths)
 
-        # the command runs inside the mounted volume
-        assert cmd[:3] == ['cd', '/data', ';']
-        assert cmd[3] == 'gnina'
+        # the command runs in the mounted volume, BiobbObject wraps it in the container command
+        assert cmd[0] == 'gnina'
 
         # every staged file is addressed by bare name, never by a host path
         for flag in ('--receptor', '--ligand', '--out', '--autobox_ligand', '--log'):
@@ -78,11 +76,10 @@ class TestGninaRunLocalCmd():
     def test_gnina_run_local_cmd(self):
         cmd = build_cmd(self.properties, self.paths)
 
-        # locally the staged files are addressed by their full path
-        assert cmd[0] == 'cd'
-        assert cmd[1].endswith(self.properties['path'].split('/')[-1]) or '/' in cmd[1]
+        # locally the command runs in the sandbox too: the staged files are addressed by bare name
+        assert cmd[0] == self.properties.get('binary_path', 'gnina')
         for flag in ('--receptor', '--ligand', '--out'):
-            assert flag_value(cmd, flag).startswith('/'), '%s should be an absolute staged path' % flag
+            assert '/' not in flag_value(cmd, flag), '%s should be a bare name in the sandbox' % flag
 
         # switches are emitted bare, never followed by a stringified boolean
         assert '--no_gpu' in cmd

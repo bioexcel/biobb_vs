@@ -4,13 +4,10 @@
 from pathlib import PurePath
 from typing import Optional
 import numpy as np
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
 
 from biobb_vs.utils.common import (
-    check_input_path,
-    check_output_path,
     get_box_coordinates,
 )
 
@@ -54,56 +51,19 @@ class Box(BiobbObject):
     """
 
     def __init__(
-        self, input_pdb_path, output_pdb_path, properties=None, **kwargs
+        self, input_pdb_path: str, output_pdb_path: str, properties: Optional[dict] = None, **kwargs
     ) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {"input_pdb_path": input_pdb_path},
-            "out": {"output_pdb_path": output_pdb_path},
-        }
+        super().__init__(**locals())
 
         # Properties specific for BB
-        self.offset = float(properties.get("offset", 2.0))
-        self.box_coordinates = float(properties.get("box_coordinates", False))
-        self.properties = properties
+        self.offset = float(self.offset)
+        self.box_coordinates = float(self.box_coordinates)
 
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
+    def stage_files(self) -> None:
+        """The block does not use the sandbox: there are no files to stage."""
 
-    def check_data_params(self, out_log, err_log):
-        """Checks all the input/output paths and parameters"""
-        self.io_dict["in"]["input_pdb_path"] = check_input_path(
-            self.io_dict["in"]["input_pdb_path"],
-            "input_pdb_path",
-            self.out_log,
-            self.__class__.__name__,
-        )
-        self.io_dict["out"]["output_pdb_path"] = check_output_path(
-            self.io_dict["out"]["output_pdb_path"],
-            "output_pdb_path",
-            False,
-            self.out_log,
-            self.__class__.__name__,
-        )
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`Box <utils.box.Box>` utils.box.Box object."""
-
-        # check input/output paths and parameters
-        self.check_data_params(self.out_log, self.err_log)
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         # check if cavity (pdb) or pocket (pqr)
         input_type = PurePath(self.io_dict["in"]["input_pdb_path"]).suffix.lstrip(".")
@@ -130,9 +90,9 @@ class Box(BiobbObject):
         with open(self.io_dict["in"]["input_pdb_path"]) as infile:
             for line in infile:
                 if line.startswith("HETATM") or line.startswith("ATOM"):
-                    x_coordslist.append(float(line[31:38].strip()))
-                    y_coordslist.append(float(line[39:46].strip()))
-                    z_coordslist.append(float(line[47:54].strip()))
+                    x_coordslist.append(float(line[30:38].strip()))
+                    y_coordslist.append(float(line[38:46].strip()))
+                    z_coordslist.append(float(line[46:54].strip()))
                     selection_atoms_num = selection_atoms_num + 1
 
         # Compute binding site box size
@@ -213,29 +173,9 @@ class Box(BiobbObject):
             self.global_log,
         )
 
-        # Copy files to host
-        self.copy_to_host()
-        self.remove_tmp_files()
 
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return 0
-
-
-def box(
-    input_pdb_path: str,
-    output_pdb_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create the :class:`Box <utils.box.Box>` class and
-    execute the :meth:`launch() <utils.box.Box.launch>` method."""
-    return Box(**dict(locals())).launch()
-
-
-box.__doc__ = Box.__doc__
-main = Box.get_main(box, "Sets the center and the size of a rectangular parallelepiped box around a set of residues from a given PDB or a pocket from a given PQR.")
+box = launcher(Box)
 
 
 if __name__ == "__main__":
-    main()
+    Box.main()

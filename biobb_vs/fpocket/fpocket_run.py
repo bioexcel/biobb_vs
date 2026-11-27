@@ -4,10 +4,9 @@
 from typing import Optional
 import shutil
 from pathlib import PurePath
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
-from biobb_vs.fpocket.common import check_input_path, check_output_path, process_output_fpocket
+from biobb_vs.fpocket.common import process_output_fpocket
 
 
 class FPocketRun(BiobbObject):
@@ -32,7 +31,6 @@ class FPocketRun(BiobbObject):
             * **container_path** (*str*) - (None) Container path definition.
             * **container_image** (*str*) - ('fpocket/fpocket:latest') Container image definition.
             * **container_volume_path** (*str*) - ('/tmp') Container volume path definition.
-            * **container_working_dir** (*str*) - (None) Container working directory definition.
             * **container_user_id** (*str*) - (None) Container user_id definition.
             * **container_shell_path** (*str*) - ('/bin/bash') Path to default shell inside the container.
 
@@ -62,67 +60,21 @@ class FPocketRun(BiobbObject):
 
     """
 
-    def __init__(self, input_pdb_path, output_pockets_zip, output_summary,
-                 properties=None, **kwargs) -> None:
-        properties = properties or {}
+    def __init__(self, input_pdb_path: str, output_pockets_zip: str, output_summary: str,
+                 properties: Optional[dict] = None, **kwargs) -> None:
+        super().__init__(**locals())
 
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {"input_pdb_path": input_pdb_path},
-            "out": {"output_pockets_zip": output_pockets_zip, "output_summary": output_summary}
-        }
-
-        # Properties specific for BB
-        self.binary_path = properties.get('binary_path', 'fpocket')
-        self.min_radius = properties.get('min_radius', None)
-        self.max_radius = properties.get('max_radius', None)
-        self.num_spheres = properties.get('num_spheres', None)
-        self.sort_by = properties.get('sort_by', 'druggability_score')
-        self.properties = properties
-
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    def check_data_params(self, out_log, err_log):
-        """ Checks all the input/output paths and parameters """
-        self.io_dict["in"]["input_pdb_path"] = check_input_path(self.io_dict["in"]["input_pdb_path"], "input_pdb_path", out_log, self.__class__.__name__)
-        self.io_dict["out"]["output_pockets_zip"] = check_output_path(self.io_dict["out"]["output_pockets_zip"], "output_pockets_zip", False, out_log, self.__class__.__name__)
-        self.io_dict["out"]["output_summary"] = check_output_path(self.io_dict["out"]["output_summary"], "output_summary", True, out_log, self.__class__.__name__)
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`FPocketRun <fpocket.fpocket_run.FPocketRun>` fpocket.fpocket_run.FPocketRun object."""
 
-        # check input/output paths and parameters
-        self.check_data_params(self.out_log, self.err_log)
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
-
-        if self.container_path:
-            working_dir = self.container_volume_path if self.container_volume_path else "/tmp"
-            tmp_input = PurePath(self.stage_io_dict["in"]["input_pdb_path"]).name
-            tmp_folder = self.stage_io_dict['unique_dir']
-        else:
-            # create tmp_folder
-            tmp_folder = fu.create_unique_dir()
-            fu.log('Creating %s temporary folder' % tmp_folder, self.out_log)
-            working_dir = tmp_folder
-            tmp_input = 'input.pdb'
-            # copy input_pdb_path to tmp_folder
-            shutil.copy(self.io_dict["in"]["input_pdb_path"], str(PurePath(tmp_folder).joinpath(tmp_input)))
+        # fpocket writes its outputs in input_out, next to its input: a folder of the sandbox
+        tmp_folder = self.create_tmp_dir(log=True)
+        tmp_input = str(PurePath(tmp_folder).joinpath('input.pdb'))
+        shutil.copy(self.sandbox_file("input_pdb_path"), tmp_input)
 
         # create cmd
-        self.cmd = ["cd", working_dir, ";",
-                    self.binary_path,
-                    '-f', tmp_input]
+        self.cmd = [self.binary_path,
+                    '-f', self.staged_path(tmp_input)]
 
         # adding extra properties
         if self.min_radius:
@@ -139,33 +91,17 @@ class FPocketRun(BiobbObject):
         # Run Biobb block
         self.run_biobb()
 
-        # Copy files to host
-        self.copy_to_host()
-
+        # Write the output pockets zip and the output summary from the folder written by fpocket.
         process_output_fpocket(tmp_folder,
-                               self.io_dict["out"]["output_pockets_zip"],
-                               self.io_dict["out"]["output_summary"],
+                               self.sandbox_file("output_pockets_zip"),
+                               self.sandbox_file("output_summary"),
                                self.sort_by,
-                               self.remove_tmp,
-                               self.container_path,
                                self.out_log,
                                self.__class__.__name__)
 
-        self.tmp_files.append(tmp_folder)
-        self.remove_tmp_files()
 
-        return self.return_code
-
-
-def fpocket_run(input_pdb_path: str, output_pockets_zip: str, output_summary: str, properties: Optional[dict] = None, **kwargs) -> int:
-    """Create the :class:`FPocketRun <fpocket.fpocket_run.FPocketRun>` class and
-    execute the :meth:`launch() <fpocket.fpocket_run.FPocketRun.launch>` method."""
-    return FPocketRun(**dict(locals())).launch()
-
-
-fpocket_run.__doc__ = FPocketRun.__doc__
-main = FPocketRun.get_main(fpocket_run, "Finds the binding site of the input_pdb_path file via the fpocket software")
+fpocket_run = launcher(FPocketRun)
 
 
 if __name__ == '__main__':
-    main()
+    FPocketRun.main()

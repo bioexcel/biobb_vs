@@ -16,49 +16,6 @@ SDF_TERMINATOR = "$$$$"
 # CHECK PARAMETERS
 
 
-def check_input_path(path, argument, out_log, classname):
-    """Checks input file"""
-    if not Path(path).exists():
-        fu.log(classname + ': Unexisting %s file, exiting' % argument, out_log)
-        raise SystemExit(classname + ': Unexisting %s file' % argument)
-    file_extension = PurePath(path).suffix
-    if not is_valid_file(file_extension[1:], argument):
-        fu.log(classname + ': Format %s in %s file is not compatible' % (file_extension[1:], argument), out_log)
-        raise SystemExit(classname + ': Format %s in %s file is not compatible' % (file_extension[1:], argument))
-    check_gzip_extension(path, argument, out_log, classname)
-    return path
-
-
-def check_output_path(path, argument, optional, out_log, classname):
-    """Checks output file"""
-    if optional and not path:
-        return None
-    if PurePath(path).parent and not Path(PurePath(path).parent).exists():
-        fu.log(classname + ': Unexisting  %s folder, exiting' % argument, out_log)
-        raise SystemExit(classname + ': Unexisting  %s folder' % argument)
-    file_extension = PurePath(path).suffix
-    if not is_valid_file(file_extension[1:], argument):
-        fu.log(classname + ': Format %s in  %s file is not compatible' % (file_extension[1:], argument), out_log)
-        raise SystemExit(classname + ': Format %s in  %s file is not compatible' % (file_extension[1:], argument))
-    check_gzip_extension(path, argument, out_log, classname)
-    return path
-
-
-def is_valid_file(ext, argument):
-    """Checks if file format is compatible"""
-    formats = {
-        'input_ligand_path': ['sdf', 'mol2', 'pdb', 'pdbqt'],
-        'input_receptor_path': ['pdb', 'pdbqt'],
-        'input_box_path': ['pdb'],
-        'input_autobox_path': ['sdf', 'mol2', 'pdb', 'pdbqt', 'pqr'],
-        'input_sdf_path': ['sdf', 'gz'],
-        'output_sdf_path': ['sdf', 'gz'],
-        'output_summary_path': ['json'],
-        'output_log_path': ['log']
-    }
-    return ext in formats[argument]
-
-
 def check_gzip_extension(path, argument, out_log, classname):
     """Checks that a gzip compressed file also declares the format it wraps
 

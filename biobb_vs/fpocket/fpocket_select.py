@@ -4,10 +4,8 @@
 from typing import Optional
 import shutil
 from pathlib import PurePath
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
-from biobb_vs.fpocket.common import check_input_path, check_output_path
 
 
 class FPocketSelect(BiobbObject):
@@ -48,54 +46,28 @@ class FPocketSelect(BiobbObject):
 
     """
 
-    def __init__(self, input_pockets_zip, output_pocket_pdb, output_pocket_pqr,
-                 properties=None, **kwargs) -> None:
-        properties = properties or {}
+    def __init__(self, input_pockets_zip: str, output_pocket_pdb: str, output_pocket_pqr: str,
+                 properties: Optional[dict] = None, **kwargs) -> None:
+        super().__init__(**locals())
 
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
+    def stage_files(self) -> None:
+        """The block does not use the sandbox: there are no files to stage."""
 
-        # Input/Output files
-        self.io_dict = {
-            "in": {"input_pockets_zip": input_pockets_zip},
-            "out": {"output_pocket_pdb": output_pocket_pdb, "output_pocket_pqr": output_pocket_pqr}
-        }
-
-        # Properties specific for BB
-        self.pocket = properties.get('pocket', None)
-        self.properties = properties
-
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    def check_data_params(self, out_log, err_log):
-        """ Checks all the input/output paths and parameters """
-        self.io_dict["in"]["input_pockets_zip"] = check_input_path(self.io_dict["in"]["input_pockets_zip"], "input_pockets_zip", out_log, self.__class__.__name__)
-        self.io_dict["out"]["output_pocket_pdb"] = check_output_path(self.io_dict["out"]["output_pocket_pdb"], "output_pocket_pdb", False, out_log, self.__class__.__name__)
-        self.io_dict["out"]["output_pocket_pqr"] = check_output_path(self.io_dict["out"]["output_pocket_pqr"], "output_pocket_pqr", True, out_log, self.__class__.__name__)
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`FPocketSelect <fpocket.fpocket_select.FPocketSelect>` fpocket.fpocket_select.FPocketSelect object."""
 
-        # check input/output paths and parameters
-        self.check_data_params(self.out_log, self.err_log)
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
-
         # create tmp_folder
-        tmp_folder = fu.create_unique_dir()
-        fu.log('Creating %s temporary folder' % tmp_folder, self.out_log)
+        tmp_folder = self.create_tmp_dir(log=True)
 
         # decompress the input_pockets_zip file to tmp_folder
         all_pockets = fu.unzip_list(zip_file=self.io_dict["in"]["input_pockets_zip"], dest_dir=tmp_folder, out_log=self.out_log)
 
-        pockets_list = [i for i in all_pockets if ('pocket' + str(self.pocket)) in i]
+        # fpocket names the files of pocket N pocketN_atm.pdb and pocketN_vert.pqr
+        pockets_list = [i for i in all_pockets if PurePath(i).name.startswith('pocket%s_' % self.pocket)]
+        if not pockets_list:
+            msg = self.__class__.__name__ + ': Pocket %s not found in %s' % (self.pocket, self.io_dict["in"]["input_pockets_zip"])
+            fu.log(msg, self.out_log)
+            raise SystemExit(msg)
 
         for p in pockets_list:
             if PurePath(p).suffix == '.pdb':
@@ -105,26 +77,9 @@ class FPocketSelect(BiobbObject):
                 fu.log('Saving %s file' % self.io_dict["out"]["output_pocket_pqr"], self.out_log)
                 shutil.copy(p, self.io_dict["out"]["output_pocket_pqr"])
 
-        # Copy files to host
-        self.copy_to_host()
 
-        self.tmp_files.append(tmp_folder)
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return 0
-
-
-def fpocket_select(input_pockets_zip: str, output_pocket_pdb: str, output_pocket_pqr: str, properties: Optional[dict] = None, **kwargs) -> int:
-    """Create the :class:`FPocketSelect <fpocket.fpocket_select.FPocketSelect>` class and
-    execute the :meth:`launch() <fpocket.fpocket_select.FPocketSelect.launch>` method."""
-    return FPocketSelect(**dict(locals())).launch()
-
-
-fpocket_select.__doc__ = FPocketSelect.__doc__
-main = FPocketSelect.get_main(fpocket_select, "Selects a single pocket in the outputs of the fpocket building block from a given parameter.")
+fpocket_select = launcher(FPocketSelect)
 
 
 if __name__ == '__main__':
-    main()
+    FPocketSelect.main()

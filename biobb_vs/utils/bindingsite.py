@@ -6,15 +6,12 @@ import warnings
 from pathlib import PurePath
 from typing import Optional
 from Bio import BiopythonDeprecationWarning
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
 
 from biobb_vs.utils.common import (
     align_sequences,
     calculate_alignment_identity,
-    check_input_path,
-    check_output_path,
     get_ligand_residues,
     get_pdb_sequence,
     get_residue_by_id,
@@ -81,73 +78,22 @@ class BindingSite(BiobbObject):
 
     def __init__(
         self,
-        input_pdb_path,
-        input_clusters_zip,
-        output_pdb_path,
-        properties=None,
+        input_pdb_path: str,
+        input_clusters_zip: str,
+        output_pdb_path: str,
+        properties: Optional[dict] = None,
         **kwargs,
     ) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {
-                "input_pdb_path": input_pdb_path,
-                "input_clusters_zip": input_clusters_zip,
-            },
-            "out": {"output_pdb_path": output_pdb_path},
-        }
+        super().__init__(**locals())
 
         # Properties specific for BB
-        self.ligand = properties.get("ligand", None)
-        self.radius = float(properties.get("radius", 5.0))
-        self.max_num_ligands = properties.get("max_num_ligands", 15)
-        self.matrix_name = properties.get("matrix_name", "BLOSUM62")
-        self.gap_open = properties.get("gap_open", -10.0)
-        self.gap_extend = properties.get("gap_extend", -0.5)
-        self.properties = properties
+        self.radius = float(self.radius)
 
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
+    def stage_files(self) -> None:
+        """The block does not use the sandbox: there are no files to stage."""
 
-    def check_data_params(self, out_log, err_log):
-        """Checks all the input/output paths and parameters"""
-        self.io_dict["in"]["input_pdb_path"] = check_input_path(
-            self.io_dict["in"]["input_pdb_path"],
-            "input_pdb_path",
-            self.out_log,
-            self.__class__.__name__,
-        )
-        self.io_dict["in"]["input_clusters_zip"] = check_input_path(
-            self.io_dict["in"]["input_clusters_zip"],
-            "input_clusters_zip",
-            self.out_log,
-            self.__class__.__name__,
-        )
-        self.io_dict["out"]["output_pdb_path"] = check_output_path(
-            self.io_dict["out"]["output_pdb_path"],
-            "output_pdb_path",
-            False,
-            self.out_log,
-            self.__class__.__name__,
-        )
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`BindingSite <utils.bindingsite.BindingSite>` utils.bindingsite.BindingSite object."""
-
-        # check input/output paths and parameters
-        self.check_data_params(self.out_log, self.err_log)
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         # Parse structure
         fu.log(
@@ -173,8 +119,7 @@ class BindingSite(BiobbObject):
                 self.global_log,
             )
             # get first chain in case there is more than one chain
-            for struct_chain in structPDB.get_chains():
-                structPDB = struct_chain
+            structPDB = next(structPDB.get_chains())
 
         # Get AA sequence
         structPDB_seq = get_pdb_sequence(structPDB)
@@ -196,10 +141,7 @@ class BindingSite(BiobbObject):
             )
 
         # create temporary folder for decompressing the input_clusters_zip file
-        unique_dir = PurePath(fu.create_unique_dir())
-        fu.log(
-            "Creating %s temporary folder" % unique_dir, self.out_log, self.global_log
-        )
+        unique_dir = PurePath(self.create_tmp_dir(log=True))
 
         # decompress the input_clusters_zip file
         cluster_list = fu.unzip_list(
@@ -226,8 +168,7 @@ class BindingSite(BiobbObject):
             clusterPDB = parser.get_structure(cluster_name, cluster_path)[0]
 
             # Use only the first chain
-            for cluster_chain in clusterPDB.get_chains():  # type: ignore
-                clusterPDB = cluster_chain
+            clusterPDB = next(clusterPDB.get_chains())  # type: ignore
 
             # Looking for ligands
             clusterPDB_ligands = get_ligand_residues(clusterPDB)
@@ -314,9 +255,10 @@ class BindingSite(BiobbObject):
             cluster_atoms = []
 
             for struct_res in residue_map:
+                # look both up before adding either, so that the two lists stay paired
                 try:
-                    cluster_atoms.append(clusterPDB[residue_map[struct_res]]["CA"])
-                    struct_atoms.append(get_residue_by_id(structPDB, struct_res)["CA"])
+                    cluster_atom = clusterPDB[residue_map[struct_res]]["CA"]
+                    struct_atom = get_residue_by_id(structPDB, struct_res)["CA"]
                 except KeyError:
                     fu.log(
                         "Cannot find CA atom for residue %s  (input PDB  %s)"
@@ -326,7 +268,9 @@ class BindingSite(BiobbObject):
                         ),
                         self.out_log,
                     )
-                    pass
+                else:
+                    cluster_atoms.append(cluster_atom)
+                    struct_atoms.append(struct_atom)
 
             if len(cluster_atoms) == 0:
                 fu.log(
@@ -430,32 +374,9 @@ class BindingSite(BiobbObject):
         io.set_structure(structPDB)
         io.save(self.io_dict["out"]["output_pdb_path"])
 
-        # Copy files to host
-        self.copy_to_host()
 
-        self.tmp_files.append(str(unique_dir))
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return 0
-
-
-def bindingsite(
-    input_pdb_path: str,
-    input_clusters_zip: str,
-    output_pdb_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create the :class:`BindingSite <utils.bindingsite.BindingSite>` class and
-    execute the :meth:`launch() <utils.bindingsite.BindingSite.launch>` method."""
-    return BindingSite(**dict(locals())).launch()
-
-
-bindingsite.__doc__ = BindingSite.__doc__
-main = BindingSite.get_main(bindingsite, "Finds the binding site of the input_pdb file based on the ligands' location of similar structures (members of the sequence identity cluster)")
+bindingsite = launcher(BindingSite)
 
 
 if __name__ == "__main__":
-    main()
+    BindingSite.main()

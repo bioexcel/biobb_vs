@@ -3,17 +3,13 @@
 """Module containing the FPocketFilter class and the command line interface."""
 import json
 from typing import Optional
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
 
 from biobb_vs.fpocket.common import (
-    check_input_path,
-    check_output_path,
     check_range,
     process_output_fpocket_filter,
 )
-from biobb_vs.utils.common import _from_string_to_list
 
 
 class FPocketFilter(BiobbObject):
@@ -60,67 +56,19 @@ class FPocketFilter(BiobbObject):
 
     def __init__(
         self,
-        input_pockets_zip,
-        input_summary,
-        output_filter_pockets_zip,
-        properties=None,
+        input_pockets_zip: str,
+        input_summary: str,
+        output_filter_pockets_zip: str,
+        properties: Optional[dict] = None,
         **kwargs,
     ) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {
-                "input_pockets_zip": input_pockets_zip,
-                "input_summary": input_summary,
-            },
-            "out": {"output_filter_pockets_zip": output_filter_pockets_zip},
-        }
+        super().__init__(**locals())
 
         # Properties specific for BB
-        self.score = [
-            float(elem) for elem in _from_string_to_list(properties.get("score", None))
-        ]
-        self.druggability_score = [
-            float(elem)
-            for elem in _from_string_to_list(properties.get("druggability_score", None))
-        ]
+        self.score = fu.str_to_list(self.score, float)
+        self.druggability_score = fu.str_to_list(self.druggability_score, float)
 
-        self.volume = [
-            float(elem) for elem in _from_string_to_list(properties.get("volume", None))
-        ]
-        self.properties = properties
-
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    def check_data_params(self, out_log, err_log):
-        """Checks all the input/output paths and parameters"""
-        self.io_dict["in"]["input_pockets_zip"] = check_input_path(
-            self.io_dict["in"]["input_pockets_zip"],
-            "input_pockets_zip",
-            out_log,
-            self.__class__.__name__,
-        )
-        self.io_dict["in"]["input_summary"] = check_output_path(
-            self.io_dict["in"]["input_summary"],
-            "input_summary",
-            False,
-            out_log,
-            self.__class__.__name__,
-        )
-        self.io_dict["out"]["output_filter_pockets_zip"] = check_output_path(
-            self.io_dict["out"]["output_filter_pockets_zip"],
-            "output_filter_pockets_zip",
-            True,
-            out_log,
-            self.__class__.__name__,
-        )
+        self.volume = fu.str_to_list(self.volume, float)
 
     def score_matcher(self, score):
         return lambda d: d["score"] > score[0] and d["score"] <= score[1]
@@ -133,17 +81,11 @@ class FPocketFilter(BiobbObject):
     def volume_matcher(self, volume):
         return lambda d: d["volume"] > volume[0] and d["volume"] <= volume[1]
 
-    @launchlogger
-    def launch(self) -> int:
+    def stage_files(self) -> None:
+        """The block does not use the sandbox: there are no files to stage."""
+
+    def run(self) -> None:
         """Execute the :class:`FPocketFilter <fpocket.fpocket_filter.FPocketFilter>` fpocket.fpocket_filter.FPocketFilter object."""
-
-        # check input/output paths and parameters
-        self.check_data_params(self.out_log, self.err_log)
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         # load input_summary into a dictionary
         with open(self.io_dict["in"]["input_summary"]) as json_file:
@@ -186,7 +128,7 @@ class FPocketFilter(BiobbObject):
 
         if len(search) == 0:
             fu.log("No matches found", self.out_log)
-            return 0
+            return
 
         str_out = ""
         for s in search:
@@ -203,8 +145,7 @@ class FPocketFilter(BiobbObject):
         fu.log("Found %d matches:%s" % (len(search), str_out), self.out_log)
 
         # create tmp_folder
-        tmp_folder = fu.create_unique_dir()
-        fu.log("Creating %s temporary folder" % tmp_folder, self.out_log)
+        tmp_folder = self.create_tmp_dir(log=True)
 
         process_output_fpocket_filter(
             search,
@@ -215,32 +156,9 @@ class FPocketFilter(BiobbObject):
             self.out_log,
         )
 
-        # Copy files to host
-        self.copy_to_host()
 
-        self.tmp_files.append(tmp_folder)
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return 0
-
-
-def fpocket_filter(
-    input_pockets_zip: str,
-    input_summary: str,
-    output_filter_pockets_zip: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create the :class:`FPocketFilter <fpocket.fpocket_filter.FPocketFilter>` class and
-    execute the :meth:`launch() <fpocket.fpocket_filter.FPocketFilter.launch>` method."""
-    return FPocketFilter(**dict(locals())).launch()
-
-
-fpocket_filter.__doc__ = FPocketFilter.__doc__
-main = FPocketFilter.get_main(fpocket_filter, "Finds one or more binding sites in the outputs of the fpocket building block from given parameters.")
+fpocket_filter = launcher(FPocketFilter)
 
 
 if __name__ == "__main__":
-    main()
+    FPocketFilter.main()

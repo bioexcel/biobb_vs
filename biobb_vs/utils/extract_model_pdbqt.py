@@ -5,11 +5,9 @@ import warnings
 from pathlib import PurePath
 from typing import Optional
 from Bio import BiopythonDeprecationWarning
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
 
-from biobb_vs.utils.common import check_input_path, check_output_path
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", BiopythonDeprecationWarning)
@@ -59,65 +57,15 @@ class ExtractModelPDBQT(BiobbObject):
     """
 
     def __init__(
-        self, input_pdbqt_path, output_pdbqt_path, properties=None, **kwargs
+        self, input_pdbqt_path: str, output_pdbqt_path: str, properties: Optional[dict] = None, **kwargs
     ) -> None:
-        properties = properties or {}
+        super().__init__(**locals())
 
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
+    def stage_files(self) -> None:
+        """The block does not use the sandbox: there are no files to stage."""
 
-        # Input/Output files
-        self.io_dict = {
-            "in": {"input_pdbqt_path": input_pdbqt_path},
-            "out": {"output_pdbqt_path": output_pdbqt_path},
-        }
-
-        # Properties specific for BB
-        self.model = properties.get("model", 1)
-        self.properties = properties
-
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    def check_data_params(self, out_log, err_log):
-        """Checks all the input/output paths and parameters"""
-        self.io_dict["in"]["input_pdbqt_path"] = check_input_path(
-            self.io_dict["in"]["input_pdbqt_path"],
-            "input_pdbqt_path",
-            out_log,
-            self.__class__.__name__,
-        )
-        self.io_dict["out"]["output_pdbqt_path"] = check_output_path(
-            self.io_dict["out"]["output_pdbqt_path"],
-            "output_pdbqt_path",
-            False,
-            out_log,
-            self.__class__.__name__,
-        )
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`ExtractModelPDBQT <utils.extract_model_pdbqt.ExtractModelPDBQT>` utils.extract_model_pdbqt.ExtractModelPDBQT object."""
-
-        # check input/output paths and parameters
-        self.check_data_params(self.out_log, self.err_log)
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
-
-        if self.restart:
-            output_file_list = [self.io_dict["out"]["output_pdbqt_path"]]
-            if fu.check_complete_files(output_file_list):
-                fu.log(
-                    "Restart is enabled, this step: %s will the skipped" % self.step,
-                    self.out_log,
-                    self.global_log,
-                )
-                return 0
 
         structure_name = PurePath(self.io_dict["in"]["input_pdbqt_path"]).name
         parser = Bio.PDB.PDBParser(QUIET=True)
@@ -160,30 +108,9 @@ class ExtractModelPDBQT(BiobbObject):
             self.out_log,
         )
 
-        # Copy files to host
-        self.copy_to_host()
-        # Remove temporal files
-        self.remove_tmp_files()
 
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return 0
-
-
-def extract_model_pdbqt(
-    input_pdbqt_path: str,
-    output_pdbqt_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create the :class:`ExtractModelPDBQT <utils.extract_model_pdbqt.ExtractModelPDBQT>` class and
-    execute the :meth:`launch() <utils.extract_model_pdbqt.ExtractModelPDBQT.launch>` method."""
-    return ExtractModelPDBQT(**dict(locals())).launch()
-
-
-extract_model_pdbqt.__doc__ = ExtractModelPDBQT.__doc__
-main = ExtractModelPDBQT.get_main(extract_model_pdbqt, "Extracts a model from a PDBQT file with several models.")
+extract_model_pdbqt = launcher(ExtractModelPDBQT)
 
 
 if __name__ == "__main__":
-    main()
+    ExtractModelPDBQT.main()

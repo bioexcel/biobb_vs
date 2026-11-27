@@ -6,14 +6,10 @@ from pathlib import PurePath
 from typing import Optional
 import numpy as np
 from Bio import BiopythonDeprecationWarning
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
 
 from biobb_vs.utils.common import (
-    _from_string_to_list,
-    check_input_path,
-    check_output_path,
     get_box_coordinates,
 )
 
@@ -70,58 +66,20 @@ class BoxResidues(BiobbObject):
     """
 
     def __init__(
-        self, input_pdb_path, output_pdb_path, properties=None, **kwargs
+        self, input_pdb_path: str, output_pdb_path: str, properties: Optional[dict] = None, **kwargs
     ) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {"input_pdb_path": input_pdb_path},
-            "out": {"output_pdb_path": output_pdb_path},
-        }
+        super().__init__(**locals())
 
         # Properties specific for BB
-        self.resid_list = _from_string_to_list(properties.get("resid_list", []))
-        self.offset = float(properties.get("offset", 2.0))
-        self.box_coordinates = float(properties.get("box_coordinates", False))
-        self.residue_offset = properties.get("residue_offset", 0)
-        self.properties = properties
+        self.resid_list = fu.str_to_list(self.resid_list)
+        self.offset = float(self.offset)
+        self.box_coordinates = float(self.box_coordinates)
 
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
+    def stage_files(self) -> None:
+        """The block does not use the sandbox: there are no files to stage."""
 
-    def check_data_params(self, out_log, err_log):
-        """Checks all the input/output paths and parameters"""
-        self.io_dict["in"]["input_pdb_path"] = check_input_path(
-            self.io_dict["in"]["input_pdb_path"],
-            "input_pdb_path",
-            self.out_log,
-            self.__class__.__name__,
-        )
-        self.io_dict["out"]["output_pdb_path"] = check_output_path(
-            self.io_dict["out"]["output_pdb_path"],
-            "output_pdb_path",
-            False,
-            self.out_log,
-            self.__class__.__name__,
-        )
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`BoxResidues <utils.box_residues.BoxResidues>` utils.box_residues.BoxResidues object."""
-
-        # check input/output paths and parameters
-        self.check_data_params(self.out_log, self.err_log)
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         # Parse structure
         fu.log(
@@ -268,27 +226,9 @@ class BoxResidues(BiobbObject):
             self.global_log,
         )
 
-        # Copy files to host
-        self.copy_to_host()
-        self.remove_tmp_files()
 
-        return 0
-
-
-def box_residues(
-    input_pdb_path: str,
-    output_pdb_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create the :class:`BoxResidues <utils.box_residues.BoxResidues>` class and
-    execute the :meth:`launch() <utils.box_residues.BoxResidues.launch>` method."""
-    return BoxResidues(**dict(locals())).launch()
-
-
-box_residues.__doc__ = BoxResidues.__doc__
-main = BoxResidues.get_main(box_residues, "Sets the center and the size of a rectangular parallelepiped box around a selection of residues found in a given PDB.")
+box_residues = launcher(BoxResidues)
 
 
 if __name__ == "__main__":
-    main()
+    BoxResidues.main()

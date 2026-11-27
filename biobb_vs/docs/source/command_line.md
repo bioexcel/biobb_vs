@@ -60,7 +60,6 @@ Config parameters for this building block:
 * **container_path** (*string*): (None) Container path definition.
 * **container_image** (*string*): (biocontainers/autodock-vina:v1.1.2-5b1-deb_cv1) Container image definition.
 * **container_volume_path** (*string*): (/tmp) Container volume path definition.
-* **container_working_dir** (*string*): (None) Container working directory definition.
 * **container_user_id** (*string*): (None) Container user_id definition.
 * **container_shell_path** (*string*): (/bin/bash) Path to default shell inside the container.
 ### YAML
@@ -548,7 +547,6 @@ Config parameters for this building block:
 * **container_path** (*string*): (None) Container path definition.
 * **container_image** (*string*): (fpocket/fpocket:latest) Container image definition.
 * **container_volume_path** (*string*): (/tmp) Container volume path definition.
-* **container_working_dir** (*string*): (None) Container working directory definition.
 * **container_user_id** (*string*): (None) Container user_id definition.
 * **container_shell_path** (*string*): (/bin/bash) Path to default shell inside the container.
 ### YAML
@@ -774,7 +772,6 @@ Config parameters for this building block:
 * **container_path** (*string*): (None) Container path definition.
 * **container_image** (*string*): (gnina/gnina:latest) Container image definition.
 * **container_volume_path** (*string*): (/data) Container volume path definition.
-* **container_working_dir** (*string*): (None) Container working directory definition.
 * **container_user_id** (*string*): (None) Container user_id definition.
 * **container_shell_path** (*string*): (/bin/bash -c) Path to default shell inside the container.
 ### YAML

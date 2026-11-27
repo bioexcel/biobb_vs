@@ -3,11 +3,10 @@
 """Module containing the GninaSelectPose class and the command line interface."""
 from typing import Optional
 
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
 
-from biobb_vs.gnina.common import check_input_path, check_output_path, open_sdf, read_sdf_records, to_number
+from biobb_vs.gnina.common import check_gzip_extension, open_sdf, read_sdf_records, to_number
 
 
 class GninaSelectPose(BiobbObject):
@@ -56,37 +55,18 @@ class GninaSelectPose(BiobbObject):
         'minimizedAffinity': False
     }
 
-    def __init__(self, input_sdf_path, output_sdf_path,
-                 properties=None, **kwargs) -> None:
-        properties = properties or {}
+    def __init__(self, input_sdf_path: str, output_sdf_path: str,
+                 properties: Optional[dict] = None, **kwargs) -> None:
+        super().__init__(**locals())
 
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {"input_sdf_path": input_sdf_path},
-            "out": {"output_sdf_path": output_sdf_path}
-        }
-
-        # Properties specific for BB
-        self.pose = properties.get('pose', 1)
-        self.ligand = properties.get('ligand', None)
-        self.sort_by = properties.get('sort_by', None)
-        self.properties = properties
-
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    def check_data_params(self, out_log, err_log):
+    def prepare(self):
         """ Checks all the input/output paths and parameters """
-        self.io_dict["in"]["input_sdf_path"] = check_input_path(self.io_dict["in"]["input_sdf_path"], "input_sdf_path", out_log, self.__class__.__name__)
-        self.io_dict["out"]["output_sdf_path"] = check_output_path(self.io_dict["out"]["output_sdf_path"], "output_sdf_path", False, out_log, self.__class__.__name__)
+        # a gzip compressed SDF file must be named .sdf.gz
+        check_gzip_extension(self.io_dict["in"]["input_sdf_path"], "input_sdf_path", self.out_log, self.__class__.__name__)
+        check_gzip_extension(self.io_dict["out"]["output_sdf_path"], "output_sdf_path", self.out_log, self.__class__.__name__)
 
         if self.sort_by is not None and self.sort_by not in self.SORT_ORDERS:
-            fu.log(self.__class__.__name__ + ': Unknown sort_by %s, use one of %s, exiting' % (self.sort_by, ', '.join(self.SORT_ORDERS)), out_log)
+            fu.log(self.__class__.__name__ + ': Unknown sort_by %s, use one of %s, exiting' % (self.sort_by, ', '.join(self.SORT_ORDERS)), self.out_log)
             raise SystemExit(self.__class__.__name__ + ': Unknown sort_by %s' % self.sort_by)
 
     def select_record(self, records):
@@ -115,17 +95,11 @@ class GninaSelectPose(BiobbObject):
 
         return records[self.pose - 1]
 
-    @launchlogger
-    def launch(self) -> int:
+    def stage_files(self) -> None:
+        """The block does not use the sandbox: there are no files to stage."""
+
+    def run(self) -> None:
         """Execute the :class:`GninaSelectPose <gnina.gnina_select_pose.GninaSelectPose>` gnina.gnina_select_pose.GninaSelectPose object."""
-
-        # check input/output paths and parameters
-        self.check_data_params(self.out_log, self.err_log)
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         records = read_sdf_records(self.io_dict["in"]["input_sdf_path"])
         fu.log('%d pose(s) read from %s' % (len(records), self.io_dict["in"]["input_sdf_path"]), self.out_log)
@@ -140,25 +114,9 @@ class GninaSelectPose(BiobbObject):
         with open_sdf(self.io_dict["out"]["output_sdf_path"], 'wt') as output_file:
             output_file.write(record['text'])
 
-        # Copy files to host
-        self.copy_to_host()
 
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return 0
-
-
-def gnina_select_pose(input_sdf_path: str, output_sdf_path: str, properties: Optional[dict] = None, **kwargs) -> int:
-    """Create the :class:`GninaSelectPose <gnina.gnina_select_pose.GninaSelectPose>` class and
-    execute the :meth:`launch() <gnina.gnina_select_pose.GninaSelectPose.launch>` method."""
-    return GninaSelectPose(**dict(locals())).launch()
-
-
-gnina_select_pose.__doc__ = GninaSelectPose.__doc__
-main = GninaSelectPose.get_main(gnina_select_pose, "Selects a single pose in the output of the gnina_run building block.")
+gnina_select_pose = launcher(GninaSelectPose)
 
 
 if __name__ == '__main__':
-    main()
+    GninaSelectPose.main()

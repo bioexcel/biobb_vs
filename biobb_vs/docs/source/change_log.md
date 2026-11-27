@@ -1,9 +1,12 @@
 # Biobb Virtual Screening changelog
 
-## Unreleased
+## [Unreleased]
+
+## What's new in version [5.4.0](https://github.com/bioexcel/biobb_vs/releases/tag/v5.4.0)?
 
 ### Changes
 
+* [UPDATE] Update to biobb_common 5.4.0.
 * [FEATURE](gnina): New gnina_run building block, wrapping the gnina docking software with optional CNN rescoring. gnina is not bundled with this package, install it separately from its binary release or use its container image.
 * [FEATURE](gnina): New gnina_select_pose building block, extracting a single pose out of the multi record SDF file written by gnina_run.
 * [FIX] box, box_residues: the SIZE field of the `REMARK BOX CENTER` line is now the full box edge length, matching what AutoDock Vina reads from `--size_x/y/z`. It was previously written as a half-extent (centre-to-face distance), so `box` -> `autodock_vina_run` workflows searched a box with half the intended edge in each dimension, i.e. 1/8 of the intended volume.
@@ -12,6 +15,13 @@
 * [FIX] fpocket_select: the `pocket` property defaults to 1, as documented. It had no default, so without it the block selected no pocket and wrote no output files. The pocket files are now matched by name: `pocket: 1` no longer also takes the files of pockets 10 to 19, which made the output depend on the order of the files in the zip. A pocket that is not in the input zip raises an error.
 * [UPDATE] autodock_vina_run also writes the missing `REMARK BOX CENTER` error in its log. fpocket_run keeps its temporary folder when fpocket fails, as every block keeps its sandbox after an error.
 * [DOCS] box, box_residues: document that the box is centred on the mean of the selected coordinates, so an asymmetric set of points may extend slightly beyond the box faces, and `offset` should be chosen to absorb it.
+* [FIX] box: the coordinates are read from the PDB columns 31-38, 39-46 and 47-54. The first column of each was skipped, so a coordinate of -100.000 or less, or 1000.000 or more, lost its sign or its first digit.
+* [FIX] bindingsite: with several chains, the first chain of the input structure and of each cluster member is used, as the log says (it used the last one). A residue whose CA atom is in the cluster member but not in the input structure is skipped in both atom lists; it was added to one of them only, and the superimposition failed.
+* [FIX] autodock_vina_run: `output_log_path` is optional, as documented; the block failed without it.
+* [FIX] fpocket_run: in containers, an input PDB file of any name works; the block looked for the outputs of an input named `fpocket_input.pdb` and failed otherwise.
+* [UPDATE] `container_working_dir` removed from the docs and the JSON schemas: the commands run in the sandbox, mounted in `container_volume_path` in containers.
+* [DOCS] bindingsite, box_residues: `input_pdb_path` also accepts PQR files, as the path checks already did.
+* [UPDATE] Python 3.11 to 3.13.
 
 ## What's new in version [5.3.0](https://github.com/bioexcel/biobb_amber/releases/tag/v5.3.0)?
 
